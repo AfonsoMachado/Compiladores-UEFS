@@ -18,5 +18,4 @@ public class AnalisadorLexico {
     public AnalisadorLexico() {
     
     }
-    
 }
