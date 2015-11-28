@@ -11,5 +11,12 @@ package source;
  * @author UCHIHA
  */
 public class AnalisadorLexico {
+
+    /**
+     * 
+     */
+    public AnalisadorLexico() {
+    
+    }
     
 }
