@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package source;
+package model;
 
 import java.util.ArrayList;
 
@@ -16,31 +16,31 @@ public class EstruturaLexica {
     /**
      * 
      */
-    private ArrayList<String> palavrasReservadas;
+    private final ArrayList<String> palavrasReservadas;
     /**
      * 
      */
-    private ArrayList<Character> letra;
+    private final ArrayList<Character> letra;
     /**
      * 
      */
-    private ArrayList<String> digito;
+    private final ArrayList<Integer> digito;
     /**
      * 
      */
-    private ArrayList<Character> simbolo;
+    private final ArrayList<Character> simbolo;
     /**
      * 
      */
-    private ArrayList<String> operadores;
+    private final ArrayList<String> operadores;
     /**
      * 
      */
-    private ArrayList<String> delimitadores;
+    private final ArrayList<String> delimitadores;
     /**
      * 
      */
-    private ArrayList<String> comentarios;
+    private final ArrayList<String> comentarios;
 
     /**
      * 
@@ -73,8 +73,7 @@ public class EstruturaLexica {
         this.palavrasReservadas.add("true");
         this.palavrasReservadas.add("false");
         this.palavrasReservadas.add("main");
-        // //Pra q isso??????
-        /*
+        
         for (char i = 'a'; i <='z' ; i++) {
             this.letra.add((char) i);
         }
@@ -83,7 +82,7 @@ public class EstruturaLexica {
         }
         //
         for (int i = 0; i <=9 ; i++) {
-            this.digito.add(i+"");
+            this.digito.add(i);
         }
         //
         for (int i = 32; i <=126 ; i++) {
@@ -119,7 +118,7 @@ public class EstruturaLexica {
         this.comentarios.add("*//*");
         this.comentarios.add("*//*");
         this.comentarios.add("//");
-        */
+        
     }
  
 }
