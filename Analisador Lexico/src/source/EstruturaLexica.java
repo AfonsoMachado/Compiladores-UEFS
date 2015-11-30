@@ -73,7 +73,6 @@ public class EstruturaLexica {
         this.palavrasReservadas.add("true");
         this.palavrasReservadas.add("false");
         this.palavrasReservadas.add("main");
-        
         // //Pra q isso??????
         /*
         for (char i = 'a'; i <='z' ; i++) {
