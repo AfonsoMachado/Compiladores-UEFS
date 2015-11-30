@@ -25,9 +25,9 @@ public class AnalisadorLexico {
     
     public static void main(String[] args){
         //coisas aleatorias 
-        String nome = JOptionPane.showInputDialog("Arquivo");
-        Arquivo arquivo = null;
-        ArrayList<String> codigoFonte = arquivo.lerCodigoFonte();
         
+        Arquivo arquivo = new Arquivo();
+        ArrayList<String> codigoFonte = arquivo.lerCodigoFonte();
+        JOptionPane.showMessageDialog(null, codigoFonte);
     }
 }
