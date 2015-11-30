@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import util.Arquivo;
@@ -25,9 +26,17 @@ public class AnalisadorLexico {
     
     public static void main(String[] args){
         //coisas aleatorias 
-        String nome = JOptionPane.showInputDialog("Arquivo");
-        Arquivo arquivo = null;
-        ArrayList<String> codigoFonte = arquivo.lerCodigoFonte();
         
+        Arquivo arquivo = new Arquivo();
+        try {
+            ArrayList<String> codigoFonte = arquivo.lerCodigoFonte();
+            for (String string : codigoFonte) {
+                System.out.println(string);
+            }
+        } catch (FileNotFoundException error1) {
+            JOptionPane.showMessageDialog(null, "Arquivo Não Encontrado");
+            System.exit(0);
+        }
+              
     }
 }

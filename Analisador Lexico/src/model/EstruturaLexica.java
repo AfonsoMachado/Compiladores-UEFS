@@ -46,6 +46,7 @@ public class EstruturaLexica {
      * 
      */
     public EstruturaLexica() {
+        
         this.palavrasReservadas = new ArrayList<>();
         this.letra = new ArrayList<>();
         this.digito = new ArrayList<>();
@@ -74,6 +75,7 @@ public class EstruturaLexica {
         this.palavrasReservadas.add("false");
         this.palavrasReservadas.add("main");
         
+        //
         for (char i = 'a'; i <='z' ; i++) {
             this.letra.add((char) i);
         }
@@ -115,8 +117,8 @@ public class EstruturaLexica {
         this.delimitadores.add("[");
         this.delimitadores.add("]");
         //
-        this.comentarios.add("*//*");
-        this.comentarios.add("*//*");
+        this.comentarios.add("*/");
+        this.comentarios.add("/*");
         this.comentarios.add("//");
         
     }

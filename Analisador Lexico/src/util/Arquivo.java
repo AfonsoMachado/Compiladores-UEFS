@@ -1,6 +1,10 @@
 package util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,15 +17,20 @@ import java.util.ArrayList;
  * @author lucas
  */
 public class Arquivo {
-    String Nome; 
     
-    public Arquivo(String arquivo) {
-        Nome = arquivo;
-    }
+    private Scanner scanner;
     
-    public ArrayList <String> lerCodigoFonte(){
-    
-        return new ArrayList<>();
+    public ArrayList <String> lerCodigoFonte() throws FileNotFoundException {
+        
+        String nome = JOptionPane.showInputDialog("Arquivo");
+        scanner = new Scanner(new FileReader("code_in/"+nome)).useDelimiter("\n");
+      
+        ArrayList<String> codigo = new ArrayList();
+        while (scanner.hasNext()) {
+            codigo.add(scanner.next());
+        }
+        
+        return codigo;
     }
     
 }
