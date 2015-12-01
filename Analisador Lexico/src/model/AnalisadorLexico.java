@@ -20,14 +20,7 @@ public class AnalisadorLexico {
      * 
      */
     public AnalisadorLexico() {
-    
-    }
-    
-    public static void main(String[] args){
-        //coisas aleatorias 
         
-        Arquivo arquivo = new Arquivo();
-        ArrayList<String> codigoFonte = arquivo.lerCodigoFonte();
-        JOptionPane.showMessageDialog(null, codigoFonte);
     }
+       
 }

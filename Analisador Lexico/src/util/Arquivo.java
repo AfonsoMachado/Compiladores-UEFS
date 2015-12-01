@@ -35,4 +35,8 @@ public class Arquivo {
         return codigo;
     }
     
+    public void escreverSaidaLexico(ArrayList <String> saida){
+        
+    }
+    
 }
