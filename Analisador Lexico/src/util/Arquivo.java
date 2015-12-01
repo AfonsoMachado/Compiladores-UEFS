@@ -18,8 +18,16 @@ import javax.swing.JOptionPane;
  */
 public class Arquivo {
     
+    /**
+     * 
+     */
     private Scanner scanner;
     
+    /**
+     * 
+     * @return
+     * @throws FileNotFoundException 
+     */
     public ArrayList <String> lerCodigoFonte() throws FileNotFoundException {
         
         String nome = JOptionPane.showInputDialog("Arquivo");
@@ -31,6 +39,15 @@ public class Arquivo {
         }
         
         return codigo;
+    }
+    
+    /**
+     * 
+     * @param saida 
+     */
+    public void escreverSaidaLexico(ArrayList <String> saida){
+        
+        
     }
     
 }

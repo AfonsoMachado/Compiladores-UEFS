@@ -82,14 +82,17 @@ public class EstruturaLexica {
         for (char i = 'A'; i <='Z' ; i++) {
             this.letra.add((char) i);
         }
+        
         //
         for (int i = 0; i <=9 ; i++) {
             this.digito.add(i);
         }
+        
         //
         for (int i = 32; i <=126 ; i++) {
             this.simbolo.add((char) i);
         }
+        
         //
         this.operadores.add(".");
         this.operadores.add("+");
@@ -107,6 +110,7 @@ public class EstruturaLexica {
         this.operadores.add("&&");
         this.operadores.add("||");
         this.operadores.add("=");
+        
         //
         this.delimitadores.add(";");
         this.delimitadores.add(",");
@@ -116,11 +120,11 @@ public class EstruturaLexica {
         this.delimitadores.add("}");
         this.delimitadores.add("[");
         this.delimitadores.add("]");
+        
         //
         this.comentarios.add("*/");
         this.comentarios.add("/*");
         this.comentarios.add("//");
-        
     }
  
 }
