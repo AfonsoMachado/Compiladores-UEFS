@@ -1,5 +1,7 @@
 package model;
 
+import util.Arquivo;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,11 +15,15 @@ package model;
  */
 public class AnalisadorLexico {
 
+    private Arquivo codigoFonte;
+    
     /**
      * 
      */
     public AnalisadorLexico() {
     
     }
+    
+     
           
 }

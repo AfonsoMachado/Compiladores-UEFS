@@ -13,6 +13,10 @@ import java.util.ArrayList;
  */
 public class EstruturaLexica {
     
+    private final char UNDERLINE = '_'; // 
+    private final char SINAL = '-'; // 
+    private final char PONTO = '.'; // 
+    
     /**
      * 
      */
@@ -24,7 +28,7 @@ public class EstruturaLexica {
     /**
      * 
      */
-    private final ArrayList<Integer> digito;
+    private final ArrayList<String> digito;
     /**
      * 
      */
@@ -85,7 +89,7 @@ public class EstruturaLexica {
         
         //
         for (int i = 0; i <=9 ; i++) {
-            this.digito.add(i);
+            this.digito.add(""+i);
         }
         
         //
@@ -126,5 +130,101 @@ public class EstruturaLexica {
         this.comentarios.add("/*");
         this.comentarios.add("//");
     }
- 
+    
+    /**
+     * 
+     * @param pReservada
+     * @return 
+     */
+    public boolean ehPalavraReservada(String pReservada) {
+                
+        return this.palavrasReservadas.contains(pReservada);
+    }
+    
+    /**
+     * 
+     * @param identificador
+     * @return 
+     */
+    public boolean ehIdentificador(String identificador) {
+       
+        // Primeiro item do identificador deve ser uma letra
+        if (! this.letra.contains(identificador.charAt(0))) {
+            return false;
+        }
+        // Verificando uma palavra dentro de um codigo fonte
+        for (int i = 1; i < identificador.length(); i++) {
+          // Os outros componentes do identificador deve ser letra ou digito ou UNDELINE 
+            if (! this.letra.contains(identificador.charAt(i))
+            && ! this.digito.contains(""+identificador.charAt(i))
+            && identificador.charAt(i) != UNDERLINE ) {
+                
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * 
+     * @param simb
+     * @return 
+     */
+    public boolean ehSimbolo(char simb) {
+                
+        return this.simbolo.contains(simb);
+    }
+    
+    /**
+     * 
+     * @param string
+     * @return 
+     */
+    public boolean ehCadeiaConstante(String string) {
+        
+        
+        return false;
+    }
+    
+    /**
+     * 
+     * @param caracter
+     * @return 
+     */
+    public boolean ehCaracterConstante(char caracter) {
+        
+        
+        
+        return false;
+    }
+    
+    /**
+     * 
+     * @param ope
+     * @return 
+     */
+    public boolean ehOperador(String ope) {
+        
+        return this.operadores.contains(ope);
+    }
+    
+    /**
+     * 
+     * @param delim
+     * @return 
+     */
+    public boolean ehDelimitador(String delim) {
+        
+        return this.delimitadores.contains(delim);
+    }
+    
+    /**
+     * 
+     * @param coment
+     * @return 
+     */
+    public boolean ehComentario(String coment) {
+        
+        return this.comentarios.contains(coment);
+    }
 }
