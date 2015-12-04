@@ -1,4 +1,4 @@
-package model;
+package modulo_analisadorLexico;
 
 //import java.util.regex.*;
 
@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.swing.JOptionPane;
-import util.Arquivo;
+import manipulação_arquivosIO.Arquivo;
 
 
 /*

@@ -1,4 +1,4 @@
-package util;
+package manipulação_arquivosIO;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,7 +14,8 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author lucas
+ * @author MUDAR DEPOIS ESSES DADOS DO JAVADOC. 
+ * na verdade é bom começar com o javadoc tbm
  */
 public class Arquivo {
     
@@ -27,18 +28,18 @@ public class Arquivo {
      * 
      * @return
      * @throws FileNotFoundException 
-     */
+     */ 
     public ArrayList <String> lerCodigoFonte() throws FileNotFoundException {
         
         String nome = JOptionPane.showInputDialog("Arquivo");
-        scanner = new Scanner(new FileReader("code_in/"+nome)).useDelimiter("\n");
+        scanner = new Scanner(new FileReader(nome)).useDelimiter("\n");
       
         ArrayList<String> codigo = new ArrayList();
         while (scanner.hasNext()) {
             codigo.add(scanner.next());
         }
-        
-        return codigo;
+       
+        return codigo; 
     }
     
     /**

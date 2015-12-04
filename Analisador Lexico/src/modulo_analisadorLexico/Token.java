@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package modulo_analisadorLexico;
 
 /**
  *
@@ -14,12 +14,12 @@ public class Token {
     /**
      * 
      */
-    private String token;
+    private String tipo;
     
     /**
      * 
      */
-    private String id;
+    private String valor;
     
     /**
      * 
@@ -28,13 +28,13 @@ public class Token {
 
     /**
      * 
-     * @param token
-     * @param id
+     * @param tipo
+     * @param valor
      * @param linha 
      */
     public Token(String token, String id, int linha) {
-        this.token = token;
-        this.id = id;
+        this.tipo = token;
+        this.valor = id;
         this.linha = linha;
     }
     
@@ -43,7 +43,7 @@ public class Token {
      * @return 
      */
     public String getToken() {
-        return token;
+        return tipo;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Token {
      * @return 
      */
     public String getId() {
-        return id;
+        return valor;
     }
 
     /**

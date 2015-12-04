@@ -1,9 +1,11 @@
+package modulo_completo;
+
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import model.AnalisadorLexico;
-import util.Arquivo;
+import modulo_analisadorLexico.AnalisadorLexico;
+import manipulação_arquivosIO.Arquivo;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
