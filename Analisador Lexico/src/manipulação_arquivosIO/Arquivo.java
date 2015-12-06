@@ -1,5 +1,6 @@
 package manipulação_arquivosIO;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -25,14 +26,14 @@ public class Arquivo {
     private Scanner scanner;
     
     /**
-     * 
+     * C:\Users\Magally\Documents\NetBeansProjects\Compiladores-UEFS\Analisador Lexico\src\manipulação_arquivosIO\Arquivo.java
+     * @param file
      * @return
      * @throws FileNotFoundException 
      */ 
-    public ArrayList <String> lerCodigoFonte() throws FileNotFoundException {
+    public ArrayList <String> lerCodigoFonte(File file) throws FileNotFoundException {
         
-        String nome = JOptionPane.showInputDialog("Arquivo");
-        scanner = new Scanner(new FileReader(nome)).useDelimiter("\n");
+        scanner = new Scanner(new FileReader(file)).useDelimiter("\n");
       
         ArrayList<String> codigo = new ArrayList();
         while (scanner.hasNext()) {

@@ -28,7 +28,7 @@ public class EstruturaLexica {
     /**
      * 
      */
-    private final ArrayList<String> digito;
+    private final ArrayList<Character> digito;
     /**
      * 
      */
@@ -40,7 +40,7 @@ public class EstruturaLexica {
     /**
      * 
      */
-    private final ArrayList<String> delimitadores;
+    private final ArrayList<Character> delimitadores;
     /**
      * 
      */
@@ -88,8 +88,8 @@ public class EstruturaLexica {
         }
         
         //
-        for (int i = 0; i <=9 ; i++) {
-            this.digito.add(""+i);
+        for (char i = '0'; i <='9' ; i++) {
+            this.digito.add(i);
         }
         
         //
@@ -116,14 +116,14 @@ public class EstruturaLexica {
         this.operadores.add("=");
         
         //
-        this.delimitadores.add(";");
-        this.delimitadores.add(",");
-        this.delimitadores.add("(");
-        this.delimitadores.add(")");
-        this.delimitadores.add("{");
-        this.delimitadores.add("}");
-        this.delimitadores.add("[");
-        this.delimitadores.add("]");
+        this.delimitadores.add(';');
+        this.delimitadores.add(',');
+        this.delimitadores.add('(');
+        this.delimitadores.add(')');
+        this.delimitadores.add('{');
+        this.delimitadores.add('}');
+        this.delimitadores.add('[');
+        this.delimitadores.add(']');
         
         //
         this.comentarios.add("*/");
@@ -213,7 +213,7 @@ public class EstruturaLexica {
      * @param delim
      * @return 
      */
-    public boolean ehDelimitador(String delim) {
+    public boolean ehDelimitador(char delim) {
         
         return this.delimitadores.contains(delim);
     }
