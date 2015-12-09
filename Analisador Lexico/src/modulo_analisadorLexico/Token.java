@@ -32,7 +32,7 @@ public class Token {
      * @param valor
      * @param linha 
      */
-    public Token(String token, String id, int linha) {
+    public Token(String id, String token, int linha) {
         this.tipo = token;
         this.valor = id;
         this.linha = linha;
@@ -42,7 +42,7 @@ public class Token {
      * 
      * @return 
      */
-    public String getToken() {
+    public String getTipo() {
         return tipo;
     }
 
@@ -50,7 +50,7 @@ public class Token {
      * 
      * @return 
      */
-    public String getId() {
+    public String getValor() {
         return valor;
     }
 

@@ -36,7 +36,7 @@ public class EstruturaLexica {
     /**
      * 
      */
-    private final ArrayList<String> operadores;
+    private final ArrayList<Character> operadores;
     /**
      * 
      */
@@ -98,22 +98,27 @@ public class EstruturaLexica {
         }
         
         //
-        this.operadores.add(".");
-        this.operadores.add("+");
-        this.operadores.add("-");
-        this.operadores.add("*");
-        this.operadores.add("/");
-        this.operadores.add("++");
-        this.operadores.add("--");
-        this.operadores.add("==");
-        this.operadores.add("!=");
-        this.operadores.add(">");
-        this.operadores.add(">=");
-        this.operadores.add("<");
-        this.operadores.add("<=");
-        this.operadores.add("&&");
-        this.operadores.add("||");
-        this.operadores.add("=");
+        this.operadores.add('.');
+        this.operadores.add('+');
+        this.operadores.add('-');
+        this.operadores.add('*');
+        this.operadores.add('/');
+        //this.operadores.add('++');
+        this.operadores.add('+');
+        //this.operadores.add('--');
+        this.operadores.add('-');
+        //this.operadores.add('==');
+        //this.operadores.add('!=');
+        this.operadores.add('!');
+        this.operadores.add('>');
+        //this.operadores.add('>=');
+        this.operadores.add('<');
+        //this.operadores.add('<=');
+        //this.operadores.add('&&');
+        this.operadores.add('&');
+        //this.operadores.add('||");
+        this.operadores.add('|');
+        this.operadores.add('=');
         
         //
         this.delimitadores.add(';');

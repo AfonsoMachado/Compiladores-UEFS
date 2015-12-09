@@ -3,11 +3,7 @@ package modulo_analisadorLexico;
 //import java.util.regex.*;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import javax.swing.JOptionPane;
-import manipulação_arquivosIO.Arquivo;
 
 
 /*
@@ -23,10 +19,10 @@ import manipulação_arquivosIO.Arquivo;
 public class AnalisadorLexico {
 
     private EstruturaLexica estruturaLexica = new EstruturaLexica();
-    private ArrayList<String> tokens;
-    private ArrayList<String> erros;
+    private ArrayList<Token> tokens = new ArrayList<>();
+    private ArrayList<String> erros = new ArrayList<>();
 
-    public ArrayList<String> getTokens() {
+    public ArrayList<Token> getTokens() {
         return tokens;
     }
 
@@ -49,39 +45,47 @@ public class AnalisadorLexico {
             numero++;
             indice = 0;
             char[] caracteres = linha.toCharArray();
-            while(caracteres[indice]!='\0'){
-                while(Character.isSpaceChar(caracteres[indice])){
+            while(indice<caracteres.length){
+                if(Character.isSpaceChar(caracteres[indice])){
                     indice++;
                 }
                 //Verifica se eh um identificador
-                if(Character.isLetter(caracteres[indice])){
+                else if(Character.isLetter(caracteres[indice])){
                     token = token + caracteres[indice];
                     indice++;
                     //percorre enquanto houver letras digitos ou _
                     while(Character.isLetter(caracteres[indice]) || Character.isDigit(caracteres[indice]) || caracteres[indice]== '_'){
                         token = token + caracteres[indice];
-                        indice++;
+                            indice++;
                     }
                     //Apos consumir letras digitos e simbolos verifica se o token esta correto
                     //Falta verificar operadores (Mudar na estrutura lexica pra char)
                     if(Character.isSpaceChar(caracteres[indice]) || estruturaLexica.ehDelimitador(caracteres[indice])){
                         JOptionPane.showMessageDialog(null, token);
+                        Token tk;                        
                         //verifica se eh uma palavra reservada
                         if(estruturaLexica.ehPalavraReservada(token)){
                              JOptionPane.showMessageDialog(null, token + " Palavra reservada");
+                             tk = new Token(token, "Palavra Reservada", numero);
                         }
+                        else{
+                             tk= new Token(token, "Identificador", numero);
+                        }
+                        tokens.add(tk);
                         token ="";
                     }
                     //indentificador com erro
                     else{
                         JOptionPane.showMessageDialog(null, token+ " Identificador mal formado");
+                        erros.add("Código com erro, identificador mal formado na linha "+ numero + "\n");
                     }
                 }
-                if(estruturaLexica.ehDelimitador(caracteres[indice])){
+                else if(estruturaLexica.ehDelimitador(caracteres[indice])){
                     token = token + caracteres[indice];
                     indice++;
                 }
             }
+            System.out.println("Acabou");
         }
     
     }      

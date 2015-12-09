@@ -126,8 +126,8 @@ public class Compilador extends javax.swing.JFrame {
                 System.out.println(string);
             }
             analisadorLexico.analise(codigoFonte);
-            analisadorLexico.getTokens();
-            analisadorLexico.getErros();
+            arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
+            
             
         } catch (FileNotFoundException error1) {
             JOptionPane.showMessageDialog(null, "Arquivo Não Encontrado");
