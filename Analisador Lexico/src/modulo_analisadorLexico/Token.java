@@ -10,53 +10,53 @@ package modulo_analisadorLexico;
  * @author UCHIHA
  */
 public class Token {
-    
+
     /**
-     * 
+     *
      */
     private String tipo;
-    
+
     /**
-     * 
+     *
      */
     private String valor;
-    
+
     /**
-     * 
+     *
      */
     private int linha;
 
     /**
-     * 
+     *
      * @param tipo
      * @param valor
-     * @param linha 
+     * @param linha
      */
     public Token(String id, String token, int linha) {
         this.tipo = token;
         this.valor = id;
         this.linha = linha;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getTipo() {
         return tipo;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getValor() {
         return valor;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getLinha() {
         return linha;

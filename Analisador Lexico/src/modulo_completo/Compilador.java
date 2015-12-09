@@ -12,17 +12,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import manipulação_arquivosIO.Arquivo;
 import modulo_analisadorLexico.AnalisadorLexico;
-import modulo_analisadorLexico.EstruturaLexica;
 
 /**
  *
  * @author Magally
  */
 public class Compilador extends javax.swing.JFrame {
-    
-        File file;
-        Arquivo arquivo = new Arquivo();
-        private AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+
+    File file;
+    Arquivo arquivo = new Arquivo();
+    private final AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+
     /**
      * Creates new form Compiler
      */
@@ -107,32 +107,28 @@ public class Compilador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
-       JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser();
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-           file = fileChooser.getSelectedFile();
-           texto.setText("Arquivo " + file.getName() + " selecionado.");
+            file = fileChooser.getSelectedFile();
+            texto.setText("Arquivo " + file.getName() + " selecionado.");
         }
-       
+
     }//GEN-LAST:event_abrirActionPerformed
 
     private void compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarActionPerformed
-        if(file==null){
+        if (file == null) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado. Escolha o arquivo a ser compilado");
-        }else {
-             try {
-            ArrayList<String> codigoFonte = arquivo.lerCodigoFonte(file);
-            for (String string : codigoFonte) {
-                System.out.println(string);
+        } else {
+            try {
+                ArrayList<String> codigoFonte = arquivo.lerCodigoFonte(file);
+                analisadorLexico.analise(codigoFonte);
+                arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
+
+            } catch (FileNotFoundException error1) {
+                JOptionPane.showMessageDialog(null, "Arquivo Não Encontrado");
+                System.exit(0);
             }
-            analisadorLexico.analise(codigoFonte);
-            arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
-            
-            
-        } catch (FileNotFoundException error1) {
-            JOptionPane.showMessageDialog(null, "Arquivo Não Encontrado");
-            System.exit(0);
-        }
         }
     }//GEN-LAST:event_compilarActionPerformed
 

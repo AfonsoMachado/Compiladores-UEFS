@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modulo_analisadorLexico.Token;
 
 /*
@@ -53,8 +51,8 @@ public class Arquivo {
     public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) {
         FileWriter arq;
         try {
-            arq = new FileWriter(file.getAbsolutePath()+ ".out");
-            
+            arq = new FileWriter(file.getAbsolutePath() + ".out");
+
             PrintWriter gravar = new PrintWriter(arq);
             for (Token token : tokens) {
                 gravar.printf("Tipo#" + token.getTipo() + "#Valor#" + token.getValor() + "#Linha#" + token.getLinha() + "\n");
@@ -68,9 +66,8 @@ public class Arquivo {
                 }
             }
             arq.close();
-            System.out.println("Escreveu");
         } catch (IOException ex) {
-            Logger.getLogger(Arquivo.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Arquivo de saida não foi gerado com sucesso.");
         }
     }
 

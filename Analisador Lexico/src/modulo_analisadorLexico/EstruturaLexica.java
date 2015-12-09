@@ -151,24 +151,24 @@ public class EstruturaLexica {
      * @param identificador
      * @return 
      */
-    public boolean ehIdentificador(String identificador) {
-       
-        // Primeiro item do identificador deve ser uma letra
-        if (! this.letra.contains(identificador.charAt(0))) {
-            return false;
-        }
-        // Verificando uma palavra dentro de um codigo fonte
-        for (int i = 1; i < identificador.length(); i++) {
-          // Os outros componentes do identificador deve ser letra ou digito ou UNDELINE 
-            if (! this.letra.contains(identificador.charAt(i))
-            && ! this.digito.contains(""+identificador.charAt(i))
-            && identificador.charAt(i) != UNDERLINE ) {
-                
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean ehIdentificador(String identificador) {
+//       
+//        // Primeiro item do identificador deve ser uma letra
+//        if (! this.letra.contains(identificador.charAt(0))) {
+//            return false;
+//        }
+//        // Verificando uma palavra dentro de um codigo fonte
+//        for (int i = 1; i < identificador.length(); i++) {
+//          // Os outros componentes do identificador deve ser letra ou digito ou UNDELINE 
+//            if (! this.letra.contains(identificador.charAt(i))
+//            && ! this.digito.contains(""+identificador.charAt(i))
+//            && identificador.charAt(i) != UNDERLINE ) {
+//                
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
     
     /**
      * 
@@ -208,7 +208,7 @@ public class EstruturaLexica {
      * @param ope
      * @return 
      */
-    public boolean ehOperador(String ope) {
+    public boolean ehOperador(char ope) {
         
         return this.operadores.contains(ope);
     }
