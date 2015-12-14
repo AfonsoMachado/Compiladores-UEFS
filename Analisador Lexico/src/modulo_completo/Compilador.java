@@ -15,19 +15,21 @@ import modulo_analisadorLexico.AnalisadorLexico;
 
 /**
  *
- * @author Magally
+ * @author
  */
 public class Compilador extends javax.swing.JFrame {
 
     File file;
-    Arquivo arquivo = new Arquivo();
-    private final AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+    Arquivo arquivo;
+    private AnalisadorLexico analisadorLexico;
 
     /**
      * Creates new form Compiler
      */
     public Compilador() {
         initComponents();
+        
+        arquivo = new Arquivo();
     }
 
     /**
@@ -122,6 +124,7 @@ public class Compilador extends javax.swing.JFrame {
         } else {
             try {
                 ArrayList<String> codigoFonte = arquivo.lerCodigoFonte(file);
+                analisadorLexico = new AnalisadorLexico();
                 analisadorLexico.analise(codigoFonte);
                 arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
 

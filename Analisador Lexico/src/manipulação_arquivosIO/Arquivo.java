@@ -29,7 +29,7 @@ public class Arquivo {
     private File file;
 
     /**
-     * C:\Users\Magally\Documents\NetBeansProjects\Compiladores-UEFS\Analisador
+     * 
      * Lexico\src\manipulação_arquivosIO\Arquivo.java
      *
      * @param file
@@ -51,14 +51,14 @@ public class Arquivo {
     public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) {
         FileWriter arq;
         try {
-            arq = new FileWriter(file.getAbsolutePath() + ".out");
+            arq = new FileWriter(file.getAbsolutePath() + ".out", false);
 
             PrintWriter gravar = new PrintWriter(arq);
             for (Token token : tokens) {
-                gravar.printf("Tipo#" + token.getTipo() + "#Valor#" + token.getValor() + "#Linha#" + token.getLinha() + "\n");
+                gravar.printf(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha() + "\n");
             }
             if (erros.isEmpty()) {
-                gravar.printf("Parabens, código compilado com successo\n");
+                gravar.printf("\nParabens, código compilado com successo\n");
             } else {
 
                 for (String erro : erros) {

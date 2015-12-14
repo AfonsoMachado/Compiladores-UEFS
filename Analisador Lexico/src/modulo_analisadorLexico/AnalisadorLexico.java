@@ -1,7 +1,6 @@
 package modulo_analisadorLexico;
 
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 
 /*
@@ -9,16 +8,29 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author UCHIHA
  */
 public class AnalisadorLexico {
+    
+    private static final char EOF = '\0';
 
-    private EstruturaLexica estruturaLexica = new EstruturaLexica();
-    private ArrayList<Token> tokens = new ArrayList<>();
-    private ArrayList<String> erros = new ArrayList<>();
+    private final EstruturaLexica estruturaLexica = new EstruturaLexica();
+    private final ArrayList<Token> tokens;
+    private final ArrayList<String> erros;
+    private int linha, coluna;
+    private ArrayList<String> codigo;
+
+    /**
+     *
+     */
+    public AnalisadorLexico() {
+        tokens = new ArrayList<>();
+        erros = new ArrayList<>();
+        coluna = 0;
+        linha = 0;
+    }
 
     public ArrayList<Token> getTokens() {
         return tokens;
@@ -27,66 +39,89 @@ public class AnalisadorLexico {
     public ArrayList<String> getErros() {
         return erros;
     }
+
+    public void novoErro(String tipo) {
+        erros.add("\nCódigo com erro, " + tipo + " na linha " + (linha+1) + " coluna " + (coluna+1));
+    }
+
+    public char novoChar() {
+        char c[] = codigo.get(linha).toCharArray();
+        if (c.length == coluna) {
+            return ' ';
+        } else if (c.length > coluna) {
+            return c[coluna];
+        } else if (codigo.size() > linha + 1) {
+            linha++;
+            c = codigo.get(linha).toCharArray();
+            coluna = 0;
+            return c[coluna];
+        } else {
+            //fim de arquivo
+            System.out.println("aq");
+            return EOF;
+        }
+
+    }
     
-    
-    /**
-     * 
-     */
-    public AnalisadorLexico() {
+    public void identificador(String token, char ch){
+        
+                token = token + ch;
+                boolean error = false;
+                coluna++;
+                ch = novoChar();
+                System.out.println(ch + token + coluna + " " + linha);
+                //percorre enquanto houver letras digitos ou _
+                while(!(ch == EOF || Character.isSpaceChar(ch) || estruturaLexica.ehDelimitador(ch) || estruturaLexica.ehOperador(ch))){
+                    if(!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '_')){
+                        error = true;
+                    }
+                    token = token + ch;
+                    coluna++;
+                    ch = novoChar();
+                }
+                //Apos consumir letras digitos e simbolos verifica se o token esta correto
+                if(!error){
+                    Token tk;
+                    //verifica se eh uma palavra reservada
+                    if (estruturaLexica.ehPalavraReservada(token)) {
+                        tk = new Token(token, "Palavra Reservada", linha);
+                    } else {
+                        tk = new Token(token, "Identificador", linha);
+                    }
+                    tokens.add(tk);
+                } //indentificador com erro
+                else {
+                    novoErro("identificador mal formado");
+                }
+                System.out.println(" token :" + token);
     
     }
-     
-    public void analise(ArrayList<String> codigo){
-        int numero=0, indice;
-        String token; 
-        for (String linha : codigo) {
-            numero++;
-            indice = 0;
-            char[] caracteres = linha.toCharArray();
-            while(indice<caracteres.length){
-                token = "";
-                if(Character.isSpaceChar(caracteres[indice])){
-                    indice++;
-                }
-                //Verifica se eh um identificador
-                else if(Character.isLetter(caracteres[indice])){
-                    token = token + caracteres[indice];
-                    indice++;
-                    //percorre enquanto houver letras digitos ou _
-                    while(indice<caracteres.length && (Character.isLetter(caracteres[indice]) || Character.isDigit(caracteres[indice]) || caracteres[indice]== '_')){
-                        token = token + caracteres[indice];
-                            indice++;
-                    }
-                    //Apos consumir letras digitos e simbolos verifica se o token esta correto
-                    if(caracteres.length==indice || Character.isSpaceChar(caracteres[indice]) || estruturaLexica.ehDelimitador(caracteres[indice]) || estruturaLexica.ehOperador(caracteres[indice])){
-                        Token tk;                        
-                        //verifica se eh uma palavra reservada
-                        if(estruturaLexica.ehPalavraReservada(token)){
-                             tk = new Token(token, "Palavra Reservada", numero);
-                        }
-                        else{
-                             tk= new Token(token, "Identificador", numero);
-                        }
-                        tokens.add(tk);
-                    }
-                    //indentificador com erro
-                    else{
-                        erros.add("Código com erro, identificador mal formado na linha "+ numero + "\n");
-                    }
-                    System.out.println(token);
-                }
-                else if(estruturaLexica.ehDelimitador(caracteres[indice])){
-                    token = token + caracteres[indice];
-                    Token tk = new Token(token, "Delimitador", indice);
-                    tokens.add(tk);
-                    indice++;
-                }
-                //outros itens
-//                else if(){
-//                
-//                }
-            }
-        }
     
-    }      
+    public void analise(ArrayList<String> codigo) {
+
+        String token;
+        this.codigo = codigo;
+
+        char ch = novoChar();
+        while (ch != EOF) {
+            token = "";
+            if (Character.isSpaceChar(ch)) {
+                coluna++;
+            } //Verifica se eh um identificador
+            else if (Character.isLetter(ch)) {
+               identificador(token, ch);
+            } else if (estruturaLexica.ehDelimitador(ch)) {
+                token = token + ch;
+                Token tk = new Token(token, "Delimitador", linha);
+                tokens.add(tk);
+                coluna++;
+            }
+            //Simbolos invalidos
+            else {
+                novoErro("Simbolo invalido");
+            }
+            ch = novoChar();
+        }
+
+    }
 }
