@@ -167,7 +167,7 @@ public class AnalisadorLexico {
             coluna++;
             ch = novoChar();
         }
-        if (!error || cont == 0) {
+        if (!error && cont != 0) {
             Token tk;
             token = token + ch;
             coluna++;

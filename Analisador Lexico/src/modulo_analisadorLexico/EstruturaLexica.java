@@ -3,7 +3,7 @@ package modulo_analisadorLexico;
 import java.util.ArrayList;
 
 /**
- * Classe que representa a estrutura lexica que regue o compilador.
+ * Classe que representa a estrutura lexica que rege o compilador.
  * 
  * @author Lucas Carneiro
  * @author Oto Lopes
