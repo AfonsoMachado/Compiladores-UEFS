@@ -72,7 +72,7 @@ public class Arquivo {
             } else {
 
                 for (String erro : erros) {
-                    gravar.printf(erro + "\n");
+                    gravar.printf(erro);
                 }
             }
             arq.close();

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 /**
  * Classe destinada à análise léxica do código fonte.
- * 
+ *
  * @author Lucas Carneiro
  * @author Oto Lopes
- * 
+ *
  * @see Token
  * @see AnalisadorLexico
  */
@@ -70,7 +70,6 @@ public class AnalisadorLexico {
             return c[this.coluna];
         } else {
             //fim de arquivo
-            System.out.println("aq");
             return EOF;
         }
     }
@@ -94,9 +93,18 @@ public class AnalisadorLexico {
                     Token tk = new Token(token, "Delimitador", this.linha, this.coluna);
                     this.tokens.add(tk);
                     this.coluna++;
-                } //Simbolos invalidos
+                }
+                else if(ch =='\''){
+                    caracterConstante(token, ch);
+                }
+                //Simbolos invalidos
                 else {
                     novoErro("Simbolo invalido");
+                    while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
+                        token = token + ch;
+                        this.coluna++;
+                        ch = novoChar();
+                    }
                 }
             } else {
                 linhaVazia = false;
@@ -138,6 +146,37 @@ public class AnalisadorLexico {
         }
         System.out.println(" token :" + token);
 
+    }
+
+    public void cadeiaConstante(String token, char ch) {
+
+    }
+
+    public void caracterConstante(String token, char ch) {
+        token = token + ch;
+        boolean error = false;
+        coluna++;
+        int cont = 0;
+        ch = novoChar();
+        while (ch != '\'' && ch != '\0') {
+            if (!(Character.isLetter(ch) || Character.isDigit(ch)) || cont > 0) {
+                error = true;
+            }
+            cont++;
+            token = token + ch;
+            coluna++;
+            ch = novoChar();
+        }
+        if (!error || cont == 0) {
+            Token tk;
+            token = token + ch;
+            coluna++;
+            tk = new Token(token, "Caracter Constante", linha, coluna);
+            tokens.add(tk);
+        } //
+        else {
+            novoErro("caracter constante mal formado");
+        }
     }
 
 }
