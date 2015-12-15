@@ -1,49 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package modulo_analisadorLexico;
 
 import java.util.ArrayList;
 
 /**
- *
- * @author UCHIHA
+ * Classe que representa a estrutura lexica que regue o compilador.
+ * 
+ * @author Lucas Carneiro
+ * @author Oto Lopes
+ * 
+ * @see Token
+ * @see AnalisadorLexico
  */
 public class EstruturaLexica {
     
     /**
-     * 
+     * Lista com as palavras reservadas.
      */
     private final ArrayList<String> palavrasReservadas;
     /**
-     * 
+     * Lista com letras de 'a' a 'z' (maiúsculas e minúsculas).
      */
     private final ArrayList<Character> letra;
     /**
-     * 
+     * Lista com os digitos de 0 a 9.
      */
     private final ArrayList<Character> digito;
     /**
-     * 
+     * Lista com os simbolos de 32 a 126 da tablea ASCII.
      */
     private final ArrayList<Character> simbolo;
     /**
-     * 
+     * Lista de operadores.
      */
     private final ArrayList<Character> operadores;
     /**
-     * 
+     * Lista de delimitadores.
      */
     private final ArrayList<Character> delimitadores;
     /**
-     * 
+     * Lista com identificador de inicio de comentário.
      */
     private final ArrayList<String> comentarios;
 
     /**
-     * 
+     * Construtor da classe, inserindo todos os elementos das listas.
      */
     public EstruturaLexica() {
         
@@ -125,9 +126,11 @@ public class EstruturaLexica {
     }
     
     /**
+     * Verifica se a palavra enviada é uma palavra reservada.
      * 
-     * @param pReservada
-     * @return 
+     * @param pReservada Palavra encontrada no código 
+     * 
+     * @return Verdadeiro se a palavra for reservada, Falso caso contrário
      */
     public boolean ehPalavraReservada(String pReservada) {
                 
@@ -135,9 +138,11 @@ public class EstruturaLexica {
     }
 
     /**
+     * Verifica se o símbolo enviado é um símbolo válido.
      * 
-     * @param simb
-     * @return 
+     * @param simb Símbolo encontrado no código
+     * 
+     * @return Verdadeiro se o símbolo enviado for um símbolo válido, Falso caso contrário
      */
     public boolean ehSimbolo(char simb) {
                 
@@ -145,9 +150,11 @@ public class EstruturaLexica {
     }
 
     /**
+     * Verifica se o símbolo enviado é um operador.
      * 
-     * @param ope
-     * @return 
+     * @param ope Operador encontrado no código
+     * 
+     * @return Verdadeiro se o símbolo enviado for um operador, Falso caso contrário
      */
     public boolean ehOperador(char ope) {
         
@@ -155,13 +162,14 @@ public class EstruturaLexica {
     }
     
     /**
+     * Verifica se o símbolo enviado é um delimitador.
      * 
-     * @param delim
-     * @return 
+     * @param delim Delimitador encontrado no código
+     * 
+     * @return Verdadeiro se o símbolo enviado for um delimitador, Falso caso contrário
      */
     public boolean ehDelimitador(char delim) {
         
         return this.delimitadores.contains(delim);
-    }
-   
+    }  
 }
