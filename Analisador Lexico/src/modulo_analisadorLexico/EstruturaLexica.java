@@ -1,4 +1,3 @@
-
 package modulo_analisadorLexico;
 
 import java.util.ArrayList;

@@ -19,8 +19,8 @@ import modulo_analisadorLexico.AnalisadorLexico;
  */
 public class Compilador extends javax.swing.JFrame {
 
-    File file;
-    Arquivo arquivo;
+    private File file;
+    private final Arquivo arquivo;
     private AnalisadorLexico analisadorLexico;
 
     /**
@@ -28,6 +28,7 @@ public class Compilador extends javax.swing.JFrame {
      */
     public Compilador() {
         initComponents();
+        this.setLocationRelativeTo(null);
         
         arquivo = new Arquivo();
     }
@@ -109,6 +110,7 @@ public class Compilador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
+        
         JFileChooser fileChooser = new JFileChooser();
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -119,6 +121,7 @@ public class Compilador extends javax.swing.JFrame {
     }//GEN-LAST:event_abrirActionPerformed
 
     private void compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarActionPerformed
+      
         if (file == null) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado. Escolha o arquivo a ser compilado");
         } else {
