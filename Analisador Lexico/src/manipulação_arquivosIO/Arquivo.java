@@ -10,36 +10,38 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import modulo_analisadorLexico.Token;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
- * @author MUDAR DEPOIS ESSES DADOS DO JAVADOC. na verdade é bom começar com o
- * javadoc tbm
+ * Classe destinada a manipulação com o arquivo de código fonte e saída, 
+ * ou seja, responsável por: gerar a lista com os caracteres provindos do código
+ * fonte e gerar o arquivo de saída com os erros e os tokens.
+ * 
+ * @author Lucas Carneiro
+ * @author Oto Lopes
+ * 
+ * @see Token
  */
 public class Arquivo {
 
     /**
-     *
+     * Localização do arquivo lido. Esta localização será a mesma para o arquivo
+     * de saída.
      */
-    private Scanner scanner;
-    private File file;
-
+    private String localFile;
+    
     /**
+     * Retorna a lista de strings obtidas a partir de um arquivo com o código 
+     * fonte.
      * 
-     * Lexico\src\manipulação_arquivosIO\Arquivo.java
-     *
-     * @param file
-     * @return
-     * @throws FileNotFoundException
+     * @param file Arquivo do código que será lido
+     * 
+     * @return Lista com as strings contidas no arquivo com o código
+     * 
+     * @throws FileNotFoundException Erro com a leitura do arquivo com o código
      */
     public ArrayList<String> lerCodigoFonte(File file) throws FileNotFoundException {
 
-        scanner = new Scanner(new FileReader(file)).useDelimiter("\n");
-        this.file = file;
+        Scanner scanner = new Scanner(new FileReader(file)).useDelimiter("\n");
+        this.localFile = file.getAbsolutePath();
         ArrayList<String> codigo = new ArrayList();
         while (scanner.hasNext()) {
             codigo.add(scanner.next());
@@ -47,15 +49,23 @@ public class Arquivo {
 
         return codigo;
     }
-
+    
+    /**
+     * Gera o arquivo de saída após a análise do código fonte. Neste arquivo de 
+     * saída conterá todos os tokens encontrados no código fonte e os erros 
+     * encontrados (se houver).
+     * 
+     * @param tokens Lista de tokens obtidos após a análise do código fonte
+     * @param erros Erros obtidos após a análise do código fonte
+     */
     public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) {
         FileWriter arq;
         try {
-            arq = new FileWriter(file.getAbsolutePath() + ".out", false);
+            arq = new FileWriter(this.localFile + ".out", false);
 
             PrintWriter gravar = new PrintWriter(arq);
             for (Token token : tokens) {
-                gravar.printf(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha() + "\n");
+                gravar.printf(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha()+ "#" + token.getColuna() + "\n");
             }
             if (erros.isEmpty()) {
                 gravar.printf("\nParabens, código compilado com successo\n");
@@ -70,5 +80,4 @@ public class Arquivo {
             System.out.println("Arquivo de saida não foi gerado com sucesso.");
         }
     }
-
 }
