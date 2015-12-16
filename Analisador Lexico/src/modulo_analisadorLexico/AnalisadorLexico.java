@@ -311,7 +311,7 @@ public class AnalisadorLexico {
             ch = this.novoChar();
         }
 
-        if (Character.isDigit(ch)) {
+        if (Character.isDigit(ch) && lexema.equals("-")) {
             this.numero(lexema, ch);
             return;
         }
