@@ -201,14 +201,14 @@ public class AnalisadorLexico {
             if (ch == '.') {
                 qtdPonto++;
             }
-            if (Character.isLetter(ch) || qtdPonto > 1) {
+            if (!Character.isDigit(ch) || qtdPonto > 1) {
                 error = true;
             }
             lexema += ch;
             this.coluna++;
             ch = this.novoChar();
         }
-        if (!error) {
+        if (!error && !(lexema.charAt(lexema.length()-1) == '.')) {
             Token tk;
             tk = new Token(lexema, "Numero", this.linha, this.coluna);
             this.tokens.add(tk);
