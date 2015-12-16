@@ -41,7 +41,7 @@ public class Token {
      * @param linha Linha de ocorrencia do lexema
      * @param coluna Coluna onde se inicia o lexema
      */
-    public Token(String tipo, String valor, int linha, int coluna) {
+    public Token(String valor, String tipo, int linha, int coluna) {
 
         this.tipo = tipo;
         this.valor = valor;

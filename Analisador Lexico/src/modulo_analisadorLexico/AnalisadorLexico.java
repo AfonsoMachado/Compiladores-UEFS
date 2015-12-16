@@ -45,6 +45,8 @@ public class AnalisadorLexico {
      *
      */
     private boolean linhaVazia;
+    
+    private ArrayList<Token> tabelaSimbolos; 
 
     /**
      *
@@ -90,25 +92,28 @@ public class AnalisadorLexico {
      * @return
      */
     public char novoChar() {
-
-        char c[] = this.codigo.get(linha).toCharArray();
-        if (c.length == this.coluna) {
-            return ' ';
-        } else if (c.length > this.coluna) {
-            return c[coluna];
-        } else if (this.codigo.size() > (this.linha + 1)) {
-            this.linha++;
-            c = this.codigo.get(this.linha).toCharArray();
-            this.coluna = 0;
-            // Caso uma linha não tenha absolutamente nada, apenas um "enter".
-            if (c.length == 0) {
-                this.linhaVazia = true;
-                return '©'; // Enviar qualquer, tanto faz, não vai ser lido mesmo.
+        if (!codigo.isEmpty()) {
+            char c[] = this.codigo.get(linha).toCharArray();
+            if (c.length == this.coluna) {
+                return ' ';
+            } else if (c.length > this.coluna) {
+                return c[coluna];
+            } else if (this.codigo.size() > (this.linha + 1)) {
+                this.linha++;
+                c = this.codigo.get(this.linha).toCharArray();
+                this.coluna = 0;
+                // Caso uma linha não tenha absolutamente nada, apenas um "enter".
+                if (c.length == 0) {
+                    this.linhaVazia = true;
+                    return '©'; // Enviar qualquer, tanto faz, não vai ser lido mesmo.
+                }
+                //
+                return c[this.coluna];
+            } else {
+                //fim de arquivo
+                return EOF;
             }
-            //
-            return c[this.coluna];
         } else {
-            //fim de arquivo
             return EOF;
         }
     }
@@ -132,6 +137,8 @@ public class AnalisadorLexico {
                     this.identificador(token, ch);
                 } else if (ch == '\'') { // Verifica se é uma cadeia constante.
                     this.caracterConstante(token, ch);
+                } else if (ch == '"') {
+                    this.cadeiaConstante(token, ch);
                 } else if (Character.isDigit(ch)) { // Verifica se é número
                     this.numero(token, ch);
                 } else if (estruturaLexica.ehOperador(ch)) { // Verifica se é operador
@@ -183,6 +190,7 @@ public class AnalisadorLexico {
                 tk = new Token(token, "Identificador", this.linha, this.coluna);
             }
             this.tokens.add(tk);
+            this.tabelaSimbolos.add(tk);
         } else {
             this.novoErro("identificador mal formado");
         }
@@ -208,7 +216,7 @@ public class AnalisadorLexico {
             this.coluna++;
             ch = this.novoChar();
         }
-        if (!error && !(lexema.charAt(lexema.length()-1) == '.')) {
+        if (!error && !(lexema.charAt(lexema.length() - 1) == '.')) {
             Token tk;
             tk = new Token(lexema, "Numero", this.linha, this.coluna);
             this.tokens.add(tk);
@@ -220,7 +228,28 @@ public class AnalisadorLexico {
     }
 
     public void cadeiaConstante(String token, char ch) {
-
+        token = token + ch;
+        boolean error = false;
+        this.coluna++;
+        int l = linha;
+        ch = this.novoChar();
+        while (ch != '"' && ch != EOF && l == linha) {
+            if (!estruturaLexica.ehSimbolo(ch)) {
+                error = true;
+            }
+            token = token + ch;
+            this.coluna++;
+            ch = this.novoChar();
+        }
+        if (!error && l == linha) {
+            Token tk;
+            token = token + ch;
+            this.coluna++;
+            tk = new Token(token, "Cadeia Constante", this.linha, this.coluna);
+            this.tokens.add(tk);
+        } else {
+            this.novoErro("cadeia constante mal formado");
+        }
     }
 
     public void caracterConstante(String token, char ch) {
@@ -228,9 +257,9 @@ public class AnalisadorLexico {
         token = token + ch;
         boolean error = false;
         this.coluna++;
-        int cont = 0;
+        int cont = 0, l = linha;
         ch = this.novoChar();
-        while (ch != '\'' && ch != EOF) {
+        while (ch != '\'' && ch != EOF && l == linha) {
             if (!(Character.isLetter(ch) || Character.isDigit(ch)) || cont > 0) {
                 error = true;
             }
@@ -239,7 +268,7 @@ public class AnalisadorLexico {
             this.coluna++;
             ch = this.novoChar();
         }
-        if (!error && cont != 0) {
+        if (!error && cont != 0 && l == linha) {
             Token tk;
             token = token + ch;
             this.coluna++;
@@ -290,7 +319,7 @@ public class AnalisadorLexico {
                 //ch = novoChar();
                 //lexema.substring(0, lexema.length()-1);
                 //this.comentario(ch);
-                
+
             } else if (lexema.equals("=") || lexema.equals("!") || lexema.equals("<") || lexema.equals(">")) {
                 if (ch != '=') {
                     error = true;
