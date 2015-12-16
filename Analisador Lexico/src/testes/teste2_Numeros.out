@@ -1,0 +1,42 @@
+Indeteficador#Identificador#0#13
+900#Numero#0#17
+;#Delimitador#0#17
+class#Palavra Reservada#1#9
+10#Numero#1#12
+{#Delimitador#1#12
+}#Delimitador#1#13
+5.10#Numero#1#18
+[#Delimitador#1#18
+]#Delimitador#1#24
+;#Delimitador#1#25
+-10#Numero#3#3
++#Operador#2#2
+-10.50#Numero#3#11
+-10#Numero#3#15
++#Operador#2#14
+-10#Numero#3#20
+;#Delimitador#5#6
+,#Delimitador#5#7
+new#Palavra Reservada#7#3
+5#Numero#7#5
+++#Operador#6#4
++10.90#Numero#7#14
+-#Operador#6#13
+a#Identificador#8#1
+=#Operador#7#1
+9999.9999#Numero#8#13
+;#Delimitador#8#13
+1#Numero#10#1
+2#Numero#10#3
+12#Numero#10#6
+12.3#Numero#10#11
+-1#Numero#10#14
+-1.2#Numero#10#19
+;#Delimitador#10#32
+1.#Numero#12#2
+-5#Numero#12#4
+
+Código com erro, Numero mal formado na linha 2 coluna 25
+Código com erro, Numero mal formado na linha 6 coluna 7
+Código com erro, Numero mal formado na linha 11 coluna 26
+Código com erro, Numero mal formado na linha 11 coluna 33
