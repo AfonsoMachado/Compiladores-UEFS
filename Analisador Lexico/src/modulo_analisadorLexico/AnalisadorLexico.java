@@ -79,7 +79,7 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
+     * Método destinado a padronização dos erros.
      * @param tipo
      */
     public void novoErro(String tipo) {
