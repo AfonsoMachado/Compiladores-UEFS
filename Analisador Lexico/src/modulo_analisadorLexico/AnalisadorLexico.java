@@ -51,7 +51,7 @@ public class AnalisadorLexico {
      */
 
     private boolean linhaVazia;
-    private boolean ultimoFoiOp;
+    private boolean podeSerNumero;
 
     public AnalisadorLexico() {
 
@@ -63,7 +63,7 @@ public class AnalisadorLexico {
         this.linha = 0;
 
         this.linhaVazia = false;
-        this.ultimoFoiOp = false;
+        this.podeSerNumero = true;
     }
 
     /**
@@ -89,7 +89,7 @@ public class AnalisadorLexico {
      */
     public void novoErro(String tipo) {
 
-        this.erros.add("\nCódigo com erro, " + tipo + " na linha " + (linha + 1) + " coluna " + (coluna + 1));
+        this.erros.add("\nCódigo com erro, " + tipo + " na linha " + (linha + 1) + " coluna " + coluna);
     }
 
     /**
@@ -138,17 +138,13 @@ public class AnalisadorLexico {
             if (!this.linhaVazia) {
                 lexema = "";
 
-                if (!estruturaLexica.ehOperador(ch) && !Character.isSpaceChar(ch)) {
-                    ultimoFoiOp = false;
-                }
-
                 if (Character.isSpaceChar(ch)) {
                     this.coluna++;
                 } else if (estruturaLexica.ehLetra(ch)) { // Verifica se é um identificador.
                     this.identificador(lexema, ch);
-                } else if (ch == '\'') { // Verifica se é uma cadeia constante.
+                } else if (ch == '\'') { // Verifica se é um caracter constante.
                     this.caracterConstante(lexema, ch);
-                } else if (ch == '"') {
+                } else if (ch == '"') { //Verifica se é cadeia constante
                     this.cadeiaConstante(lexema, ch);
                 } else if (estruturaLexica.ehDigito(ch)) { // Verifica se é número
                     this.numero(lexema, ch);
@@ -165,6 +161,12 @@ public class AnalisadorLexico {
             } else {
                 this.linhaVazia = false;
                 this.linha++;
+            }
+
+            if (podeSerNumero && (estruturaLexica.ehOperador(ch) || estruturaLexica.ehDelimitador(ch))) {
+                podeSerNumero = true;
+            } else if (estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch)) {
+                podeSerNumero = false;
             }
 
             ch = this.novoChar();
@@ -320,12 +322,13 @@ public class AnalisadorLexico {
             if (ch == '-') {
                 lexema += ch;
                 this.coluna++;
-            } else if (this.ultimoFoiOp) {
-                while (Character.isSpaceChar(ch) && (linhaInicial - 1) == this.linha) {
+            } else if (this.podeSerNumero) {
+                while (Character.isSpaceChar(ch) && linhaInicial == this.linha) {
                     this.coluna++;
                     ch = novoChar();
                 }
                 if (estruturaLexica.ehDigito(ch)) {
+                    this.podeSerNumero = false;
                     this.numero(lexema, ch);
                     return;
                 }
@@ -373,9 +376,9 @@ public class AnalisadorLexico {
 
         }
         if (lexema.equals("++") || lexema.equals("--")) {
-            this.ultimoFoiOp = false;
+            this.podeSerNumero = false;
         } else {
-            this.ultimoFoiOp = true;
+            this.podeSerNumero = true;
         }
 
         if (!error) {
@@ -416,6 +419,7 @@ public class AnalisadorLexico {
     }
 
     private void simboloInvalido(String lexema, char ch) {
+
         this.novoErro("Simbolo invalido");
         while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
             lexema = lexema + ch;

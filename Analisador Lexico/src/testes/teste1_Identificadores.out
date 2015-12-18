@@ -1,0 +1,18 @@
+Identificador#package#1:1
+Identificador#testes#1:9
+Delimitador#;#1:15
+Identificador#public#2:1
+Palavra Reservada#class#2:8
+Identificador#teste1I_dentificadores#2:14
+Palavra Reservada#if#4:5
+Palavra Reservada#else#4:8
+Delimitador#;#4:12
+Palavra Reservada#class#5:9
+Delimitador#;#5:14
+Delimitador#(#6:17
+Palavra Reservada#class#6:18
+Delimitador#)#6:23
+Delimitador#,#6:24
+Delimitador#;#6:25
+
+Código com erro, Simbolo invalido na linha 4 coluna 1
