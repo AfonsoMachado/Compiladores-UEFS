@@ -44,9 +44,11 @@ public class AnalisadorLexico {
     /**
      *
      */
-    private boolean linhaVazia;
-
     private ArrayList<Token> tabelaSimbolos;
+
+    private boolean linhaVazia;
+    private boolean ultimoFoiDecremento;
+    private boolean ultimoFoiMenos;
 
     /**
      *
@@ -60,6 +62,7 @@ public class AnalisadorLexico {
         this.linha = 0;
 
         this.linhaVazia = false;
+        this.ultimoFoiDecremento = false;
     }
 
     /**
@@ -104,10 +107,13 @@ public class AnalisadorLexico {
                 this.linha++;
                 c = this.codigo.get(this.linha).toCharArray();
                 this.coluna = 0;
-                // Caso uma linha não tenha absolutamente nada, apenas um "enter".
-                if (c.length == 0) {
+                //....
+                this.ultimoFoiDecremento = false;
+                this.ultimoFoiMenos = false;
+
+                if (c.length == 0) { // Caso uma linha não tenha absolutamente nada, apenas um "enter".
                     this.linhaVazia = true;
-                    return '©'; // Enviar qualquer, tanto faz, não vai ser lido mesmo.
+                    return '©'; // Enviar qualquer coisa, tanto faz, não vai ser lido mesmo.
                 }
                 //
                 return c[this.coluna];
@@ -290,44 +296,56 @@ public class AnalisadorLexico {
         int colunaInicial = this.coluna - 1;
         boolean error = false;
 
-        if (ch == '.') {
-            lexema += ch;
-            this.coluna++;
-
+        lexema += ch;
+        this.coluna++;
+        if (ch == '.' || ch == '*') {
+            //kbou faz mais nada.
         } else if (ch == '+') {
-            lexema += ch;
-            this.coluna++;
             ch = this.novoChar();
             if (ch == '+') {
                 lexema += ch;
                 this.coluna++;
             }
 
-        } else if (ch == '-') {
-            lexema += ch;
-            this.coluna++;            
+        } else if (ch == '-' && this.ultimoFoiMenos) {  
+            ch = novoChar();
+            while (Character.isSpaceChar(ch) && linhaInicial == this.linha) {
+                this.coluna++;
+                ch = novoChar();
+            }
+            if (estruturaLexica.ehDigito(ch)) {
+                this.ultimoFoiMenos = false;
+                this.numero(lexema, ch);
+                return;
+            }
+
+        } else if (ch == '-' && !this.ultimoFoiMenos) {
             ch = novoChar();
             if (ch_anterior == null) {
                 if (ch == '-') {
                     lexema += ch;
                     this.coluna++;
+                    this.ultimoFoiDecremento = true;
                 } else if (estruturaLexica.ehDigito(ch)) {
                     this.numero(lexema, ch);
                     return;
                 }
-            } else {
-                if (estruturaLexica.ehDigito(ch)) {
-                    
+            } else if (ultimoFoiDecremento) {
+                this.ultimoFoiDecremento = false;
+                while (Character.isSpaceChar(ch)) {
+                    this.coluna++;
+                    ch = novoChar();
                 }
+                if (estruturaLexica.ehDigito(ch)) {
+                    this.numero(lexema, ch);
+                    return;
+                }
+
+            } else if () {
+
             }
 
-        } else if (ch == '*') {
-            lexema += ch;
-            this.coluna++;
-
         } else if (ch == '/') {
-            lexema += ch;
-            this.coluna++;
             ch = this.novoChar();
             if (ch == '/' || ch == '*') {
                 this.comentario(lexema + ch);
@@ -335,8 +353,6 @@ public class AnalisadorLexico {
             }
 
         } else if (ch == '=' || ch == '>' || ch == '<') {
-            lexema += ch;
-            this.coluna++;
             ch = novoChar();
             if (ch == '=') {
                 lexema += ch;
@@ -344,8 +360,6 @@ public class AnalisadorLexico {
             }
 
         } else if (ch == '!') {
-            lexema += ch;
-            this.coluna++;
             ch = this.novoChar();
             if (ch == '=') {
                 lexema += ch;
@@ -359,8 +373,6 @@ public class AnalisadorLexico {
             }
 
         } else if (ch == '&' || ch == '|') {
-            lexema += ch;
-            this.coluna++;
             ch = this.novoChar();
             if (ch == lexema.charAt(0)) {
                 lexema += ch;
