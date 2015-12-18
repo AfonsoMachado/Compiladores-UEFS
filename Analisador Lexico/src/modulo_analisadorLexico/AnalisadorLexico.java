@@ -45,8 +45,8 @@ public class AnalisadorLexico {
      *
      */
     private boolean linhaVazia;
-    
-    private ArrayList<Token> tabelaSimbolos; 
+
+    private ArrayList<Token> tabelaSimbolos;
 
     /**
      *
@@ -80,6 +80,7 @@ public class AnalisadorLexico {
 
     /**
      * Método destinado a padronização dos erros.
+     *
      * @param tipo
      */
     public void novoErro(String tipo) {
@@ -92,6 +93,7 @@ public class AnalisadorLexico {
      * @return
      */
     public char novoChar() {
+
         if (!codigo.isEmpty()) {
             char c[] = this.codigo.get(linha).toCharArray();
             if (c.length == this.coluna) {
@@ -124,34 +126,35 @@ public class AnalisadorLexico {
      */
     public void analise(ArrayList<String> codigo) {
 
-        String token;
         this.codigo = codigo;
+        String lexema;
+        Character ch_anterior = null;
 
         char ch = this.novoChar();
         while (ch != EOF) {
             if (!this.linhaVazia) {
-                token = "";
+                lexema = "";
                 if (Character.isSpaceChar(ch)) {
                     this.coluna++;
-                } else if (Character.isLetter(ch)) { // Verifica se é um identificador.
-                    this.identificador(token, ch);
+                } else if (estruturaLexica.ehLetra(ch)) { // Verifica se é um identificador.
+                    this.identificador(lexema, ch);
                 } else if (ch == '\'') { // Verifica se é uma cadeia constante.
-                    this.caracterConstante(token, ch);
+                    this.caracterConstante(lexema, ch);
                 } else if (ch == '"') {
-                    this.cadeiaConstante(token, ch);
-                } else if (Character.isDigit(ch)) { // Verifica se é número
-                    this.numero(token, ch);
+                    this.cadeiaConstante(lexema, ch);
+                } else if (estruturaLexica.ehDigito(ch)) { // Verifica se é número
+                    this.numero(lexema, ch);
                 } else if (estruturaLexica.ehOperador(ch)) { // Verifica se é operador
-                    this.operador(token, ch);
+                    this.operador(lexema, ch, ch_anterior);
                 } else if (this.estruturaLexica.ehDelimitador(ch)) { // Verifica se é delimitador.
-                    token = token + ch;
-                    Token tk = new Token(token, "Delimitador", this.linha, this.coluna);
+                    lexema = lexema + ch;
+                    Token tk = new Token(lexema, "Delimitador", this.linha, this.coluna);
                     this.tokens.add(tk);
                     this.coluna++;
                 } else { //Simbolos invalidos
                     this.novoErro("Simbolo invalido");
                     while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
-                        token = token + ch;
+                        lexema = lexema + ch;
                         this.coluna++;
                         ch = this.novoChar();
                     }
@@ -160,23 +163,25 @@ public class AnalisadorLexico {
                 this.linhaVazia = false;
                 this.linha++;
             }
+
+            ch_anterior = ch;
             ch = this.novoChar();
         }
     }
 
-    public void identificador(String token, char ch) {
+    public void identificador(String lexema, char ch) {
 
-        token = token + ch;
+        lexema = lexema + ch;
         boolean error = false;
         this.coluna++;
         ch = this.novoChar();
-        System.out.println(ch + token + this.coluna + " " + this.linha);
+        System.out.println(ch + lexema + this.coluna + " " + this.linha);
         //percorre enquanto houver letras, digitos ou _
         while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
-            if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '_')) {
+            if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) {
                 error = true;
             }
-            token = token + ch;
+            lexema = lexema + ch;
             this.coluna++;
             ch = this.novoChar();
         }
@@ -184,17 +189,17 @@ public class AnalisadorLexico {
         if (!error) {
             Token tk;
             //verifica se eh uma palavra reservada
-            if (this.estruturaLexica.ehPalavraReservada(token)) {
-                tk = new Token(token, "Palavra Reservada", this.linha, this.coluna);
+            if (this.estruturaLexica.ehPalavraReservada(lexema)) {
+                tk = new Token(lexema, "Palavra Reservada", this.linha, this.coluna);
             } else {
-                tk = new Token(token, "Identificador", this.linha, this.coluna);
+                tk = new Token(lexema, "Identificador", this.linha, this.coluna);
             }
             this.tokens.add(tk);
             this.tabelaSimbolos.add(tk);
         } else {
             this.novoErro("identificador mal formado");
         }
-        System.out.println(" token :" + token);
+        System.out.println(" token :" + lexema);
 
     }
 
@@ -209,7 +214,7 @@ public class AnalisadorLexico {
             if (ch == '.') {
                 qtdPonto++;
             }
-            if (!Character.isDigit(ch) || qtdPonto > 1) {
+            if (!estruturaLexica.ehDigito(ch) || qtdPonto > 1) {
                 error = true;
             }
             lexema += ch;
@@ -227,8 +232,8 @@ public class AnalisadorLexico {
         System.out.println("tok atu: " + lexema);
     }
 
-    public void cadeiaConstante(String token, char ch) {
-        token = token + ch;
+    public void cadeiaConstante(String lexema, char ch) {
+        lexema = lexema + ch;
         boolean error = false;
         this.coluna++;
         int l = linha;
@@ -237,114 +242,139 @@ public class AnalisadorLexico {
             if (!estruturaLexica.ehSimbolo(ch)) {
                 error = true;
             }
-            token = token + ch;
+            lexema = lexema + ch;
             this.coluna++;
             ch = this.novoChar();
         }
         if (!error && l == linha) {
             Token tk;
-            token = token + ch;
+            lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(token, "Cadeia Constante", this.linha, this.coluna);
+            tk = new Token(lexema, "Cadeia Constante", this.linha, this.coluna);
             this.tokens.add(tk);
         } else {
             this.novoErro("cadeia constante mal formado");
         }
     }
 
-    public void caracterConstante(String token, char ch) {
+    public void caracterConstante(String lexema, char ch) {
 
-        token = token + ch;
+        lexema = lexema + ch;
         boolean error = false;
         this.coluna++;
         int cont = 0, l = linha;
         ch = this.novoChar();
         while (ch != '\'' && ch != EOF && l == linha) {
-            if (!(Character.isLetter(ch) || Character.isDigit(ch)) || cont > 0) {
+            if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch)) || cont > 0) {
                 error = true;
             }
             cont++;
-            token = token + ch;
+            lexema = lexema + ch;
             this.coluna++;
             ch = this.novoChar();
         }
         if (!error && cont != 0 && l == linha) {
             Token tk;
-            token = token + ch;
+            lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(token, "Caracter Constante", this.linha, this.coluna);
+            tk = new Token(lexema, "Caracter Constante", this.linha, this.coluna);
             this.tokens.add(tk);
         } else {
             this.novoErro("caracter constante mal formado");
         }
     }
 
-    public void operador(String lexema, char ch) {
+    public void operador(String lexema, char ch, Character ch_anterior) {
 
-        int linhaInicial = this.linha - 1;
+        int linhaInicial = this.linha;
         int colunaInicial = this.coluna - 1;
-
-        lexema += ch;
         boolean error = false;
-        this.coluna++;
-        int qtdOpe = 0;
-        ch = this.novoChar();
-        while (estruturaLexica.ehOperador(ch)) {
-            this.coluna++;
-            qtdOpe++;
-            if (lexema.equals(".")) {
-                error = true;
-                lexema += ch;
-            } else if (lexema.equals("+")) {
-                if (ch != '+') {
-                    error = true;
-                }
-                lexema += ch;
-            } else if (lexema.equals("-")) {
-                if (ch != '-') {
-                    error = true;
-                }
-                lexema += ch;
-            } else if (lexema.equals("*")) {
-                error = true;
-                lexema += ch;
-            } else if (lexema.equals("/")) {
-                if (ch == '/' || ch == '*') {
-                    //lexema.substring(0, lexema.length()-1);
-                    //this.comentario(ch);
-                } else {
-                    error = true;
-                }
-            } else if (!lexema.equals("/") && (ch == '/' || ch == '*')) {
-                //ch = novoChar();
-                //lexema.substring(0, lexema.length()-1);
-                //this.comentario(ch);
 
-            } else if (lexema.equals("=") || lexema.equals("!") || lexema.equals("<") || lexema.equals(">")) {
-                if (ch != '=') {
-                    error = true;
-                }
+        if (ch == '.') {
+            lexema += ch;
+            this.coluna++;
+
+        } else if (ch == '+') {
+            lexema += ch;
+            this.coluna++;
+            ch = this.novoChar();
+            if (ch == '+') {
                 lexema += ch;
-            } else if (lexema.equals("&")) {
-                if (ch != '&') {
-                    error = true;
-                }
-                lexema += ch;
-            } else if (lexema.equals("|")) {
-                if (ch != '|') {
-                    error = true;
-                }
-                lexema += ch;
+                this.coluna++;
             }
 
-            ch = this.novoChar();
-        }
+        } else if (ch == '-') {
+            lexema += ch;
+            this.coluna++;            
+            ch = novoChar();
+            if (ch_anterior == null) {
+                if (ch == '-') {
+                    lexema += ch;
+                    this.coluna++;
+                } else if (estruturaLexica.ehDigito(ch)) {
+                    this.numero(lexema, ch);
+                    return;
+                }
+            } else {
+                if (estruturaLexica.ehDigito(ch)) {
+                    
+                }
+            }
 
-        if (Character.isDigit(ch) && lexema.equals("-")) {
-            this.numero(lexema, ch);
-            return;
+        } else if (ch == '*') {
+            lexema += ch;
+            this.coluna++;
+
+        } else if (ch == '/') {
+            lexema += ch;
+            this.coluna++;
+            ch = this.novoChar();
+            if (ch == '/' || ch == '*') {
+                this.comentario(lexema + ch);
+                return;
+            }
+
+        } else if (ch == '=' || ch == '>' || ch == '<') {
+            lexema += ch;
+            this.coluna++;
+            ch = novoChar();
+            if (ch == '=') {
+                lexema += ch;
+                this.coluna++;
+            }
+
+        } else if (ch == '!') {
+            lexema += ch;
+            this.coluna++;
+            ch = this.novoChar();
+            if (ch == '=') {
+                lexema += ch;
+                this.coluna++;
+            } else {
+                if (!Character.isSpaceChar(ch)) {
+                    lexema += ch;
+                    this.coluna++;
+                }
+                error = true;
+            }
+
+        } else if (ch == '&' || ch == '|') {
+            lexema += ch;
+            this.coluna++;
+            ch = this.novoChar();
+            if (ch == lexema.charAt(0)) {
+                lexema += ch;
+                this.coluna++;
+            } else {
+                if (!Character.isSpaceChar(ch)) {
+                    lexema += ch;
+                    this.coluna++;
+                }
+                error = true;
+            }
+
         }
-        if (!error && qtdOpe <= 2) {
+        if (!error) {
             Token tk;
             tk = new Token(lexema, "Operador", linhaInicial, colunaInicial);
             this.tokens.add(tk);
@@ -353,17 +383,19 @@ public class AnalisadorLexico {
         }
     }
 
-    public void comentario(char ch) {
+    public void comentario(String coment) {
 
-        linha = this.linha;
+        int linha = this.linha;
         boolean saiuBloco = false;
+        this.coluna++;
+        char ch = novoChar();
 
-        if (ch == '/') {
+        if (coment.equals("//")) {
             while (linha == this.linha || ch != EOF) {
                 this.coluna++;
                 ch = novoChar();
             }
-        } else if (ch == '*') {
+        } else if (coment.equals("/*")) {
             while (ch != EOF && !saiuBloco) {
                 this.coluna++;
                 ch = novoChar();

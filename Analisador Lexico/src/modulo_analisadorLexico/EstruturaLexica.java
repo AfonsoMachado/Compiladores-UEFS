@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 /**
  * Classe que representa a estrutura lexica que rege o compilador.
- * 
+ *
  * @author Lucas Carneiro
  * @author Oto Lopes
- * 
+ *
  * @see Token
  * @see AnalisadorLexico
  */
 public class EstruturaLexica {
-    
+
     /**
      * Lista com as palavras reservadas.
      */
@@ -46,7 +46,7 @@ public class EstruturaLexica {
      * Construtor da classe, inserindo todos os elementos das listas.
      */
     public EstruturaLexica() {
-        
+
         this.palavrasReservadas = new ArrayList<>();
         this.letra = new ArrayList<>();
         this.digito = new ArrayList<>();
@@ -54,7 +54,7 @@ public class EstruturaLexica {
         this.operadores = new ArrayList<>();
         this.delimitadores = new ArrayList<>();
         this.comentarios = new ArrayList<>();
-        
+
         //
         this.palavrasReservadas.add("class");
         this.palavrasReservadas.add("const");
@@ -74,25 +74,25 @@ public class EstruturaLexica {
         this.palavrasReservadas.add("true");
         this.palavrasReservadas.add("false");
         this.palavrasReservadas.add("main");
-        
+
         //
-        for (char i = 'a'; i <='z' ; i++) {
+        for (char i = 'a'; i <= 'z'; i++) {
             this.letra.add((char) i);
         }
-        for (char i = 'A'; i <='Z' ; i++) {
+        for (char i = 'A'; i <= 'Z'; i++) {
             this.letra.add((char) i);
         }
-        
+
         //
-        for (char i = '0'; i <='9' ; i++) {
+        for (char i = '0'; i <= '9'; i++) {
             this.digito.add(i);
         }
-        
+
         //
-        for (int i = 32; i <=126 ; i++) {
+        for (int i = 32; i <= 126; i++) {
             this.simbolo.add((char) i);
         }
-        
+
         //
         this.operadores.add('.');
         this.operadores.add('+');
@@ -107,7 +107,7 @@ public class EstruturaLexica {
         this.operadores.add('&');
         this.operadores.add('|');
         this.operadores.add('=');
-        
+
         //
         this.delimitadores.add(';');
         this.delimitadores.add(',');
@@ -117,58 +117,85 @@ public class EstruturaLexica {
         this.delimitadores.add('}');
         this.delimitadores.add('[');
         this.delimitadores.add(']');
-        
+
         //
         this.comentarios.add("*/");
         this.comentarios.add("/*");
         this.comentarios.add("//");
     }
-    
+
     /**
      * Verifica se a palavra enviada é uma palavra reservada.
-     * 
-     * @param pReservada Palavra encontrada no código 
-     * 
+     *
+     * @param pReservada Palavra encontrada no código
+     *
      * @return Verdadeiro se a palavra for reservada, Falso caso contrário
      */
     public boolean ehPalavraReservada(String pReservada) {
-                
+
         return this.palavrasReservadas.contains(pReservada);
     }
 
     /**
+     * Verifica se o caracter enviado é uma letra.
+     *
+     * @param letra Letra encontrada no código
+     *
+     * @return Verdadeiro se o char enviado for uma letra, Falso caso contrário
+     */
+    public boolean ehLetra(char letra) {
+
+        return this.letra.contains(letra);
+    }
+    
+    /**
+     * Verifica se o caracter enviado é um digito.
+     *
+     * @param digito Digito encontrado no código
+     *
+     * @return Verdadeiro se o char enviado for um digito, Falso caso contrário
+     */
+    public boolean ehDigito(char digito) {
+
+        return this.digito.contains(digito);
+    }
+
+    /**
      * Verifica se o símbolo enviado é um símbolo válido.
-     * 
+     *
      * @param simb Símbolo encontrado no código
-     * 
-     * @return Verdadeiro se o símbolo enviado for um símbolo válido, Falso caso contrário
+     *
+     * @return Verdadeiro se o símbolo enviado for um símbolo válido, Falso caso
+     * contrário
      */
     public boolean ehSimbolo(char simb) {
-                
+
         return this.simbolo.contains(simb);
     }
 
     /**
      * Verifica se o símbolo enviado é um operador.
-     * 
+     *
      * @param ope Operador encontrado no código
-     * 
-     * @return Verdadeiro se o símbolo enviado for um operador, Falso caso contrário
+     *
+     * @return Verdadeiro se o símbolo enviado for um operador, Falso caso
+     * contrário
      */
     public boolean ehOperador(char ope) {
-        
+
         return this.operadores.contains(ope);
     }
-    
+
     /**
      * Verifica se o símbolo enviado é um delimitador.
-     * 
+     *
      * @param delim Delimitador encontrado no código
-     * 
-     * @return Verdadeiro se o símbolo enviado for um delimitador, Falso caso contrário
+     *
+     * @return Verdadeiro se o símbolo enviado for um delimitador, Falso caso
+     * contrário
      */
     public boolean ehDelimitador(char delim) {
-        
+
         return this.delimitadores.contains(delim);
-    }  
+    }
 }
