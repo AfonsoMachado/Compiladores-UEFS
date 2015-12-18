@@ -1,19 +1,15 @@
-Identificador#package#1:1
-Identificador#testes#1:9
-Delimitador#;#1:15
-Identificador#public#2:1
-Palavra Reservada#class#2:8
-Identificador#teste1I_dentificadores#2:14
-Identificador#aaa#3:1
-Palavra Reservada#if#4:5
-Palavra Reservada#else#4:8
-Delimitador#;#4:12
-Palavra Reservada#class#5:9
-Delimitador#;#5:14
-Delimitador#(#6:17
-Palavra Reservada#class#6:18
-Delimitador#)#6:23
-Delimitador#,#6:24
-Delimitador#;#6:25
+Identificador#package#6:1
+Delimitador#;#6:20
+Identificador#public#7:1
+Palavra Reservada#class#7:8
+Identificador#teste1I_dentificadores#7:14
+Identificador#aaa#8:1
+Palavra Reservada#if#9:5
+Palavra Reservada#else#9:8
+Delimitador#;#9:12
+Palavra Reservada#class#10:9
+Delimitador#;#10:14
 
-Código com erro, $if Simbolo invalido na linha 3 coluna 0
+Código com erro, class$class Identificador mal formado na linha 6 coluna 9
+Código com erro, $if Símbolo inválido na linha 9 coluna 1
+Código com erro, if$ Identificador mal formado na linha 11 coluna 1

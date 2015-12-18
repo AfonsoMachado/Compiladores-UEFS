@@ -89,7 +89,7 @@ public class AnalisadorLexico {
      */
     public void novoErro(String tipo, String erro, int linhaInicial, int colunaInicial) {
 
-        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + linhaInicial + " coluna " + colunaInicial);
+        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + (linhaInicial+1) + " coluna " + (colunaInicial+1));
     }
 
     /**
@@ -106,6 +106,7 @@ public class AnalisadorLexico {
                 return c[coluna];
             } else if (this.codigo.size() > (this.linha + 1)) {
                 this.linha++;
+                podeSerNumero=true;
                 c = this.codigo.get(this.linha).toCharArray();
                 this.coluna = 0;
 
@@ -203,7 +204,7 @@ public class AnalisadorLexico {
             }
             this.tokens.add(tk);
         } else {
-            this.novoErro("identificador mal formado", lexema, linhaInicial, colunaInicial);
+            this.novoErro("Identificador mal formado", lexema, linhaInicial, colunaInicial);
         }
         System.out.println(" token :" + lexema);
 
@@ -214,6 +215,10 @@ public class AnalisadorLexico {
         int linhaInicial = this.linha;
         int colunaInicial = this.coluna;
 
+        if (lexema.equals("-")) {
+            colunaInicial--;
+        }
+            
         lexema += ch;
         boolean error = false;
         this.coluna++;
@@ -233,10 +238,10 @@ public class AnalisadorLexico {
             if (!estruturaLexica.ehDigito(ch)) {
                 if (!error) {
                     Token tk;
-                    tk = new Token(lexema, "Numero", linhaInicial, colunaInicial);
+                    tk = new Token(lexema, "Número", linhaInicial, colunaInicial);
                     this.tokens.add(tk);
                 } else {
-                    this.novoErro("Numero mal formado", lexema, linhaInicial, colunaInicial);
+                    this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
                 }
                 this.podeSerNumero = true;
                 Token tk2;
@@ -246,7 +251,7 @@ public class AnalisadorLexico {
                 return;
 
             } else {
-                lexema += ch;
+                lexema += "."+ch;
                 this.coluna++;
                 ch = this.novoChar();
                 while (estruturaLexica.ehDigito(ch) || estruturaLexica.ehLetra(ch)) {
@@ -262,10 +267,10 @@ public class AnalisadorLexico {
 
         if (!error) {
             Token tk;
-            tk = new Token(lexema, "Numero", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Número", linhaInicial, colunaInicial);
             this.tokens.add(tk);
         } else {
-            this.novoErro("Numero mal formado", lexema, linhaInicial, colunaInicial);
+            this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
         }
     }
 
@@ -291,10 +296,10 @@ public class AnalisadorLexico {
             Token tk;
             lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(lexema, "Cadeia Constante", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Cadeia constante", linhaInicial, colunaInicial);
             this.tokens.add(tk);
         } else {
-            this.novoErro("cadeia constante mal formado", lexema, linhaInicial, colunaInicial);
+            this.novoErro("Cadeia constante mal formado", lexema, linhaInicial, colunaInicial);
         }
     }
 
@@ -321,10 +326,10 @@ public class AnalisadorLexico {
             Token tk;
             lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(lexema, "Caracter Constante", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Caracter constante", linhaInicial, colunaInicial);
             this.tokens.add(tk);
         } else {
-            this.novoErro("caracter constante mal formado", lexema, linhaInicial, colunaInicial);
+            this.novoErro("Caracter constante mal formado", lexema, linhaInicial, colunaInicial);
         }
     }
 
@@ -457,6 +462,6 @@ public class AnalisadorLexico {
             ch = this.novoChar();
         }
 
-        this.novoErro("Simbolo invalido", lexema, linhaInicial, colunaInicial);
+        this.novoErro("Símbolo inválido", lexema, linhaInicial, colunaInicial);
     }
 }
