@@ -1,0 +1,61 @@
+Operador#.#2:8
+Operador#.#2:9
+Operador#.#2:10
+Operador#+#2:12
+Operador#++#2:14
+Operador#++#2:17
+Operador#+#2:19
+Operador#++#2:21
+Operador#++#2:23
+Operador#==#5:4
+Operador#>=#5:7
+Operador#=#5:10
+Operador#<=#5:12
+Operador#>#5:15
+Operador#<#5:16
+Operador#!=#5:18
+Operador#&&#7:5
+Operador#||#7:8
+Operador#--#11:9
+Identificador#i#11:11
+Operador#-#11:13
+Numero#5#11:15
+Identificador#i#12:9
+Operador#--#12:10
+Operador#-#12:13
+Numero#5#12:15
+Identificador#i#13:9
+Operador#-#13:11
+Numero#-5#13:14
+Operador#-#13:16
+Numero#1#13:18
+Identificador#i#14:9
+Operador#-#14:11
+Numero#1#14:13
+Operador#-#15:4
+Operador#-#15:6
+Numero#5#15:10
+Identificador#i#16:9
+Operador#-#16:11
+Operador#-#16:13
+Numero#5#16:15
+Operador#-#16:17
+Numero#1#16:19
+Operador#=#17:4
+Operador#-#17:6
+Numero#5#17:8
+Identificador#i#18:9
+Operador#-#18:11
+Numero#5#18:13
+Identificador#i#19:9
+Operador#--#19:10
+Operador#-#19:13
+Operador#-#19:15
+Numero#5#19:17
+
+Código com erro, Operador Inexistente na linha 6 coluna 2
+Código com erro, Operador Inexistente na linha 7 coluna 3
+Código com erro, Operador Inexistente na linha 8 coluna 3
+Código com erro, Operador Inexistente na linha 9 coluna 3
+Código com erro, Simbolo invalido na linha 15 coluna 1
+Código com erro, Simbolo invalido na linha 17 coluna 1

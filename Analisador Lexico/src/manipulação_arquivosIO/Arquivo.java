@@ -66,7 +66,7 @@ public class Arquivo {
             PrintWriter gravar = new PrintWriter(arq);
             
             for (Token token : tokens) {
-                gravar.println(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha()+ "#" + token.getColuna());
+                gravar.println(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha()+ ":" + token.getColuna());
             }
             if (erros.isEmpty()) {
                 gravar.printf("\nParabens, código compilado com successo\n");

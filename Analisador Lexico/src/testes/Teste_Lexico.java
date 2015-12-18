@@ -21,7 +21,7 @@ public class Teste_Lexico {
         System.out.println("teste 4 -> i = " + i + " j = " + j);
 
         i = 10;
-        j = i - -5; // id(i) op(-) nro(-5)   
+        j = i- -5; // id(i) op(-) nro(-5)   
         System.out.println("teste 5 -> i = " + i + " j = " + j);
 
         i = 10;
@@ -38,6 +38,10 @@ public class Teste_Lexico {
 
         i = 10;
         j = i-- - - 5; // id(i) op(--) op(-) nro(-5)  
-        System.out.println("teste 9 -> i = " + i + " j = " + j);
+        System.out.println("teste 9 -> i = " + i + " j = " + j);   
+        
+        
+        //j = i --5; // id(i) op(--) nro(5)   
+        
     }
 }
