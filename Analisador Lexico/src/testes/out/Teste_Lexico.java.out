@@ -1,6 +1,8 @@
 Identificador#package#1:1
 Identificador#testes#1:9
-Delimitador#;#1:15
+Operador#.#1:15
+Identificador#in#1:16
+Delimitador#;#1:18
 Identificador#public#3:1
 Palavra Reservada#class#3:8
 Identificador#Teste_Lexico#3:14
@@ -255,39 +257,4 @@ Delimitador#;#41:64
 Delimitador#}#46:5
 Delimitador#}#47:1
 
-Código com erro, Simbolo invalido na linha 2 coluna 0
-Código com erro, Simbolo invalido na linha 3 coluna 27
-Código com erro, Simbolo invalido na linha 4 coluna 0
-Código com erro, Simbolo invalido na linha 5 coluna 44
-Código com erro, Simbolo invalido na linha 6 coluna 22
-Código com erro, Simbolo invalido na linha 7 coluna 0
-Código com erro, Simbolo invalido na linha 9 coluna 64
-Código com erro, Simbolo invalido na linha 10 coluna 0
-Código com erro, Simbolo invalido na linha 11 coluna 15
-Código com erro, Simbolo invalido na linha 13 coluna 64
-Código com erro, Simbolo invalido na linha 14 coluna 0
-Código com erro, Simbolo invalido na linha 15 coluna 15
-Código com erro, Simbolo invalido na linha 17 coluna 64
-Código com erro, Simbolo invalido na linha 18 coluna 0
-Código com erro, Simbolo invalido na linha 19 coluna 15
-Código com erro, Simbolo invalido na linha 21 coluna 64
-Código com erro, Simbolo invalido na linha 22 coluna 0
-Código com erro, Simbolo invalido na linha 23 coluna 15
-Código com erro, Simbolo invalido na linha 25 coluna 64
-Código com erro, Simbolo invalido na linha 26 coluna 0
-Código com erro, Simbolo invalido na linha 27 coluna 15
-Código com erro, Simbolo invalido na linha 29 coluna 64
-Código com erro, Simbolo invalido na linha 30 coluna 0
-Código com erro, Simbolo invalido na linha 31 coluna 15
-Código com erro, Simbolo invalido na linha 33 coluna 64
-Código com erro, Simbolo invalido na linha 34 coluna 0
-Código com erro, Simbolo invalido na linha 35 coluna 15
-Código com erro, Simbolo invalido na linha 37 coluna 64
-Código com erro, Simbolo invalido na linha 38 coluna 0
-Código com erro, Simbolo invalido na linha 39 coluna 15
-Código com erro, Simbolo invalido na linha 41 coluna 67
-Código com erro, Simbolo invalido na linha 42 coluna 8
-Código com erro, Simbolo invalido na linha 43 coluna 8
-Código com erro, Simbolo invalido na linha 45 coluna 8
-Código com erro, Simbolo invalido na linha 46 coluna 5
-Código com erro, Simbolo invalido na linha 47 coluna 1
+Parabens, código compilado com successo

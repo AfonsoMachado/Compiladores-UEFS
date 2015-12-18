@@ -4,6 +4,7 @@ Delimitador#;#1:15
 Identificador#public#2:1
 Palavra Reservada#class#2:8
 Identificador#teste1I_dentificadores#2:14
+Identificador#aaa#3:1
 Palavra Reservada#if#4:5
 Palavra Reservada#else#4:8
 Delimitador#;#4:12
@@ -15,4 +16,4 @@ Delimitador#)#6:23
 Delimitador#,#6:24
 Delimitador#;#6:25
 
-Código com erro, Simbolo invalido na linha 4 coluna 1
+Código com erro, $if Simbolo invalido na linha 3 coluna 0
