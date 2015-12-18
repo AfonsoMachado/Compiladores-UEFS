@@ -32,18 +32,20 @@ Numero#1#13:18
 Identificador#i#14:9
 Operador#-#14:11
 Numero#1#14:13
-Operador#-#15:4
-Operador#-#15:6
-Numero#5#15:10
+Identificador#i#15:9
+Operador#-#15:11
+Operador#-#15:13
+Numero#5#15:17
 Identificador#i#16:9
 Operador#-#16:11
 Operador#-#16:13
 Numero#5#16:15
 Operador#-#16:17
 Numero#1#16:19
-Operador#=#17:4
-Operador#-#17:6
-Numero#5#17:8
+Identificador#i#17:9
+Operador#=#17:11
+Operador#-#17:13
+Numero#5#17:15
 Identificador#i#18:9
 Operador#-#18:11
 Numero#5#18:13
@@ -57,5 +59,3 @@ Código com erro, Operador Inexistente na linha 6 coluna 2
 Código com erro, Operador Inexistente na linha 7 coluna 3
 Código com erro, Operador Inexistente na linha 8 coluna 3
 Código com erro, Operador Inexistente na linha 9 coluna 3
-Código com erro, Simbolo invalido na linha 15 coluna 1
-Código com erro, Simbolo invalido na linha 17 coluna 1

@@ -52,8 +52,7 @@ public class AnalisadorLexico {
 
     private boolean linhaVazia;
     private boolean ultimoFoiOp;
-    
-    
+
     public AnalisadorLexico() {
 
         this.estruturaLexica = new EstruturaLexica();
@@ -138,11 +137,11 @@ public class AnalisadorLexico {
         while (ch != EOF) {
             if (!this.linhaVazia) {
                 lexema = "";
-                
+
                 if (!estruturaLexica.ehOperador(ch) && !Character.isSpaceChar(ch)) {
                     ultimoFoiOp = false;
                 }
-                
+
                 if (Character.isSpaceChar(ch)) {
                     this.coluna++;
                 } else if (estruturaLexica.ehLetra(ch)) { // Verifica se é um identificador.
@@ -161,12 +160,7 @@ public class AnalisadorLexico {
                     this.tokens.add(tk);
                     this.coluna++;
                 } else { //Simbolos invalidos
-                    this.novoErro("Simbolo invalido");
-                    while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
-                        lexema = lexema + ch;
-                        this.coluna++;
-                        ch = this.novoChar();
-                    }
+                    this.simboloInvalido(lexema, ch);
                 }
             } else {
                 this.linhaVazia = false;
@@ -336,7 +330,7 @@ public class AnalisadorLexico {
                     return;
                 }
             }
-            
+
         } else if (ch == '/') {
             ch = this.novoChar();
             if (ch == '/' || ch == '*') {
@@ -381,10 +375,9 @@ public class AnalisadorLexico {
         if (lexema.equals("++") || lexema.equals("--")) {
             this.ultimoFoiOp = false;
         } else {
-            this.ultimoFoiOp = true; 
+            this.ultimoFoiOp = true;
         }
-            
-            
+
         if (!error) {
             Token tk;
             tk = new Token(lexema, "Operador", linhaInicial, colunaInicial);
@@ -419,6 +412,15 @@ public class AnalisadorLexico {
                     }
                 }
             }
+        }
+    }
+
+    private void simboloInvalido(String lexema, char ch) {
+        this.novoErro("Simbolo invalido");
+        while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
+            lexema = lexema + ch;
+            this.coluna++;
+            ch = this.novoChar();
         }
     }
 }
