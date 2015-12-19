@@ -425,13 +425,15 @@ public class AnalisadorLexico {
 
     public void comentario(String coment) {
 
-        int linhaA = this.linha;
+        int colunaInicial = this.coluna;
+        int linhaInicial = this.linha;
+        
         boolean saiuBloco = false;
         this.coluna++;
         char ch = novoChar();
 
         if (coment.equals("//")) {
-            while (linhaA == this.linha && ch != EOF) {
+            while (linhaInicial == this.linha && ch != EOF) {
                 this.coluna++;
                 ch = novoChar();
             }
@@ -447,6 +449,10 @@ public class AnalisadorLexico {
                         saiuBloco = true;
                     }
                 }
+            }
+            
+            if (!saiuBloco) {
+                this.novoErro("Comentário não finalizado", "###Comentário não impresso###", linhaInicial, colunaInicial);
             }
         }
     }

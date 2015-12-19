@@ -1,23 +1,23 @@
-Número#1#0:1
-Número#2#0:3
-Número#3#0:5
-Número#123#0:7
-Número#10.10#0:11
-Número#-1#1:1
-Operador#-#1:4
-Número#2#1:5
-Operador#--#1:7
-Número#3#1:9
-Número#-2.10#2:1
-Número#-7#3:1
-Operador#.#3:1
-Número#-6#3:4
-Número#88#6:1
-Operador#.#6:1
-Identificador#A22#6:4
-Número#77#8:1
-Operador#.#8:1
-Identificador#H#8:4
+Número#1#0:0
+Número#2#0:2
+Número#3#0:4
+Número#123#0:6
+Número#10.10#0:10
+Número#-1#1:0
+Operador#-#1:3
+Número#2#1:4
+Operador#--#1:6
+Número#3#1:8
+Número#-2.10#2:0
+Número#-7#3:0
+Operador#.#3:0
+Número#-6#3:3
+Número#88#6:0
+Operador#.#6:0
+Identificador#A22#6:3
+Número#77#8:0
+Operador#.#8:0
+Identificador#H#8:3
 
 Código com erro, 1a Número mal formado na linha 5 coluna 1
 Código com erro, 1a.2 Número mal formado na linha 5 coluna 4
