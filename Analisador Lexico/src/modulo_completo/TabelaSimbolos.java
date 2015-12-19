@@ -1,20 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modulo_completo;
 
 import modulo_analisadorLexico.Token;
 
 /**
+ * Classe responsável por armazenar informações sobre identificadores. 
  *
- * @author UCHIHA
+ * @author Lucas Carneiro
+ * @author Oto Lopes
+ *
+ * @see Token
  */
 public class TabelaSimbolos {
     
-    public void add(Token token) {
-        // xD
+    /**
+     * Adiciona um identificador a tabela.
+     */
+    public void add() {
+        // Adicionar, variaveis, constantes, funções, etc...
     }
-    
 }

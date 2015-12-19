@@ -47,6 +47,7 @@ public class EstruturaLexica {
      */
     public EstruturaLexica() {
 
+        // Criando listas da estrutura
         this.palavrasReservadas = new ArrayList<>();
         this.letra = new ArrayList<>();
         this.digito = new ArrayList<>();
@@ -55,7 +56,7 @@ public class EstruturaLexica {
         this.delimitadores = new ArrayList<>();
         this.comentarios = new ArrayList<>();
 
-        //
+        // Inserindo palavras reservadas.
         this.palavrasReservadas.add("class");
         this.palavrasReservadas.add("const");
         this.palavrasReservadas.add("else");
@@ -75,7 +76,7 @@ public class EstruturaLexica {
         this.palavrasReservadas.add("false");
         this.palavrasReservadas.add("main");
 
-        //
+        // Inserindo letras de a..z e A..Z.
         for (char i = 'a'; i <= 'z'; i++) {
             this.letra.add((char) i);
         }
@@ -83,17 +84,17 @@ public class EstruturaLexica {
             this.letra.add((char) i);
         }
 
-        //
+        // Inserindo dígitos 0..9.
         for (char i = '0'; i <= '9'; i++) {
             this.digito.add(i);
         }
 
-        //
+        // Inserindo inserindo códigos ASCII do 32 ao 126.
         for (int i = 32; i <= 126; i++) {
             this.simbolo.add((char) i);
         }
 
-        //
+        // Inserindo operadores.
         this.operadores.add('.');
         this.operadores.add('+');
         this.operadores.add('-');
@@ -108,7 +109,7 @@ public class EstruturaLexica {
         this.operadores.add('|');
         this.operadores.add('=');
 
-        //
+        // Inserindo delimitadores.
         this.delimitadores.add(';');
         this.delimitadores.add(',');
         this.delimitadores.add('(');
@@ -118,7 +119,7 @@ public class EstruturaLexica {
         this.delimitadores.add('[');
         this.delimitadores.add(']');
 
-        //
+        // Inserindo simbolos de comentarios.
         this.comentarios.add("*/");
         this.comentarios.add("/*");
         this.comentarios.add("//");

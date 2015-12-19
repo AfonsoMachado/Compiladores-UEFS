@@ -23,33 +23,38 @@ import modulo_analisadorLexico.Token;
 public class Arquivo {
 
     /**
-     * Localização do arquivo lido. Esta localização será a mesma para o arquivo
-     * de saída.
+     * Nome do arquivo lido.
      */
     private String localFile;
 
     /**
-     * 
-     * @return 
+     * Busca e retorna todos os códigos fonte presentes na pasta
+     * <i>/src/testes/in/</i>.
+     *
+     * @return Lista com os nomes dos códigos fonte presentes na pasta
+     * <i>/src/testes/in/</i>
      */
     public ArrayList<String> lerCodigos() {
 
-        ArrayList<String> codes = new ArrayList<>();
-        File raiz = new File("src/testes/in/");
-        System.out.println(raiz.getAbsolutePath());
-        
-        for(File f: raiz.listFiles()) {
-            codes.add(f.getName());
+        File raiz = new File("src/testes/in/"); // Pasta com os códigos de entrada.
+        ArrayList<String> codigos = new ArrayList<>(); // Nomes dos arquivos com os códigos de entrada.
+        for (File f : raiz.listFiles()) { // Inserindo caminho dos códigos.
+            codigos.add(f.getName());
         }
-        
-        return codes;
+
+        /*if (codes.isEmpty()) { // Pasta de códigos de entrada vazia.
+            JOptionPane.showMessageDialog(null, "Sem Códigos para Compilar");
+            System.exit(0);
+        }*/
+
+        return codigos;
     }
 
     /**
      * Retorna a lista de strings obtidas a partir de um arquivo com o código
      * fonte.
      *
-     * @param localFile Localização do arquivo do código que será lido
+     * @param localFile Nome do arquivo do código que será lido
      *
      * @return Lista com as strings contidas no arquivo com o código
      *
@@ -57,10 +62,10 @@ public class Arquivo {
      */
     public ArrayList<String> lerCodigoFonte(String localFile) throws FileNotFoundException {
 
-        Scanner scanner = new Scanner(new FileReader("src/testes/in/" + localFile)).useDelimiter("\n");
-        this.localFile = localFile;
-        ArrayList<String> codigo = new ArrayList();
-        while (scanner.hasNext()) {
+        Scanner scanner = new Scanner(new FileReader("src/testes/in/" + localFile)).useDelimiter("\n"); // Lendo o arquivo do código.
+        this.localFile = localFile; // Guarda o nome do arquivo de entrada para que o arquivo de saída tenha o "mesmo" nome.
+        ArrayList<String> codigo = new ArrayList(); // Código obtido;
+        while (scanner.hasNext()) { // Capturando as linhas do código.
             codigo.add(scanner.next());
         }
 
@@ -74,28 +79,24 @@ public class Arquivo {
      *
      * @param tokens Lista de tokens obtidos após a análise do código fonte
      * @param erros Erros obtidos após a análise do código fonte
+     * 
+     * @throws IOException Arquivo de saida não foi gerado com sucesso
      */
-    public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) {
-        FileWriter arq;
-        try {
-            arq = new FileWriter("src/testes/out/" + this.localFile + ".out", false);
+    public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) throws IOException {
 
-            PrintWriter gravar = new PrintWriter(arq);
+        FileWriter arq = new FileWriter("src/testes/out/" + this.localFile + ".out", false); // Cria o arquivo de saída relacionado ao seu respectivo arquivo de entrada ("mesmo" nome). 
 
-            for (Token token : tokens) {
-                gravar.println(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha() + ":" + token.getColuna());
-            }
-            if (erros.isEmpty()) {
-                gravar.printf("\nParabens, código compilado com successo\n");
-            } else {
-
-                for (String erro : erros) {
-                    gravar.printf(erro);
-                }
-            }
-            arq.close();
-        } catch (IOException ex) {
-            System.out.println("Arquivo de saida não foi gerado com sucesso.");
+        PrintWriter gravar = new PrintWriter(arq);
+        for (Token token : tokens) { // Insere os tokens no arquivo de saída.
+            gravar.println(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha() + ":" + token.getColuna());
         }
+        if (erros.isEmpty()) { // Se não houver erros léxicos, imprime sucesso.
+            gravar.printf("\nParabens, código compilado com successo\n");
+        } else { // Se houver erros léxicos, os insere no arquivo de saída.
+            for (String erro : erros) {
+                gravar.printf(erro);
+            }
+        }
+        arq.close();
     }
 }

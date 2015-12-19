@@ -1,14 +1,14 @@
-Identificador#package#6:1
-Delimitador#;#6:20
-Identificador#public#7:1
-Palavra Reservada#class#7:8
-Identificador#teste1I_dentificadores#7:14
-Identificador#aaa#8:1
-Palavra Reservada#if#9:5
-Palavra Reservada#else#9:8
-Delimitador#;#9:12
-Palavra Reservada#class#10:9
-Delimitador#;#10:14
+Identificador#package#5:1
+Delimitador#;#5:20
+Identificador#public#6:1
+Palavra Reservada#class#6:8
+Identificador#teste1I_dentificadores#6:14
+Identificador#aaa#7:1
+Palavra Reservada#if#8:5
+Palavra Reservada#else#8:8
+Delimitador#;#8:12
+Palavra Reservada#class#9:9
+Delimitador#;#9:14
 
 Código com erro, class$class Identificador mal formado na linha 6 coluna 9
 Código com erro, $if Símbolo inválido na linha 9 coluna 1
