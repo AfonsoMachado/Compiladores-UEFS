@@ -10,15 +10,17 @@ Operador#--#1:6
 Número#3#1:8
 Número#-2.10#2:0
 Número#-7#3:0
-Operador#.#3:0
+Operador#.#3:3
 Número#-6#3:3
+Operador#.#4:6
+Número#2#4:6
 Número#88#6:0
-Operador#.#6:0
+Operador#.#6:3
 Identificador#A22#6:3
 Número#77#8:0
-Operador#.#8:0
+Operador#.#8:3
 Identificador#H#8:3
 
-Código com erro, 1a Número mal formado na linha 5 coluna 1
-Código com erro, 1a.2 Número mal formado na linha 5 coluna 4
-Código com erro, 99.5o Número mal formado na linha 5 coluna 9
+Código com erro, 1a Número mal formado na linha 4 coluna 0
+Código com erro, 1a Número mal formado na linha 4 coluna 3
+Código com erro, 99.5o Número mal formado na linha 4 coluna 8

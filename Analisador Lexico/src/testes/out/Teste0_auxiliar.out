@@ -1,6 +1,8 @@
 Número#-7#0:0
-Operador#.#0:0
+Operador#.#0:3
 Número#-6#0:3
+Operador#.#1:6
+Número#2#1:6
 Identificador#i#3:0
 Operador#--#3:1
 Operador#-#3:4
@@ -17,7 +19,7 @@ Identificador#i#6:8
 Operador#-#6:10
 Número#5#6:12
 Número#88#8:0
-Operador#.#8:0
+Operador#.#8:3
 Identificador#A22#8:3
 Caracter constante#'1'#12:0
 Cadeia constante#"XD"#12:4
@@ -27,16 +29,31 @@ Identificador#cLass#16:11
 Delimitador#(#16:17
 Delimitador#}#16:18
 Delimitador#;#16:19
+Operador#.#25:3
+Número#2#25:3
+Número#22#26:0
+Operador#.#26:3
+Identificador#a#26:3
+Operador#.#27:3
+Identificador#a#27:3
+Operador#.#28:4
+Identificador#a2#28:4
+Operador#.#29:4
 
-Código com erro, 1a Número mal formado na linha 2 coluna 1
-Código com erro, 1a.2 Número mal formado na linha 2 coluna 4
-Código com erro, 99.5o Número mal formado na linha 2 coluna 9
-Código com erro, "nada nops  Cadeia constante mal formado na linha 11 coluna 1
-Código com erro, '! Caracter constante mal formado na linha 15 coluna 16
-Código com erro, ' // nenenenene  Caracter constante mal formado na linha 15 coluna 18
-Código com erro, 'vaca Caracter constante mal formado na linha 19 coluna 1
-Código com erro, 'xD  Caracter constante mal formado na linha 19 coluna 6
-Código com erro, 'bezzera  Caracter constante mal formado na linha 20 coluna 1
-Código com erro, 'llama boi  Caracter constante mal formado na linha 21 coluna 1
-Código com erro, 'bode   Caracter constante mal formado na linha 23 coluna 1
-Código com erro, ###Comentário não impresso### Comentário não finalizado na linha 25 coluna 2
+Código com erro, 1a Número mal formado na linha 1 coluna 0
+Código com erro, 1a Número mal formado na linha 1 coluna 3
+Código com erro, 99.5o Número mal formado na linha 1 coluna 8
+Código com erro, "nada nops  Cadeia constante mal formado na linha 10 coluna 0
+Código com erro, '! Caracter constante mal formado na linha 14 coluna 15
+Código com erro, ' // nenenenene  Caracter constante mal formado na linha 14 coluna 17
+Código com erro, 'vaca Caracter constante mal formado na linha 18 coluna 0
+Código com erro, 'xD  Caracter constante mal formado na linha 18 coluna 5
+Código com erro, 'bezzera  Caracter constante mal formado na linha 19 coluna 0
+Código com erro, 'llama boi  Caracter constante mal formado na linha 20 coluna 0
+Código com erro, 'bode   Caracter constante mal formado na linha 22 coluna 0
+Código com erro, 2a Número mal formado na linha 25 coluna 0
+Código com erro, 2a Número mal formado na linha 27 coluna 0
+Código com erro, 2a2 Número mal formado na linha 28 coluna 0
+Código com erro, 2a2 Número mal formado na linha 29 coluna 0
+Código com erro, 2a Número mal formado na linha 29 coluna 4
+Código com erro, ###Comentário não impresso### Comentário não finalizado na linha 31 coluna 1

@@ -89,7 +89,7 @@ public class AnalisadorLexico {
      */
     public void novoErro(String tipo, String erro, int linhaInicial, int colunaInicial) {
 
-        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + (linhaInicial+1) + " coluna " + (colunaInicial+1));
+        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + (linhaInicial) + " coluna " + (colunaInicial));
     }
 
     /**
@@ -100,7 +100,7 @@ public class AnalisadorLexico {
 
         if (!codigo.isEmpty()) {
             char c[] = this.codigo.get(linha).toCharArray();
-            if (c.length == this.coluna) {
+            if (c.length == this.coluna) { 
                 return ' ';
             } else if (c.length > this.coluna) {
                 return c[coluna];
@@ -243,28 +243,37 @@ public class AnalisadorLexico {
                 } else {
                     this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
                 }
+                
                 this.podeSerNumero = true;
                 Token tk2;
-                tk2 = new Token(".", "Operador", linhaInicial, colunaInicial);
+                tk2 = new Token(".", "Operador", linhaInicial, this.coluna);
                 this.tokens.add(tk2);
-
                 return;
 
-            } else {
-                lexema += "."+ch;
-                this.coluna++;
-                ch = this.novoChar();
-                while (estruturaLexica.ehDigito(ch) || estruturaLexica.ehLetra(ch)) {
-                    if (estruturaLexica.ehLetra(ch)) {
-                        error = true;
-                    }
-                    lexema += ch;
+            } else { // Tem número depois do ponto.
+                if (!error) {
+                    lexema += "."+ch;
                     this.coluna++;
                     ch = this.novoChar();
+                    while (estruturaLexica.ehDigito(ch) || estruturaLexica.ehLetra(ch)) {
+                        if (estruturaLexica.ehLetra(ch)) {
+                            error = true;
+                        }
+                        lexema += ch;
+                        this.coluna++;
+                        ch = this.novoChar();
+                    }
+                } else {
+                    this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
+                 
+                    this.podeSerNumero = true;
+                    Token tk2;
+                    tk2 = new Token(".", "Operador", linhaInicial, this.coluna);
+                    this.tokens.add(tk2);
+                    return;
                 }
             }
         }
-
         if (!error) {
             Token tk;
             tk = new Token(lexema, "Número", linhaInicial, colunaInicial);
@@ -461,7 +470,13 @@ public class AnalisadorLexico {
 
         int linhaInicial = this.linha;
         int colunaInicial = this.coluna;
-
+///////////////////////////////////////
+        if (ch == 9) {
+            System.out.println("TAB");
+            this.coluna++;
+            return ;
+        }
+///////////////////////////////////////        
         while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
             lexema = lexema + ch;
             this.coluna++;

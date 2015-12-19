@@ -54,7 +54,7 @@ Operador#--#17:9
 Operador#-#17:12
 Número#-5#17:15
 
-Código com erro, ! Operador Inexistente na linha 5 coluna 1
-Código com erro, !0 Operador Inexistente na linha 6 coluna 1
-Código com erro, &; Operador Inexistente na linha 7 coluna 1
-Código com erro, |+ Operador Inexistente na linha 8 coluna 1
+Código com erro, ! Operador Inexistente na linha 4 coluna 0
+Código com erro, !0 Operador Inexistente na linha 5 coluna 0
+Código com erro, &; Operador Inexistente na linha 6 coluna 0
+Código com erro, |+ Operador Inexistente na linha 7 coluna 0
