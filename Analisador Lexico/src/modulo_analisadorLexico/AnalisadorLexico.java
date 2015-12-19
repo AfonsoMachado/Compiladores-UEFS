@@ -18,6 +18,8 @@ public class AnalisadorLexico {
      *
      */
     private static final char EOF = '\0';
+    private static final char QUEBRA_LINHA = ' ';
+    private static final char LINHA_VAZIA = '@';
     /**
      *
      */
@@ -98,10 +100,10 @@ public class AnalisadorLexico {
      */
     public char novoChar() {
 
-        if (!codigo.isEmpty()) {
-            char c[] = this.codigo.get(linha).toCharArray();
+        if (!this.codigo.isEmpty()) {
+            char c[] = this.codigo.get(this.linha).toCharArray();
             if (c.length == this.coluna) { 
-                return ' ';
+                return QUEBRA_LINHA;
             } else if (c.length > this.coluna) {
                 return c[coluna];
             } else if (this.codigo.size() > (this.linha + 1)) {
@@ -112,7 +114,7 @@ public class AnalisadorLexico {
 
                 if (c.length == 0) { // Caso uma linha não tenha absolutamente nada, apenas um "enter".
                     this.linhaVazia = true;
-                    return '©'; // Enviar qualquer coisa, tanto faz, não vai ser lido mesmo.
+                    return LINHA_VAZIA; // Enviar qualquer coisa, tanto faz, não vai ser lido mesmo.
                 }
                 //
                 return c[this.coluna];
@@ -308,7 +310,7 @@ public class AnalisadorLexico {
             tk = new Token(lexema, "Cadeia constante", linhaInicial, colunaInicial);
             this.tokens.add(tk);
         } else {
-            this.novoErro("Cadeia constante mal formado", lexema, linhaInicial, colunaInicial);
+            this.novoErro("Cadeia constante mal formada", lexema, linhaInicial, colunaInicial);
         }
     }
 
