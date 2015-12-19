@@ -1,6 +1,7 @@
 package modulo_analisadorLexico;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modulo_completo.TabelaSimbolos;
 
 /**
@@ -88,10 +89,13 @@ public class AnalisadorLexico {
      * Método destinado a padronização dos erros.
      *
      * @param tipo
+     * @param erro
+     * @param linhaInicial
+     * @param colunaInicial
      */
     public void novoErro(String tipo, String erro, int linhaInicial, int colunaInicial) {
 
-        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + (linhaInicial) + " coluna " + (colunaInicial));
+        this.erros.add("\nCódigo com erro, " + erro + " " + tipo +  " na linha " + (linhaInicial+1) + " coluna " + (colunaInicial+1));
     }
 
     /**
@@ -132,7 +136,6 @@ public class AnalisadorLexico {
      * @param codigo
      */
     public void analise(ArrayList<String> codigo) {
-
         this.codigo = codigo;
         String lexema;
 

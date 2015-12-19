@@ -62,11 +62,11 @@ public class Arquivo {
      */
     public ArrayList<String> lerCodigoFonte(String localFile) throws FileNotFoundException {
 
-        Scanner scanner = new Scanner(new FileReader("src/testes/in/" + localFile)).useDelimiter("\n"); // Lendo o arquivo do código.
+        Scanner scanner = new Scanner(new FileReader("src/testes/in/" + localFile)); // Lendo o arquivo do código.
         this.localFile = localFile; // Guarda o nome do arquivo de entrada para que o arquivo de saída tenha o "mesmo" nome.
         ArrayList<String> codigo = new ArrayList(); // Código obtido;
-        while (scanner.hasNext()) { // Capturando as linhas do código.
-            codigo.add(scanner.next());
+        while (scanner.hasNextLine()) { // Capturando as linhas do código.
+            codigo.add(scanner.nextLine());
         }
 
         return codigo;

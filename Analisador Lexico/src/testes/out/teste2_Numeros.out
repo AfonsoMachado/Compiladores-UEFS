@@ -1,26 +1,26 @@
-Número#1#0:0
-Número#2#0:2
-Número#3#0:4
-Número#123#0:6
-Número#10.10#0:10
-Número#-1#1:0
-Operador#-#1:3
-Número#2#1:4
-Operador#--#1:6
-Número#3#1:8
-Número#-2.10#2:0
-Número#-7#3:0
-Operador#.#3:3
-Número#-6#3:3
-Operador#.#4:6
-Número#2#4:6
-Número#88#6:0
-Operador#.#6:3
-Identificador#A22#6:3
-Número#77#8:0
-Operador#.#8:3
-Identificador#H#8:3
+Número#1#1:1
+Número#2#1:3
+Número#3#1:5
+Número#123#1:7
+Número#10.10#1:11
+Número#-1#2:1
+Operador#-#2:4
+Número#2#2:5
+Operador#--#2:7
+Número#3#2:9
+Número#-2.10#3:1
+Número#-7#4:1
+Operador#.#4:4
+Número#-6#4:4
+Operador#.#5:7
+Número#2#5:7
+Número#88#7:1
+Operador#.#7:4
+Identificador#A22#7:4
+Número#77#9:1
+Operador#.#9:4
+Identificador#H#9:4
 
-Código com erro, 1a Número mal formado na linha 4 coluna 0
-Código com erro, 1a Número mal formado na linha 4 coluna 3
-Código com erro, 99.5o Número mal formado na linha 4 coluna 8
+Código com erro, 1a Número mal formado na linha 5 coluna 1
+Código com erro, 1a Número mal formado na linha 5 coluna 4
+Código com erro, 99.5o Número mal formado na linha 5 coluna 9
