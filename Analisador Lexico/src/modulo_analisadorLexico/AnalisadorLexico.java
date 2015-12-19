@@ -1,7 +1,6 @@
 package modulo_analisadorLexico;
 
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import modulo_completo.TabelaSimbolos;
 
 /**
@@ -88,8 +87,8 @@ public class AnalisadorLexico {
     /**
      * Método destinado a padronização dos erros.
      *
-     * @param tipo
-     * @param erro
+     * @param tipo Tipo do erro (relacionado ao token que esta errado)
+     * @param erro A sequência que originou o erro, exceto para erro de comentário
      * @param linhaInicial
      * @param colunaInicial
      */
@@ -251,7 +250,7 @@ public class AnalisadorLexico {
                 
                 this.podeSerNumero = true;
                 Token tk2;
-                tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna+1);
+                tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna);
                 this.tokens.add(tk2);
                 return;
 
@@ -273,7 +272,7 @@ public class AnalisadorLexico {
                  
                     this.podeSerNumero = true;
                     Token tk2;
-                    tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna+1);
+                    tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna);
                     this.tokens.add(tk2);
                     return;
                 }
