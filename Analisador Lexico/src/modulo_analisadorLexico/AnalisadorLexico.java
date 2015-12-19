@@ -322,9 +322,9 @@ public class AnalisadorLexico {
         lexema = lexema + ch;
         boolean error = false;
         this.coluna++;
-        int cont = 0, l = linha;
+        int cont = 0, l = this.linha;
         ch = this.novoChar();
-        while (ch != '\'' && ch != EOF && l == linha) {
+        while (ch != '\'' && ch != EOF && l == this.linha) {
             if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch)) || cont > 0) {
                 error = true;
             }
@@ -340,6 +340,11 @@ public class AnalisadorLexico {
             tk = new Token(lexema, "Caracter constante", linhaInicial, colunaInicial);
             this.tokens.add(tk);
         } else {
+            if(ch == '\''){
+                lexema = lexema + ch;
+                this.coluna++;
+            
+            }
             this.novoErro("Caracter constante mal formado", lexema, linhaInicial, colunaInicial);
         }
     }
