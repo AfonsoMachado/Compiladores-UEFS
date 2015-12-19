@@ -158,7 +158,7 @@ public class AnalisadorLexico {
                     this.operador(lexema, ch);
                 } else if (this.estruturaLexica.ehDelimitador(ch)) { // Verifica se é delimitador.
                     lexema = lexema + ch;
-                    Token tk = new Token(lexema, "Delimitador", this.linha, this.coluna);
+                    Token tk = new Token(lexema, "Delimitador", this.linha+1, this.coluna+1);
                     this.tokens.add(tk);
                     this.coluna++;
                 } else { //Simbolos invalidos
@@ -203,9 +203,9 @@ public class AnalisadorLexico {
             Token tk;
             //verifica se eh uma palavra reservada
             if (this.estruturaLexica.ehPalavraReservada(lexema)) {
-                tk = new Token(lexema, "Palavra Reservada", linhaInicial, colunaInicial);
+                tk = new Token(lexema, "Palavra Reservada", linhaInicial+1, colunaInicial+1);
             } else {
-                tk = new Token(lexema, "Identificador", linhaInicial, colunaInicial);
+                tk = new Token(lexema, "Identificador", linhaInicial+1, colunaInicial+1);
             }
             this.tokens.add(tk);
         } else {
@@ -243,7 +243,7 @@ public class AnalisadorLexico {
             if (!estruturaLexica.ehDigito(ch)) {
                 if (!error) {
                     Token tk;
-                    tk = new Token(lexema, "Número", linhaInicial, colunaInicial);
+                    tk = new Token(lexema, "Número", linhaInicial+1, colunaInicial+1);
                     this.tokens.add(tk);
                 } else {
                     this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
@@ -251,7 +251,7 @@ public class AnalisadorLexico {
                 
                 this.podeSerNumero = true;
                 Token tk2;
-                tk2 = new Token(".", "Operador", linhaInicial, this.coluna);
+                tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna+1);
                 this.tokens.add(tk2);
                 return;
 
@@ -273,7 +273,7 @@ public class AnalisadorLexico {
                  
                     this.podeSerNumero = true;
                     Token tk2;
-                    tk2 = new Token(".", "Operador", linhaInicial, this.coluna);
+                    tk2 = new Token(".", "Operador", linhaInicial+1, this.coluna+1);
                     this.tokens.add(tk2);
                     return;
                 }
@@ -281,7 +281,7 @@ public class AnalisadorLexico {
         }
         if (!error) {
             Token tk;
-            tk = new Token(lexema, "Número", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Número", linhaInicial+1, colunaInicial+1);
             this.tokens.add(tk);
         } else {
             this.novoErro("Número mal formado", lexema, linhaInicial, colunaInicial);
@@ -310,7 +310,7 @@ public class AnalisadorLexico {
             Token tk;
             lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(lexema, "Cadeia constante", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Cadeia constante", linhaInicial+1, colunaInicial+1);
             this.tokens.add(tk);
         } else {
             this.novoErro("Cadeia constante mal formada", lexema, linhaInicial, colunaInicial);
@@ -340,7 +340,7 @@ public class AnalisadorLexico {
             Token tk;
             lexema = lexema + ch;
             this.coluna++;
-            tk = new Token(lexema, "Caracter constante", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Caracter constante", linhaInicial+1, colunaInicial+1);
             this.tokens.add(tk);
         } else {
             if(ch == '\''){
@@ -435,7 +435,7 @@ public class AnalisadorLexico {
 
         if (!error) {
             Token tk;
-            tk = new Token(lexema, "Operador", linhaInicial, colunaInicial);
+            tk = new Token(lexema, "Operador", linhaInicial+1, colunaInicial+1);
             this.tokens.add(tk);
         } else {
             this.novoErro("Operador Inexistente", lexema, linhaInicial, colunaInicial);

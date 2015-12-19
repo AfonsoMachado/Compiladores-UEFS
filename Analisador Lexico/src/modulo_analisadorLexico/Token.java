@@ -45,8 +45,8 @@ public class Token {
 
         this.tipo = tipo;
         this.valor = valor;
-        this.linha = linha+1;
-        this.coluna = coluna+1;
+        this.linha = linha;
+        this.coluna = coluna;
     }
     
     /**
