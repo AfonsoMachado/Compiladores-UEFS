@@ -485,8 +485,6 @@ public class AnalisadorLexico {
             }
         } else if (coment.equals("/*")) {
             while (ch != EOF && !saiuBloco) {
-                this.coluna++;
-                ch = novoChar();
                 if (ch == '*') {
                     this.coluna++;
                     ch = novoChar();
@@ -494,11 +492,14 @@ public class AnalisadorLexico {
                         this.coluna++;
                         saiuBloco = true;
                     }
+                } else {
+                    this.coluna++;
+                    ch = novoChar();
                 }
             }
 
             if (!saiuBloco) {
-                this.novoErro("Comentário não finalizado", "###Comentário não impresso###", linhaInicial, colunaInicial);
+                this.novoErro("Comentário não finalizado", "###Comentário não impresso###", linhaInicial, colunaInicial-1);
             }
         }
     }
