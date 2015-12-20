@@ -252,7 +252,8 @@ public class AnalisadorLexico {
                 return;
 
             } else // Tem número depois do ponto. NÚMERO RACIONAL TODO ERRADO OU NÃO ANALISAR A PARTIR DESSA CONDIÇÂO
-             if (!error) {
+            {
+                if (!error) {
                     lexema += "." + ch;
                     this.coluna++;
                     ch = this.novoChar();
@@ -273,6 +274,7 @@ public class AnalisadorLexico {
                     this.tokens.add(tk2);
                     return;
                 }
+            }
         }
         if (!error) {
             Token tk;
@@ -299,15 +301,18 @@ public class AnalisadorLexico {
             if (Character.isSpaceChar(ch)) {
                 this.coluna++;
                 ch = this.novoChar();
-                if (ch != '"' && ch != EOF && linhaInicial == this.linha && ch == ' ') {
+                if (ch == ' ' && linhaInicial == this.linha) {
                     lexema += " ";
-                } else if (ch != '"' && ch != EOF && linhaInicial == this.linha) {
+                } else if (ch != EOF && linhaInicial == this.linha) {
                     if (!this.estruturaLexica.ehSimbolo(ch)) {
                         error = true;
                     }
-                    lexema += " " + ch;
-                    this.coluna++;
-                    ch = this.novoChar();
+                    lexema += " ";
+                    if (ch != '"') {
+                        lexema += ch;
+                        this.coluna++;
+                        ch = this.novoChar();
+                    }
                 }
             } else {
                 lexema += ch;
@@ -346,12 +351,15 @@ public class AnalisadorLexico {
             if (Character.isSpaceChar(ch)) {
                 this.coluna++;
                 ch = this.novoChar();
-                if (ch != '\'' && ch != EOF && linhaInicial == this.linha && ch == ' ') {
+                if (ch == ' ' && linhaInicial == this.linha) {
                     lexema += " ";
-                } else if (ch != '\'' && ch != EOF && linhaInicial == this.linha) {
-                    lexema += " " + ch;
-                    this.coluna++;
-                    ch = this.novoChar();
+                } else if (ch != EOF && linhaInicial == this.linha) {
+                    lexema += " ";
+                    if (ch != '\'') {
+                        lexema += ch;
+                        this.coluna++;
+                        ch = this.novoChar();
+                    }
                 }
             } else {
                 qtdConteudo++;
@@ -473,7 +481,7 @@ public class AnalisadorLexico {
 
         lexema += ch;
         this.coluna++;
-        
+
         Token tk = new Token(lexema, "delimitador", linhaInicial + 1, colunaInicial + 1);
         this.tokens.add(tk);
     }
