@@ -75,5 +75,7 @@ public class Compilador {
             JOptionPane.showMessageDialog(null, "Arquivo de saida não foi gerado com sucesso");
             System.exit(0);
         }
+        
+        System.out.println("COMPILADO !");
     }
 }

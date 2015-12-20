@@ -54,6 +54,12 @@ Número#88#47:5
 Operador#.#48:4
 Identificador#oi#48:5
 Operador#.#49:4
+Número#9#53:1
+Operador#/#53:2
+Número#5#53:3
+Número#11#54:1
+Operador#/#54:4
+Número#13#54:7
 
 Código com erro, 1m Número mal formado na linha 6 coluna 1
 Código com erro, 1n Número mal formado na linha 6 coluna 4
@@ -80,4 +86,4 @@ Código com erro, 8h9 Número mal formado na linha 47 coluna 1
 Código com erro, 9h8 Número mal formado na linha 48 coluna 1
 Código com erro, 7h7 Número mal formado na linha 49 coluna 1
 Código com erro, 8i Número mal formado na linha 49 coluna 5
-Código com erro, ###Comentário não impresso### Comentário não finalizado na linha 51 coluna 2
+Código com erro, ###Comentário não impresso### Comentário não finalizado na linha 55 coluna 2

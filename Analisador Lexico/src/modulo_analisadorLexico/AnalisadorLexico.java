@@ -188,7 +188,6 @@ public class AnalisadorLexico {
         boolean error = false;
         this.coluna++;
         ch = this.novoChar();
-        System.out.println(ch + lexema + this.coluna + " " + this.linha);
         //percorre enquanto houver letras, digitos ou _
         while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
             if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) {
@@ -211,8 +210,6 @@ public class AnalisadorLexico {
         } else {
             this.novoErro("Identificador mal formado", lexema, linhaInicial, colunaInicial);
         }
-        System.out.println(" token :" + lexema);
-
     }
 
     public void numero(String lexema, char ch) {
