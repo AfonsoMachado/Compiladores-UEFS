@@ -1,60 +1,9 @@
-2056
-2015.0
-0.0
+exemplo teste;
 
--7.-6
-1m 1n.2 99.5o
+float f = 3a;
 
-i-- - - 5 
-i++ + - 5 ||
-            i = - 5 
-        i - 5
+char flag = 'teste'; 
 
-88.A22
-
-"nada nops
-lol
-
-'1' "XD"
-
-"tudo bom ?//" '!' // nenenenene
-
-"rapaz a coisa ta   
-" nsei_ tenso 
-"   i
-"  lua  
-
-"""
-
-write_void cLass (}; /* // */
-
-'coisa  
-'  as coisas
-' c'
-' c  
-
-'vaca'xD
-'bezzera
-'llama boi
-
-'bode 
-
-a.a
-1a.2
-34.b
-5d.e
-6f6.g7 // tudo numero mal formado ou não ?
-8h9.88
-9h8.oi
-7h7.8i 
-
-//
-////
-9/5
-11 /  13  
-
-/*1*/
-/* coisas lindas
-        mas não termina */
-
-/**///
+if (f >= 10) | (f < )
+	write("mensagem);	
+	 

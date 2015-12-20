@@ -1,60 +1,61 @@
-Operador#.#2:1
-Operador#.#2:2
-Operador#.#2:3
-Operador#+#2:5
-Operador#++#2:7
-Operador#++#2:10
-Operador#+#2:12
-Operador#++#2:14
-Operador#++#2:16
-Operador#*#3:1
-Operador#*#3:2
-Operador#/#3:4
-Operador#==#5:4
-Operador#>=#5:7
-Operador#=#5:10
-Operador#<=#5:12
-Operador#>#5:15
-Operador#<#5:16
-Operador#!=#5:18
-Operador#&&#7:5
-Operador#||#7:8
-Operador#--#11:9
-Identificador#i#11:11
-Operador#-#11:13
-Número#5.2#11:15
-Identificador#i#12:9
-Operador#--#12:10
-Operador#-#12:13
-Número#5.9#12:15
-Identificador#i#13:9
-Operador#-#13:11
-Número#-5#13:13
-Operador#-#13:16
-Número#1#13:18
-Identificador#i#14:9
-Operador#-#14:11
-Número#1#14:13
-Identificador#i#15:9
-Operador#-#15:11
-Número#-5#15:16
-Identificador#i#16:9
-Operador#-#16:11
-Número#-5#16:14
-Operador#-#16:17
-Número#1#16:19
-Identificador#i#17:9
-Operador#=#17:11
-Número#-5#17:14
-Identificador#i#18:9
-Operador#-#18:11
-Número#5#18:13
-Identificador#i#19:9
-Operador#--#19:10
-Operador#-#19:13
-Número#-5#19:16
+. operador 2:1
+. operador 2:2
+. operador 2:3
++ operador 2:5
+++ operador 2:7
++ operador 2:10
+-- operador 2:11
++ operador 2:13
+++ operador 2:15
+++ operador 2:17
+* operador 3:1
+* operador 3:2
+/ operador 3:4
+== operador 5:4
+>= operador 5:7
+= operador 5:10
+<= operador 5:12
+> operador 5:15
+< operador 5:16
+!= operador 5:18
+&& operador 7:5
+|| operador 7:8
+-- operador 11:9
+i id 11:11
+- operador 11:13
+5.2 numero 11:15
+i id 12:9
+-- operador 12:10
+- operador 12:13
+5.9 numero 12:15
+i id 13:9
+- operador 13:11
+-5 numero 13:13
+- operador 13:16
+1 numero 13:18
+i id 14:9
+- operador 14:11
+1 numero 14:13
+i id 15:9
+- operador 15:11
+-5 numero 15:16
+i id 16:9
+- operador 16:11
+-5 numero 16:14
+- operador 16:17
+1 numero 16:19
+i id 17:9
+= operador 17:11
+-5 numero 17:14
+i id 18:9
+- operador 18:11
+5 numero 18:13
+i id 19:9
+-- operador 19:10
+- operador 19:13
+-5 numero 19:20
 
-Código com erro, ! Operador Inexistente na linha 6 coluna 1
-Código com erro, !0 Operador Inexistente na linha 7 coluna 1
-Código com erro, &; Operador Inexistente na linha 8 coluna 1
-Código com erro, |+ Operador Inexistente na linha 9 coluna 1
+! operador_mal_formado 6:1
+!0 operador_mal_formado 7:1
+&; operador_mal_formado 8:1
+|+ operador_mal_formado 9:1

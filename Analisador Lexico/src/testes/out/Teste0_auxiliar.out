@@ -1,88 +1,28 @@
-Número#2056#1:1
-Número#2015.0#2:1
-Número#0.0#3:1
-Operador#-#5:1
-Número#7#5:2
-Operador#.#5:3
-Operador#-#5:4
-Número#6#5:5
-Operador#.#6:6
-Número#2#6:7
-Identificador#i#8:1
-Operador#--#8:2
-Operador#-#8:5
-Número#-5#8:8
-Identificador#i#9:1
-Operador#++#9:2
-Operador#+#9:5
-Número#-5#9:8
-Operador#||#9:11
-Identificador#i#10:13
-Operador#=#10:15
-Número#-5#10:18
-Identificador#i#11:9
-Operador#-#11:11
-Número#5#11:13
-Número#88#13:1
-Operador#.#13:3
-Identificador#A22#13:4
-Identificador#lol#16:1
-Caracter constante#'1'#18:1
-Cadeia constante#"XD"#18:5
-Cadeia constante#"tudo bom ?//"#20:1
-Cadeia constante#""#27:1
-Identificador#write_void#29:1
-Identificador#cLass#29:12
-Delimitador#(#29:18
-Delimitador#}#29:19
-Delimitador#;#29:20
-Identificador#xD#36:7
-Identificador#a#42:1
-Operador#.#42:2
-Identificador#a#42:3
-Operador#.#43:3
-Número#2#43:4
-Número#34#44:1
-Operador#.#44:3
-Identificador#b#44:4
-Operador#.#45:3
-Identificador#e#45:4
-Operador#.#46:4
-Identificador#g7#46:5
-Operador#.#47:4
-Número#88#47:5
-Operador#.#48:4
-Identificador#oi#48:5
-Operador#.#49:4
-Número#9#53:1
-Operador#/#53:2
-Número#5#53:3
-Número#11#54:1
-Operador#/#54:4
-Número#13#54:7
+exemplo id 1:1
+teste id 1:9
+; delimitador 1:14
+float palavra_reservada 3:1
+f id 3:7
+= operador 3:9
+; delimitador 3:13
+char palavra_reservada 5:1
+flag id 5:6
+= operador 5:11
+; delimitador 5:20
+if palavra_reservada 7:1
+( delimitador 7:4
+f id 7:5
+>= operador 7:7
+10 numero 7:10
+) delimitador 7:12
+( delimitador 7:16
+f id 7:17
+< operador 7:19
+) delimitador 7:21
+write palavra_reservada 8:2
+( delimitador 8:7
 
-Código com erro, 1m Número mal formado na linha 6 coluna 1
-Código com erro, 1n Número mal formado na linha 6 coluna 4
-Código com erro, 99.5o Número mal formado na linha 6 coluna 9
-Código com erro, "nada nops Cadeia constante mal formada na linha 15 coluna 1
-Código com erro, '!' Caracter constante mal formado na linha 20 coluna 16
-Código com erro, "rapaz a coisa ta    Cadeia constante mal formada na linha 22 coluna 1
-Código com erro, " nsei_ tenso  Cadeia constante mal formada na linha 23 coluna 1
-Código com erro, "   i Cadeia constante mal formada na linha 24 coluna 1
-Código com erro, "  lua   Cadeia constante mal formada na linha 25 coluna 1
-Código com erro, " Cadeia constante mal formada na linha 27 coluna 3
-Código com erro, 'coisa   Caracter constante mal formado na linha 31 coluna 1
-Código com erro, '  as coisas Caracter constante mal formado na linha 32 coluna 1
-Código com erro, ' c' Caracter constante mal formado na linha 33 coluna 1
-Código com erro, ' c   Caracter constante mal formado na linha 34 coluna 1
-Código com erro, 'vaca' Caracter constante mal formado na linha 36 coluna 1
-Código com erro, 'bezzera Caracter constante mal formado na linha 37 coluna 1
-Código com erro, 'llama boi Caracter constante mal formado na linha 38 coluna 1
-Código com erro, 'bode  Caracter constante mal formado na linha 40 coluna 1
-Código com erro, 1a Número mal formado na linha 43 coluna 1
-Código com erro, 5d Número mal formado na linha 45 coluna 1
-Código com erro, 6f6 Número mal formado na linha 46 coluna 1
-Código com erro, 8h9 Número mal formado na linha 47 coluna 1
-Código com erro, 9h8 Número mal formado na linha 48 coluna 1
-Código com erro, 7h7 Número mal formado na linha 49 coluna 1
-Código com erro, 8i Número mal formado na linha 49 coluna 5
+3a nro_mal_formado 3:11
+'teste' caractere_mal_formado 5:13
+| operador_mal_formado 7:14
+"mensagem);	 cadeia_mal_formada 8:8

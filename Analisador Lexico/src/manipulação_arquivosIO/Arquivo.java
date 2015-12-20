@@ -88,10 +88,10 @@ public class Arquivo {
 
         PrintWriter gravar = new PrintWriter(arq);
         for (Token token : tokens) { // Insere os tokens no arquivo de saída.
-            gravar.println(token.getTipo() + "#" + token.getValor() + "#" + token.getLinha() + ":" + token.getColuna());
+            gravar.println(token.getValor() + " " + token.getTipo() + " " + token.getLinha() + ":" + token.getColuna());
         }
         if (erros.isEmpty()) { // Se não houver erros léxicos, imprime sucesso.
-            gravar.printf("\nParabens, código compilado com successo\n");
+            gravar.printf("\nnao ha erros lexicos\n");
         } else { // Se houver erros léxicos, os insere no arquivo de saída.
             for (String erro : erros) {
                 gravar.printf(erro);
