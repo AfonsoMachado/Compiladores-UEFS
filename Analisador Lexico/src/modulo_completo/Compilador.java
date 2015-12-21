@@ -3,7 +3,6 @@ package modulo_completo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import manipulação_arquivosIO.Arquivo;
 import modulo_analisadorLexico.AnalisadorLexico;
 
@@ -49,7 +48,7 @@ public class Compilador {
 
         ArrayList<String> localFiles = arquivo.lerCodigos(); // Recebe a lista com todos os códigos da pasta.
         if (localFiles.isEmpty()) { // Pasta de códigos de entrada vazia.
-            JOptionPane.showMessageDialog(null, "Sem Códigos para Compilar");
+            System.out.println("Sem Códigos para Compilar");
             System.exit(0);
         }
         for (String lF : localFiles) { // Para cada arquivo fonte, o analisador léxico gera as listas de tokens e erros (se houver).
@@ -70,10 +69,10 @@ public class Compilador {
             Compilador compilador = new Compilador(); // Cria o compilador.
             compilador.compilar(); // Executa o compilador.
         } catch (FileNotFoundException error1) {
-            JOptionPane.showMessageDialog(null, "Arquivo Não Encontrado");
+            System.out.println("Arquivo Não Encontrado");
             System.exit(0);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Arquivo de saida não foi gerado com sucesso");
+            System.out.println("Arquivo de saida não foi gerado com sucesso");
             System.exit(0);
         }
         
