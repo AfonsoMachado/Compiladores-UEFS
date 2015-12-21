@@ -192,8 +192,8 @@ public class AnalisadorLexico {
      */
     public void identificador(String lexema, char ch) {
 
-        int linhaInicial = this.linha;  //Salva a linha e a coluna iniciais do lexema para apresentar na saída.
-        int colunaInicial = this.coluna;
+        int linhaInicial = this.linha;  //Salva a linha inicial do lexema para apresentar na saída.
+        int colunaInicial = this.coluna; //Salva a coluna inicial do lexema para apresentar na saída.
 
         lexema = lexema + ch;  //Cria o lexema apartir da composição dos caracteres lidos. 
         boolean error = false;
@@ -243,19 +243,20 @@ public class AnalisadorLexico {
         boolean error = false;
         this.coluna++;
         ch = this.novoChar();
-
+            
+        //Percorre acumulando caracteres enquanto não encontrar um delimitador de número.
         while (!(ch == EOF || this.estruturaLexica.ehEspaco(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
-            if (!(estruturaLexica.ehDigito(ch))) {
+            if (!(estruturaLexica.ehDigito(ch))) { //Verifica se algum caracter não é digito, gerando erro. 
                 error = true;
             }
             lexema += ch;
             this.coluna++;
             ch = this.novoChar();
         }
-        if (ch == '.') {
+        if (ch == '.') {  //Verifica se o proximo caracter é um ponto para definir se o número é um ponto flutuante.
             this.coluna++;
             ch = this.novoChar();
-            if (!estruturaLexica.ehDigito(ch)) {
+            if (!estruturaLexica.ehDigito(ch)) { //Se após o ponto não aparecer um número, então o ponto é um operador.
                 if (!error) {
                     Token tk;
                     tk = new Token(lexema, "numero", linhaInicial + 1, colunaInicial + 1);
@@ -319,11 +320,11 @@ public class AnalisadorLexico {
         boolean error = false;
         this.coluna++;
         ch = this.novoChar();
-        while (ch != '"' && ch != EOF && linhaInicial == this.linha) {
-            if (!this.estruturaLexica.ehSimbolo(ch) && ch != 9) {
+        while (ch != '"' && ch != EOF && linhaInicial == this.linha) { //Procura por aspas para feixar a cadeia ou até fim de linha ou fim de arquivo.
+            if (!this.estruturaLexica.ehSimbolo(ch) && ch != 9) {  //Verifica se o caracter é um simbolo invalido.
                 error = true;
             }
-            if (Character.isSpaceChar(ch)) {
+            if (Character.isSpaceChar(ch)) { 
                 this.coluna++;
                 ch = this.novoChar();
                 if (ch == ' ' && linhaInicial == this.linha) {
@@ -346,11 +347,11 @@ public class AnalisadorLexico {
             }
         }
 
-        if (ch == '"' && linhaInicial == this.linha) {
+        if (ch == '"' && linhaInicial == this.linha) {  //Verifica se a cadeia constante foi fechada antes de uma quebra de linha.
             lexema += ch;
             this.coluna++;
         }
-        if (!error && linhaInicial == this.linha) {
+        if (!error && linhaInicial == this.linha) { //Se não houver erro, simbolo inválido ou quebra de linha, a cadeia constante é aceita.
             Token tk;
             tk = new Token(lexema, "cadeia constante", linhaInicial + 1, colunaInicial + 1);
             this.tokens.add(tk);
@@ -376,8 +377,8 @@ public class AnalisadorLexico {
         this.coluna++;
         int qtdConteudo = 0;
         ch = this.novoChar();
-        while (ch != '\'' && ch != EOF && linhaInicial == this.linha) {
-            if (!(this.estruturaLexica.ehLetra(ch) || this.estruturaLexica.ehDigito(ch)) || qtdConteudo > 0) {
+        while (ch != '\'' && ch != EOF && linhaInicial == this.linha) { //Consome caracteres até encontar aspas simples ou quebra de linha ou fim de arquivo.
+            if (!(this.estruturaLexica.ehLetra(ch) || this.estruturaLexica.ehDigito(ch)) || qtdConteudo > 0) { //Verifica se o conteudo é valido. Um caracter de Letra ou Digito.
                 error = true;
             }
             if (Character.isSpaceChar(ch)) {
@@ -401,12 +402,12 @@ public class AnalisadorLexico {
             }
         }
 
-        if (ch == '\'' && linhaInicial == this.linha) {
+        if (ch == '\'' && linhaInicial == this.linha) { //Verifica se o caracter constante foi fechado na mesma linha.
             lexema += ch;
             this.coluna++;
         }
 
-        if (!error && qtdConteudo != 0 && linhaInicial == this.linha) {
+        if (!error && qtdConteudo != 0 && linhaInicial == this.linha) {//Verifica se houve erro no caracter, mais de um caracter, caracter diferente de letra ou digito ou quebra de linha.
             Token tk;
             tk = new Token(lexema, "caractere constante", linhaInicial + 1, colunaInicial + 1);
             this.tokens.add(tk);
@@ -579,7 +580,6 @@ public class AnalisadorLexico {
         int colunaInicial = this.coluna;
 ///////////////////////////////////////
         if (ch == 9) {
-            System.out.println("TAB");
             this.coluna++;
             return;
         }
