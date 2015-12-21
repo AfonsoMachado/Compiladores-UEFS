@@ -200,7 +200,7 @@ public class AnalisadorLexico {
         this.coluna++;
         ch = this.novoChar();
         //Percorre enquanto encontrar um delimitador de identificador.
-        while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
+        while (!(ch == EOF || this.estruturaLexica.ehEspaco(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
             if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) { //Verifica se existe algum caracter inválido no identificador
                 error = true;
             }
@@ -477,7 +477,7 @@ public class AnalisadorLexico {
                 lexema += ch;
                 this.coluna++;
             } else {
-                if (!Character.isSpaceChar(ch)) {
+                if (!this.estruturaLexica.ehEspaco(ch)) {
                     lexema += ch;
                     this.coluna++;
                 }
@@ -490,7 +490,7 @@ public class AnalisadorLexico {
                 lexema += ch;
                 this.coluna++;
             } else {
-                if (!Character.isSpaceChar(ch)) {
+                if (!this.estruturaLexica.ehEspaco(ch)) {
                     lexema += ch;
                     this.coluna++;
                 }
@@ -584,7 +584,7 @@ public class AnalisadorLexico {
             return;
         }
 ///////////////////////////////////////        
-        while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
+        while (!(ch == EOF || this.estruturaLexica.ehEspaco(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
             lexema = lexema + ch;
             this.coluna++;
             ch = this.novoChar();
