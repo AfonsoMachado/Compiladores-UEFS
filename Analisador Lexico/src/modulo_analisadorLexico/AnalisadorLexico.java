@@ -188,7 +188,7 @@ public class AnalisadorLexico {
         this.coluna++;
         ch = this.novoChar();
         //percorre enquanto houver letras, digitos ou _
-        while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch))) {
+        while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
             if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) {
                 error = true;
             }
@@ -225,8 +225,8 @@ public class AnalisadorLexico {
         this.coluna++;
         ch = this.novoChar();
 
-        while (estruturaLexica.ehDigito(ch) || estruturaLexica.ehLetra(ch)) {
-            if (estruturaLexica.ehLetra(ch)) {
+        while (!(ch == EOF || this.estruturaLexica.ehEspaco(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
+            if (!(estruturaLexica.ehDigito(ch))) {
                 error = true;
             }
             lexema += ch;
@@ -251,8 +251,7 @@ public class AnalisadorLexico {
                 this.tokens.add(tk2);
                 return;
 
-            } else // Tem número depois do ponto. NÚMERO RACIONAL TODO ERRADO OU NÃO ANALISAR A PARTIR DESSA CONDIÇÂO
-            {
+            } else {// Tem número depois do ponto. NÚMERO RACIONAL TODO ERRADO OU NÃO ANALISAR A PARTIR DESSA CONDIÇÂO 
                 if (!error) {
                     lexema += "." + ch;
                     this.coluna++;
@@ -295,7 +294,7 @@ public class AnalisadorLexico {
         this.coluna++;
         ch = this.novoChar();
         while (ch != '"' && ch != EOF && linhaInicial == this.linha) {
-            if (!this.estruturaLexica.ehSimbolo(ch)) {
+            if (!this.estruturaLexica.ehSimbolo(ch) && ch != 9) {
                 error = true;
             }
             if (Character.isSpaceChar(ch)) {
@@ -407,7 +406,7 @@ public class AnalisadorLexico {
                 lexema += ch;
                 this.coluna++;
             } else if (this.podeSerNumero) {
-                while (Character.isSpaceChar(ch) /*&& linhaInicial == this.linha*/) {
+                while (this.estruturaLexica.ehEspaco(ch)) {
                     this.coluna++;
                     ch = novoChar();
                 }

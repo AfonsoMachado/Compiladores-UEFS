@@ -125,6 +125,15 @@ public class EstruturaLexica {
         this.comentarios.add("//");
     }
 
+    
+    public boolean ehEspaco(char ch){
+        
+        if(Character.isSpaceChar(ch) || ch == 9){
+            return true;
+        }
+        return false;
+    }
+            
     /**
      * Verifica se a palavra enviada é uma palavra reservada.
      *
