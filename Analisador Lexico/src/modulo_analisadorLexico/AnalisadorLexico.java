@@ -102,20 +102,21 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @return
+     * Método destinado ao consumo do código fonte, caracter a caracter.
+     * 
+     * @return Retorna o próximo caracter a ser lido pelo analisador lexico
      */
     public char novoChar() {
 
-        if (!this.codigo.isEmpty()) {
-            char c[] = this.codigo.get(this.linha).toCharArray();
-            if (c.length == this.coluna) {
+        if (!this.codigo.isEmpty()) {   //Verifica se o código fonte é um arquivo vazio.
+            char c[] = this.codigo.get(this.linha).toCharArray(); //Tranforma a linha atual do código em uma sequência de caracteres.
+            if (c.length == this.coluna) { //Verifica se a linha acabou. 
                 this.linhaVazia = false;
                 return QUEBRA_LINHA;
-            } else if (c.length > this.coluna) {
+            } else if (c.length > this.coluna) { //Retorna um caracter da linha atual. 
                 this.linhaVazia = false;
                 return c[this.coluna];
-            } else if (this.codigo.size() > (this.linha + 1)) {
+            } else if (this.codigo.size() > (this.linha + 1)) { //Verifica se o arquivo ainda possui linhas a serem tratadas.
                 this.linha++;
                 podeSerNumero = true;
                 c = this.codigo.get(this.linha).toCharArray();
@@ -126,8 +127,8 @@ public class AnalisadorLexico {
                     return LINHA_VAZIA; // 
                 }
                 //
-                return c[this.coluna];
-            } else {
+                return c[this.coluna]; //Retorna um caracter da linha atual.
+            } else { 
                 //fim de arquivo
                 return EOF;
             }
@@ -137,8 +138,9 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param codigo
+     * Método destinado a análise léxica do código fonte.
+     * 
+     * @param codigo Código fonte a ser analisado e compilado.
      */
     public void analise(ArrayList<String> codigo) {
         this.codigo = codigo;
@@ -149,7 +151,7 @@ public class AnalisadorLexico {
             if (!this.linhaVazia) {
                 lexema = "";
 
-                if (Character.isSpaceChar(ch)) {
+                if (this.estruturaLexica.ehEspaco(ch)) { //Verifica se é um espaço em branco ou caracter de tabulação.
                     this.coluna++;
                 } else if (estruturaLexica.ehLetra(ch)) { // Verifica se é um identificador.
                     this.identificador(lexema, ch);
@@ -171,7 +173,7 @@ public class AnalisadorLexico {
                 this.linha++;
             }
 
-            if (podeSerNumero && (estruturaLexica.ehOperador(ch) || estruturaLexica.ehDelimitador(ch))) {
+            if (podeSerNumero && (estruturaLexica.ehOperador(ch) || estruturaLexica.ehDelimitador(ch))) { //Verifica se a partir do caracteres já consumido se -Digito é um número negativo ou operador seguido de número.
                 podeSerNumero = true;
             } else if (estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch)) {
                 podeSerNumero = false;
@@ -182,32 +184,34 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar identificadores e palavras reservados no código fonte e erros relacionados aos mesmos.
+     * 
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void identificador(String lexema, char ch) {
 
-        int linhaInicial = this.linha;
+        int linhaInicial = this.linha;  //Salva a linha e a coluna iniciais do lexema para apresentar na saída.
         int colunaInicial = this.coluna;
 
-        lexema = lexema + ch;
+        lexema = lexema + ch;  //Cria o lexema apartir da composição dos caracteres lidos. 
         boolean error = false;
         this.coluna++;
         ch = this.novoChar();
-        //percorre enquanto houver letras, digitos ou _
+        //Percorre enquanto encontrar um delimitador de identificador.
         while (!(ch == EOF || Character.isSpaceChar(ch) || this.estruturaLexica.ehDelimitador(ch) || this.estruturaLexica.ehOperador(ch) || ch=='\'' || ch=='"')) {
-            if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) {
+            if (!(estruturaLexica.ehLetra(ch) || estruturaLexica.ehDigito(ch) || ch == '_')) { //Verifica se existe algum caracter inválido no identificador
                 error = true;
             }
             lexema = lexema + ch;
             this.coluna++;
             ch = this.novoChar();
         }
-        //Apos consumir letras digitos e simbolos verifica se o token esta correto
+        //Apos consumir letras digitos e simbolos verifica se o token esta correto.
         if (!error) {
             Token tk;
-            //verifica se eh uma palavra reservada
+            //verifica se é uma palavra reservada.
             if (this.estruturaLexica.ehPalavraReservada(lexema)) {
                 tk = new Token(lexema, "palavra_reservada", linhaInicial + 1, colunaInicial + 1);
             } else {
@@ -220,9 +224,11 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar números no código fonte e erros relacionado ao mesmo.
+     * 
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void numero(String lexema, char ch) {
 
@@ -299,8 +305,10 @@ public class AnalisadorLexico {
 
     /**
      *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar cadeias constantes no código fonte e erros relacionado a mesma.
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void cadeiaConstante(String lexema, char ch) {
 
@@ -352,9 +360,11 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar caracter constantes no código fonte e erros relacionado ao mesmo.
+     * 
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void caracterConstante(String lexema, char ch) {
 
@@ -407,9 +417,11 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar operadores no código fonte e erros relacionado ao mesmo.
+     * 
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void operador(String lexema, char ch) {
 
@@ -502,9 +514,11 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param lexema
-     * @param ch
+     * Método destinado a identificar delimitadores no código fonte e erros relacionado ao mesmo.
+     * 
+     * @param lexema token em formação.
+     * 
+     * @param ch caracter a ser analisado para compor o lexema.
      */
     public void delimitador(String lexema, char ch) {
 
@@ -519,8 +533,9 @@ public class AnalisadorLexico {
     }
 
     /**
-     *
-     * @param coment
+     * Método destinado a identificar comentarios no código fonte e erros relacionado ao mesmo.
+     * 
+     * @param coment 
      */
     public void comentario(String coment) {
 
@@ -557,6 +572,7 @@ public class AnalisadorLexico {
         }
     }
 
+    
     private void simboloInvalido(String lexema, char ch) {
 
         int linhaInicial = this.linha;
