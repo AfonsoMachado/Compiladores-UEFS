@@ -62,6 +62,7 @@ public class Compilador {
 
     /**
      * Inicializa os modulos do compilador
+     * @param args
      */
     public static void main(String args[]) {
 

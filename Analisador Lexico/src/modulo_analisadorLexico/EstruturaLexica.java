@@ -125,13 +125,16 @@ public class EstruturaLexica {
         this.comentarios.add("//");
     }
 
-    
+    /**
+     * Verifica se o caracter enviado é um espaço em branco ou um caracter de tabulação.
+     * 
+     * @param ch Espaço encontrado no código
+     * 
+     * @return Verdadeiro se o char enviado for um espaço em branco ou caracter de tabulação, Falso caso contrário
+     */
     public boolean ehEspaco(char ch){
         
-        if(Character.isSpaceChar(ch) || ch == 9){
-            return true;
-        }
-        return false;
+        return Character.isSpaceChar(ch) || ch == 9;
     }
             
     /**

@@ -55,6 +55,9 @@ public class AnalisadorLexico {
     private boolean linhaVazia;
     private boolean podeSerNumero;
 
+    /**
+     *
+     */
     public AnalisadorLexico() {
 
         this.estruturaLexica = new EstruturaLexica();
@@ -178,6 +181,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void identificador(String lexema, char ch) {
 
         int linhaInicial = this.linha;
@@ -211,6 +219,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void numero(String lexema, char ch) {
 
         int linhaInicial = this.linha;
@@ -284,6 +297,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void cadeiaConstante(String lexema, char ch) {
 
         int linhaInicial = this.linha;
@@ -333,6 +351,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void caracterConstante(String lexema, char ch) {
 
         int linhaInicial = this.linha;
@@ -383,6 +406,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void operador(String lexema, char ch) {
 
         int linhaInicial = this.linha;
@@ -473,6 +501,11 @@ public class AnalisadorLexico {
         }
     }
 
+    /**
+     *
+     * @param lexema
+     * @param ch
+     */
     public void delimitador(String lexema, char ch) {
 
         int colunaInicial = this.coluna;
@@ -485,6 +518,10 @@ public class AnalisadorLexico {
         this.tokens.add(tk);
     }
 
+    /**
+     *
+     * @param coment
+     */
     public void comentario(String coment) {
 
         int colunaInicial = this.coluna;
