@@ -3,7 +3,7 @@ package modulo_analisadorLexico;
 import java.util.ArrayList;
 
 /**
- * Classe que representa a estrutura lexica que rege o compilador.
+ * Classe que representa a estrutura léxica que rege o compilador.
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -126,15 +126,15 @@ public class EstruturaLexica {
     }
 
     /**
-     * Verifica se o caracter enviado é um espaço em branco ou um caracter de tabulação.
+     * Verifica se o caractere enviado é um espaço em branco ou um caractere de tabulação.
      * 
-     * @param ch Espaço encontrado no código
+     * @param ch Espaço/TAB encontrado no código
      * 
-     * @return Verdadeiro se o char enviado for um espaço em branco ou caracter de tabulação, Falso caso contrário
+     * @return Verdadeiro se o char enviado for um espaço em branco ou caractere de tabulação, Falso caso contrário
      */
     public boolean ehEspaco(char ch){
         
-        return Character.isSpaceChar(ch) || ch == 9;
+        return (Character.isSpaceChar(ch) || ch == 9);
     }
             
     /**
@@ -150,7 +150,7 @@ public class EstruturaLexica {
     }
 
     /**
-     * Verifica se o caracter enviado é uma letra.
+     * Verifica se o caractere enviado é uma letra.
      *
      * @param letra Letra encontrada no código
      *
@@ -162,7 +162,7 @@ public class EstruturaLexica {
     }
     
     /**
-     * Verifica se o caracter enviado é um digito.
+     * Verifica se o caractere enviado é um digito.
      *
      * @param digito Digito encontrado no código
      *

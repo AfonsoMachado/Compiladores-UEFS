@@ -13,7 +13,7 @@ import modulo_analisadorLexico.Token;
 public class TabelaSimbolos {
     
     /**
-     * Adiciona um identificador a tabela.
+     * Adiciona um identificador à tabela.
      */
     public void add() {
         // Adicionar, variaveis, constantes, funções, etc...

@@ -11,9 +11,9 @@ import java.util.Scanner;
 import modulo_analisadorLexico.Token;
 
 /**
- * Classe destinada a manipulação com o arquivo de código fonte e saída, ou
- * seja, responsável por: gerar a lista com os caracteres provindos do código
- * fonte e gerar o arquivo de saída com os erros e os tokens.
+ * Classe destinada à manipulação do arquivo de código fonte e saída, ou
+ * seja, responsável por: gerar a lista com os caracteres provenientes do código
+ * fonte e gerar o arquivo de saída com os tokens e erros (se houver) do mesmo.
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -23,16 +23,14 @@ import modulo_analisadorLexico.Token;
 public class Arquivo {
 
     /**
-     * Nome do arquivo lido.
+     * Nome do código lido.
      */
     private String localFile;
 
     /**
-     * Busca e retorna todos os códigos fonte presentes na pasta
-     * <i>/src/testes/in/</i>.
+     * Busca e retorna todos os códigos fonte presentes na pasta <i>/src/testes/in/</i>.
      *
-     * @return Lista com os nomes dos códigos fonte presentes na pasta
-     * <i>/src/testes/in/</i>
+     * @return Lista com os nomes dos códigos fonte presentes na pasta <i>/src/testes/in/</i>
      */
     public ArrayList<String> lerCodigos() {
 
@@ -41,11 +39,6 @@ public class Arquivo {
         for (File f : raiz.listFiles()) { // Inserindo caminho dos códigos.
             codigos.add(f.getName());
         }
-
-        /*if (codes.isEmpty()) { // Pasta de códigos de entrada vazia.
-            JOptionPane.showMessageDialog(null, "Sem Códigos para Compilar");
-            System.exit(0);
-        }*/
 
         return codigos;
     }
@@ -64,7 +57,7 @@ public class Arquivo {
 
         Scanner scanner = new Scanner(new FileReader("src/testes/in/" + localFile)); // Lendo o arquivo do código.
         this.localFile = localFile; // Guarda o nome do arquivo de entrada para que o arquivo de saída tenha o "mesmo" nome.
-        ArrayList<String> codigo = new ArrayList(); // Código obtido;
+        ArrayList<String> codigo = new ArrayList(); // Código obtido.
         while (scanner.hasNextLine()) { // Capturando as linhas do código.
             codigo.add(scanner.nextLine());
         }
@@ -74,7 +67,7 @@ public class Arquivo {
 
     /**
      * Gera o arquivo de saída após a análise do código fonte. Neste arquivo de
-     * saída conterá todos os tokens encontrados no código fonte e os erros
+     * saída, conterá todos os tokens encontrados no código fonte e os erros
      * encontrados (se houver).
      *
      * @param tokens Lista de tokens obtidos após a análise do código fonte
@@ -90,7 +83,7 @@ public class Arquivo {
         for (Token token : tokens) { // Insere os tokens no arquivo de saída.
             gravar.println(token.getValor() + " " + token.getTipo() + " " + token.getLinha() + ":" + token.getColuna());
         }
-        if (erros.isEmpty()) { // Se não houver erros léxicos, imprime sucesso.
+        if (erros.isEmpty()) { // Se não houver erros léxicos.
             gravar.printf("\nnao ha erros lexicos\n");
         } else { // Se houver erros léxicos, os insere no arquivo de saída.
             for (String erro : erros) {

@@ -35,10 +35,10 @@ public class Token {
 
     /**
      * Construtor da classe.
-     
+     *
      * @param tipo O token (Delimitador, Identificador ou Operador, por exemplo)
      * @param valor Lexema (valor refente ao token)
-     * @param linha Linha de ocorrencia do lexema
+     * @param linha Linha de início do lexema
      * @param coluna Coluna onde se inicia o lexema
      */
     public Token(String valor, String tipo, int linha, int coluna) {

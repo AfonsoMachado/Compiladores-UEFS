@@ -7,7 +7,7 @@ import manipulação_arquivosIO.Arquivo;
 import modulo_analisadorLexico.AnalisadorLexico;
 
 /**
- * Classe responsável por executar os modulos do compilador, assim capturando os
+ * Classe responsável por executar os modulos do compilador, assim, capturando os
  * códigos fonte e gerando suas respectivas saídas.
  *
  * @author Lucas Carneiro
@@ -24,7 +24,7 @@ public class Compilador {
     private final Arquivo arquivo;
 
     /**
-     * Modulo da analise léxica do código.
+     * Módulo da análise léxica do código.
      */
     private AnalisadorLexico analisadorLexico;
 
@@ -38,7 +38,7 @@ public class Compilador {
 
     /**
      * Ler todos os códigos fonte da pasta <i>/src/testes/in/</i> e envia cada
-     * um ao modulo léxico, sendo que ao fim do processo deste modulo, são
+     * um ao módulo léxico, sendo que ao fim do processo deste módulo, são
      * gerados os arquivos de cada código fonte
      *
      * @throws FileNotFoundException Se não encontrar o arquivo do código
@@ -60,7 +60,8 @@ public class Compilador {
     }
 
     /**
-     * Inicializa os modulos do compilador
+     * Inicializa os módulos do compilador.
+     * 
      * @param args
      */
     public static void main(String args[]) {
@@ -69,7 +70,7 @@ public class Compilador {
             Compilador compilador = new Compilador(); // Cria o compilador.
             compilador.compilar(); // Executa o compilador.
         } catch (FileNotFoundException error1) {
-            System.out.println("Arquivo Não Encontrado");
+            System.out.println("Arquivo não encontrado");
             System.exit(0);
         } catch (IOException ex) {
             System.out.println("Arquivo de saida não foi gerado com sucesso");
