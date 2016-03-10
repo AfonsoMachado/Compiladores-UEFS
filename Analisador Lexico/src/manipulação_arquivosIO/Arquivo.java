@@ -92,4 +92,13 @@ public class Arquivo {
         }
         arq.close();
     }
+    
+    public ArrayList<String> lerSaidaLexico() throws FileNotFoundException{
+        Scanner scanner = new Scanner(new FileReader("src/testes/out/" + localFile)); // Lendo o arquivo do código.
+        ArrayList<String> codigo = new ArrayList(); // Código obtido.
+        while (scanner.hasNextLine()) { // Capturando as linhas do código.
+            codigo.add(scanner.nextLine());
+        }
+        return codigo;
+    }
 }

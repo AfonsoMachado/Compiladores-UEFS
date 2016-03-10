@@ -17,6 +17,7 @@ public class Simbolos {
     public static final int STRING = 2;
     public static final int FLOAT = 3;
     public static final int BOOL = 4;
+    public static final int OBJECT = 5;
     
     public static final int VAR = 10;
     public static final int CONST= 11;

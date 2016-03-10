@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import manipulação_arquivosIO.Arquivo;
 import modulo_analisadorLexico.AnalisadorLexico;
+import modulo_analisadorSintatico.AnalisadorSintatico;
 
 /**
  * Classe responsável por executar os modulos do compilador, assim, capturando os
@@ -17,7 +18,13 @@ import modulo_analisadorLexico.AnalisadorLexico;
  * @see Arquivo
  */
 public class Compilador {
+    private TabelaSimbolos tabelaSimbolos;
 
+    public void addSimbolo(Simbolos simbolo) {
+        tabelaSimbolos.add(simbolo);
+    }
+    
+    
     /**
      * Manipulador dos documentos de entrada e saída.
      */
@@ -27,6 +34,7 @@ public class Compilador {
      * Módulo da análise léxica do código.
      */
     private AnalisadorLexico analisadorLexico;
+    private AnalisadorSintatico analisadorSintatico;
 
     /**
      * Construtor da Classe.
@@ -34,6 +42,7 @@ public class Compilador {
     public Compilador() {
 
         arquivo = new Arquivo(); // Criação do manipulador de entrada e saída.
+        tabelaSimbolos = new TabelaSimbolos();
     }
 
     /**
@@ -56,6 +65,9 @@ public class Compilador {
             analisadorLexico = new AnalisadorLexico();
             analisadorLexico.analise(codigoFonte);
             arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
+            codigoFonte=arquivo.lerSaidaLexico();
+            analisadorSintatico = new AnalisadorSintatico();
+            analisadorSintatico.analise(codigoFonte);
         }
     }
 
