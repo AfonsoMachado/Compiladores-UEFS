@@ -34,10 +34,6 @@ public class AnalisadorLexico {
      */
     private final EstruturaLexica estruturaLexica;
     /**
-     * Tabela contendo os identificadores desta etapa.
-     */
-    private TabelaSimbolos tabelaSimbolos;
-    /**
      * Lista de tokens.
      */
     private final ArrayList<Token> tokens;
@@ -72,7 +68,6 @@ public class AnalisadorLexico {
     public AnalisadorLexico() {
 
         this.estruturaLexica = new EstruturaLexica();
-        this.tabelaSimbolos = new TabelaSimbolos();
         this.tokens = new ArrayList<>();
         this.erros = new ArrayList<>();
         this.coluna = 0;

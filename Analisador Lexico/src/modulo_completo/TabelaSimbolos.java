@@ -1,5 +1,6 @@
 package modulo_completo;
 
+import java.util.ArrayList;
 import modulo_analisadorLexico.Token;
 
 /**
@@ -11,11 +12,18 @@ import modulo_analisadorLexico.Token;
  * @see Token
  */
 public class TabelaSimbolos {
+    private final ArrayList<Simbolos> tabela;
+
+    public TabelaSimbolos() {
+        tabela = new ArrayList<>();
+    }
+    
     
     /**
      * Adiciona um identificador à tabela.
+     * @param simbolo
      */
-    public void add() {
-        // Adicionar, variaveis, constantes, funções, etc...
+    public void add(Simbolos simbolo) {
+        tabela.add(simbolo);
     }
 }
