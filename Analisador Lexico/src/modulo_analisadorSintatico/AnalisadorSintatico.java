@@ -19,23 +19,11 @@ public class AnalisadorSintatico {
     public void analise(ArrayList<String> codigoFonte) {
         tokens = codigoFonte;
         proximo = proximo();
-        switch (proximo) {
-            case "void":
-                terminal("void");
-                terminal("main");
-                terminal("(");
-                terminal(")");
-                terminal("{");
-                reconheceConteudoMetodo();
-                terminal("}");
-                break;
-            default:
-                erroSintatico();
-        }
+        reconheceArquivo();
     }
 
     private String proximo() {
-        return ""  + tokens.get(0);
+        return "" + tokens.get(0);
     }
 
     private void erroSintatico() {
@@ -51,6 +39,46 @@ public class AnalisadorSintatico {
     }
 
     private void reconheceConteudoMetodo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void reconheceMain() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void reconheceConst() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void reconheceArquivo() {
+        switch (proximo) {
+            case "const":
+                reconheceConst();
+                break;
+            case "char":
+                reconheceDeclaracaoVariavel();
+                break;
+            case "int":
+                reconheceDeclaracaoVariavel();
+                break;
+            case "bool":
+                reconheceDeclaracaoVariavel();
+                break;
+            case "string":
+                reconheceDeclaracaoVariavel();
+                break;
+            case "float":
+                reconheceDeclaracaoVariavel();
+                break;
+            case "main":
+                reconheceMain();
+                break;
+            default:
+                erroSintatico();
+        }
+    }
+
+    private void reconheceDeclaracaoVariavel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
