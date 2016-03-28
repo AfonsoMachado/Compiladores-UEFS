@@ -11,9 +11,9 @@ import java.util.Scanner;
 import modulo_analisadorLexico.Token;
 
 /**
- * Classe destinada à manipulação do arquivo de código fonte e saída, ou
- * seja, responsável por: gerar a lista com os caracteres provenientes do código
- * fonte e gerar o arquivo de saída com os tokens e erros (se houver) do mesmo.
+ * Classe destinada à manipulação do arquivo de código fonte e saída, ou seja,
+ * responsável por: gerar a lista com os caracteres provenientes do código fonte
+ * e gerar o arquivo de saída com os tokens e erros (se houver) do mesmo.
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -28,9 +28,11 @@ public class Arquivo {
     private String localFile;
 
     /**
-     * Busca e retorna todos os códigos fonte presentes na pasta <i>/src/testes/in/</i>.
+     * Busca e retorna todos os códigos fonte presentes na pasta
+     * <i>/src/testes/in/</i>.
      *
-     * @return Lista com os nomes dos códigos fonte presentes na pasta <i>/src/testes/in/</i>
+     * @return Lista com os nomes dos códigos fonte presentes na pasta
+     * <i>/src/testes/in/</i>
      */
     public ArrayList<String> lerCodigos() {
 
@@ -39,7 +41,7 @@ public class Arquivo {
         for (File f : raiz.listFiles()) { // Inserindo caminho dos códigos.
             codigos.add(f.getName());
         }
-
+        System.out.println(codigos);
         return codigos;
     }
 
@@ -61,7 +63,6 @@ public class Arquivo {
         while (scanner.hasNextLine()) { // Capturando as linhas do código.
             codigo.add(scanner.nextLine());
         }
-
         return codigo;
     }
 
@@ -72,13 +73,12 @@ public class Arquivo {
      *
      * @param tokens Lista de tokens obtidos após a análise do código fonte
      * @param erros Erros obtidos após a análise do código fonte
-     * 
+     *
      * @throws IOException Arquivo de saida não foi gerado com sucesso
      */
     public void escreverSaidaLexico(ArrayList<Token> tokens, ArrayList<String> erros) throws IOException {
 
         FileWriter arq = new FileWriter("src/testes/out/" + this.localFile + ".out", false); // Cria o arquivo de saída relacionado ao seu respectivo arquivo de entrada ("mesmo" nome). 
-
         PrintWriter gravar = new PrintWriter(arq);
         for (Token token : tokens) { // Insere os tokens no arquivo de saída.
             gravar.println(token.getValor() + " " + token.getTipo() + " " + token.getLinha() + ":" + token.getColuna());
@@ -92,13 +92,21 @@ public class Arquivo {
         }
         arq.close();
     }
-    
-    public ArrayList<String> lerSaidaLexico() throws FileNotFoundException{
-        Scanner scanner = new Scanner(new FileReader("src/testes/out/" + localFile)); // Lendo o arquivo do código.
-        ArrayList<String> codigo = new ArrayList(); // Código obtido.
+
+    public ArrayList<Token> lerSaidaLexico() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new FileReader("src/testes/out/" + localFile + ".out")); // Lendo o arquivo do código.
+        ArrayList<Token> listaTokens = new ArrayList(); // Código obtido.
+
         while (scanner.hasNextLine()) { // Capturando as linhas do código.
-            codigo.add(scanner.nextLine());
+            String[] aux = scanner.nextLine().split(" ");
+            if (!aux[0].equals("")) {
+                String[] aux2 = aux[2].split(":");
+                Token token = new Token(aux[0], aux[1], Integer.parseInt(aux2[0]), Integer.parseInt(aux2[1]));
+                listaTokens.add(token);
+            } else {
+                break;
+            }
         }
-        return codigo;
+        return listaTokens;
     }
 }

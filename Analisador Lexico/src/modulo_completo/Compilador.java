@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import manipulação_arquivosIO.Arquivo;
 import modulo_analisadorLexico.AnalisadorLexico;
+import modulo_analisadorLexico.Token;
 import modulo_analisadorSintatico.AnalisadorSintatico;
 
 /**
@@ -65,9 +66,10 @@ public class Compilador {
             analisadorLexico = new AnalisadorLexico();
             analisadorLexico.analise(codigoFonte);
             arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
-            codigoFonte=arquivo.lerSaidaLexico();
+            ArrayList<Token> listaTokens;
+            listaTokens=arquivo.lerSaidaLexico();
             analisadorSintatico = new AnalisadorSintatico();
-            analisadorSintatico.analise(codigoFonte);
+            analisadorSintatico.analise(listaTokens);
         }
     }
 

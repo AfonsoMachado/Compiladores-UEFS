@@ -157,7 +157,6 @@ public class AnalisadorLexico {
 
         this.codigo = codigo;
         String lexema;
-
         char ch = this.novoChar(); // Recupera o primeiro caractere do código.
         while (ch != EOF) {
             if (!this.linhaVazia) { // Se for linha vazia pula para a próxima.

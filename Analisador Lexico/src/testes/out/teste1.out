@@ -1,0 +1,11 @@
+class palavra_reservada 1:1
+a id 1:7
+{ delimitador 1:9
+int palavra_reservada 2:1
+i id 2:5
+= operador 2:6
+10 numero 2:7
+; delimitador 2:9
+} delimitador 3:1
+
+nao ha erros lexicos
