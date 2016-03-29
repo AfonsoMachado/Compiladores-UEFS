@@ -70,6 +70,7 @@ public class Compilador {
             listaTokens=arquivo.lerSaidaLexico();
             analisadorSintatico = new AnalisadorSintatico();
             analisadorSintatico.analise(listaTokens);
+            arquivo.escreverSaidaSintatico(analisadorSintatico.getErros());
         }
     }
 

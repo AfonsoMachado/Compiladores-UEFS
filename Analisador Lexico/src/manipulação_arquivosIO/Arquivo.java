@@ -98,15 +98,47 @@ public class Arquivo {
         ArrayList<Token> listaTokens = new ArrayList(); // Código obtido.
 
         while (scanner.hasNextLine()) { // Capturando as linhas do código.
-            String[] aux = scanner.nextLine().split(" ");
-            if (!aux[0].equals("")) {
-                String[] aux2 = aux[2].split(":");
-                Token token = new Token(aux[0], aux[1], Integer.parseInt(aux2[0]), Integer.parseInt(aux2[1]));
+            String next = scanner.nextLine();
+            if (next.length()!=0 && next.charAt(0) == '"') {
+                String[] aux = next.split("cadeia_constante ");
+                String[] aux2 = aux[1].split(":");
+                Token token = new Token(aux[0], "cadeia_constante", Integer.parseInt(aux2[0]), Integer.parseInt(aux2[1]));
                 listaTokens.add(token);
             } else {
-                break;
+                String[] aux = next.split(" ");
+                if (!aux[0].equals("")) {
+                    String[] aux2 = aux[2].split(":");
+                    Token token = new Token(aux[0], aux[1], Integer.parseInt(aux2[0]), Integer.parseInt(aux2[1]));
+                    listaTokens.add(token);
+
+                } else {
+                    break;
+                }
             }
         }
         return listaTokens;
+    }
+
+    /**
+     * Gera o arquivo de saída após a análise do código fonte. Neste arquivo de
+     * saída, conterá todos os tokens encontrados no código fonte e os erros
+     * encontrados (se houver).
+     *
+     * @param erros Erros obtidos após a análise do código fonte
+     *
+     * @throws IOException Arquivo de saida não foi gerado com sucesso
+     */
+    public void escreverSaidaSintatico(ArrayList<String> erros) throws IOException {
+        System.out.println(this.localFile);
+        FileWriter arq = new FileWriter("src/testes/sintatico/" + this.localFile + ".out", false); // Cria o arquivo de saída relacionado ao seu respectivo arquivo de entrada ("mesmo" nome). 
+        PrintWriter gravar = new PrintWriter(arq);
+        if (erros.isEmpty()) { // Se não houver erros léxicos.
+            gravar.printf("\nnao ha erros sintaticos\n");
+        } else { // Se houver erros léxicos, os insere no arquivo de saída.
+            for (String erro : erros) {
+                gravar.printf(erro);
+            }
+        }
+        arq.close();
     }
 }

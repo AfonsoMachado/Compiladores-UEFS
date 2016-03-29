@@ -16,26 +16,37 @@ public class AnalisadorSintatico {
 
     private Token proximo;
     private ArrayList<Token> tokens;
+    private ArrayList<String> erros;
+    private int i = 0;
 
     public void analise(ArrayList<Token> codigoFonte) {
         tokens = codigoFonte;
         proximo = proximo();
+        erros = new ArrayList<>();
         reconheceArquivo();
     }
 
-    private Token proximo() {
-        return tokens.get(0);
+    public ArrayList<String> getErros() {
+        return erros;
     }
 
-    private void erroSintatico() {
-        System.out.println("ERRO");
+    private Token proximo() {
+        if (i < tokens.size()) {
+            return tokens.get(i++);
+        } else {
+            return null;
+        }
+    }
+
+    private void erroSintatico(String erro) {
+        erros.add(erro);
     }
 
     private void terminal(String esperado) {
         if (proximo == null ? esperado == null : proximo.getValor().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico();
+            erroSintatico("Erro na linha " + proximo.getLinha() + ". Token " + proximo.getValor() + "esperado.");
         }
     }
 
@@ -47,6 +58,7 @@ public class AnalisadorSintatico {
 
     private void reconhecePreMain() {
         System.out.println("pre-main");
+        if(proximo!=null){
         switch (proximo.getValor()) {
             case "void":
                 reconheceMain();
@@ -57,7 +69,11 @@ public class AnalisadorSintatico {
                 reconhecePreMain();
                 break;
             default:
-                erroSintatico();
+                erroSintatico("");
+        }
+        }
+        else {
+            erroSintatico("Fim de arquivo inesperado");
         }
     }
 
@@ -86,6 +102,7 @@ public class AnalisadorSintatico {
 
     private void reconheceClasse() {
         System.out.println("classe");
+        System.out.println(proximo.getValor());
         switch (proximo.getValor()) {
             case "class":
                 terminal("class");
@@ -94,6 +111,8 @@ public class AnalisadorSintatico {
                 terminal("{");
                 reconheceConteudoClasse();
                 terminal("}");
+                break;
+            default:
                 break;
         }
     }
@@ -143,23 +162,26 @@ public class AnalisadorSintatico {
         if (proximo == null ? esperado == null : proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico();
+            erroSintatico("Erro na linha " + proximo.getLinha() + ". Token do tipo" + proximo.getTipo() + "esperado.");
         }
     }
 
     private void reconheceExpressaoHerenca() {
         System.out.println("ExpressaoHerenca");
-        switch(proximo.getValor()){
-            case ">": terminal(">"); Tipo("id"); break;
-                default: break;
-            
-        
+        switch (proximo.getValor()) {
+            case ">":
+                terminal(">");
+                Tipo("id");
+                break;
+            default:
+                break;
+
         }
-                
+
     }
 
     private void reconheceConteudoClasse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return;
     }
 
 }

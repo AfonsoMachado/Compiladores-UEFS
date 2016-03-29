@@ -376,7 +376,7 @@ public class AnalisadorLexico {
         
         if (!error && linhaInicial == this.linha) { // Se não houve erro.
             Token tk;
-            tk = new Token(lexema, "cadeia constante", linhaInicial + 1, colunaInicial + 1);
+            tk = new Token(lexema, "cadeia_constante", linhaInicial + 1, colunaInicial + 1);
             this.tokens.add(tk);
         } else {
             this.novoErro("cadeia_mal_formada", lexema, linhaInicial, colunaInicial);
@@ -436,7 +436,7 @@ public class AnalisadorLexico {
 
         if (!error && qtdConteudo != 0 && linhaInicial == this.linha) { // Se não houve erro.
             Token tk;
-            tk = new Token(lexema, "caractere constante", linhaInicial + 1, colunaInicial + 1);
+            tk = new Token(lexema, "caractere_constante", linhaInicial + 1, colunaInicial + 1);
             this.tokens.add(tk);
         } else {
             this.novoErro("caractere_mal_formado", lexema, linhaInicial, colunaInicial);

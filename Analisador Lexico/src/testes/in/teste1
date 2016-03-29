@@ -1,3 +1,5 @@
 class a { 
-int i=10;
+" "
+}
+void main(){
 }
