@@ -19,8 +19,8 @@ public class AnalisadorSintatico {
     private ArrayList<String> erros;
     private int i = 0;
 
-    public void analise(ArrayList<Token> codigoFonte) {
-        tokens = codigoFonte;
+    public void analise(ArrayList<Token> tokens) {
+        this.tokens = tokens;
         proximo = proximo();
         erros = new ArrayList<>();
         reconheceArquivo();
@@ -39,7 +39,11 @@ public class AnalisadorSintatico {
     }
 
     private void erroSintatico(String erro) {
-        erros.add("Erro na linha " + proximo.getLinha() + ". " + erro);
+        if (proximo != null) {
+            erros.add("Erro na linha " + proximo.getLinha() + ". " + erro);
+        } else {
+            erros.add(erro);
+        }
     }
 
     private void terminal(String esperado) {
@@ -77,13 +81,17 @@ public class AnalisadorSintatico {
     }
 
     private void reconheceClasses() {
-        switch (proximo.getValor()) {
-            case "class":
-                reconheceClasse();
-                reconheceClasses();
-                break;
-            default:
-                break;
+        if (proximo != null) {
+            switch (proximo.getValor()) {
+                case "class":
+                    reconheceClasse();
+                    reconheceClasses();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            erroSintatico("Fim de arquivo inesperado");
         }
     }
 
@@ -250,11 +258,11 @@ public class AnalisadorSintatico {
                 Tipo("caracter_constante");
                 break;
             default:
-                if(proximo.getValor().equals("true")){
+                if (proximo.getValor().equals("true")) {
                     terminal("true");
-                }else if(proximo.getValor().equals("false")){
+                } else if (proximo.getValor().equals("false")) {
                     terminal("false");
-                }else {
+                } else {
                     erroSintatico("Atribuição invalida");
                 }
                 break;
@@ -282,7 +290,8 @@ public class AnalisadorSintatico {
     }
 
     private void reconheceConteudoMetodo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return;
     }
 
     private void Tipo(String esperado) {

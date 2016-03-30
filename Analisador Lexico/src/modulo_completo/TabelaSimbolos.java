@@ -12,7 +12,9 @@ import modulo_analisadorLexico.Token;
  * @see Token
  */
 public class TabelaSimbolos {
+    
     private final ArrayList<Simbolos> tabela;
+    
 
     public TabelaSimbolos() {
         tabela = new ArrayList<>();

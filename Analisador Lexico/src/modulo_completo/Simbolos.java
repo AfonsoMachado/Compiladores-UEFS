@@ -5,13 +5,13 @@
  */
 package modulo_completo;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author lucas
  */
 public class Simbolos {
+    
+    
     public static final int INT = 0;
     public static final int CHAR = 1;
     public static final int STRING = 2;
@@ -26,24 +26,27 @@ public class Simbolos {
     public static final int VET = 14;
     public static final int MAIN = 15;
     
-    
-    
     private final String nome;
     private Object valor;
     private final int categoria;
     private final int tipo;
-    private final ArrayList<Simbolos> filhos;
+    private final TabelaSimbolos filhos;
 
-    public Simbolos(int categoria, int tipo, String nome) {
+    public Simbolos(int categoria, int tipo, String nome, Object valor) {
         this.categoria = categoria;
         this.tipo = tipo;
         this.nome = nome;
-        filhos = new ArrayList<>();
+        this.valor = valor;
+        filhos = new TabelaSimbolos();
     }
     
     
     public void addFilho(Simbolos filho){
         filhos.add(filho);
+    }
+
+    public void setValor(Object valor) {
+        this.valor = valor;
     }
     
     

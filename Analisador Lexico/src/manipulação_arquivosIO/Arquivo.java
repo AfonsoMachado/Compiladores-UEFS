@@ -100,7 +100,7 @@ public class Arquivo {
         while (scanner.hasNextLine()) { // Capturando as linhas do código.
             String next = scanner.nextLine();
             if (next.length()!=0 && next.charAt(0) == '"') {
-                String[] aux = next.split("cadeia_constante ");
+                String[] aux = next.split(" cadeia_constante ");
                 String[] aux2 = aux[1].split(":");
                 Token token = new Token(aux[0], "cadeia_constante", Integer.parseInt(aux2[0]), Integer.parseInt(aux2[1]));
                 listaTokens.add(token);
