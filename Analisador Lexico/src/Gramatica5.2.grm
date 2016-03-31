@@ -101,7 +101,7 @@ Char1 = '' {Chars} ''
 !Comandos
 
 !while
-<while>::= 'while' '(' <exp> ')' '{' <conteudo_metodo> '}'
+<while>::= 'while' '(' <exp> ')' '{' <conteudo_estrutura> '}'
 
 !Comando read
 <read> ::= 'read' '('Identifier<lista_read>')' ';'
@@ -115,9 +115,12 @@ Char1 = '' {Chars} ''
 <op_write>::=<operador_aritmetico><exp_aritmetica> | <lambda>
 
 !if
-<if>::= 'if' '(' <exp> ')' '{' <conteudo_metodo> '}' <complemento_if>
-<complemento_if> ::= 'else' '{'<conteudo_metodo>'}' | <lambda>
-                 
+<if>::= 'if' '(' <exp> ')' '{' <conteudo_estrutura> '}' <complemento_if>
+<complemento_if> ::= 'else' '{'<conteudo_estrutura>'}' | <lambda>
+!!!!!!conteudo_estrutura
+<conteudo_estrutura> ::= <comando_estrutura><conteudo_estrutura> | <lambda>
+<comando_estrutura> ::=  <read> | <write> | Identifier <id_comando> | <inicializa_objeto> | <if> | <while> 
+!!!!!
 !Expressões lógicas 
 <exp> ::= <boolean> <complemento_logico> | <operador_incremento> Identifier <id_exp><complemento_aritmetico1>| Identifier <id_exp_arit><complemento_aritmetico1>| Numero<complemento_aritmetico><op_relacional> |'(' <exp_logica> ')' <complemento_exp_logica>  
 <complemento_aritmetico1>::=<operador_aritmetico><fator_aritmetico><op_id_relacional>| <op_id_logico>

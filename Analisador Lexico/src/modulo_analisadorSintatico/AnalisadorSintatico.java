@@ -286,6 +286,90 @@ public class AnalisadorSintatico {
     }
 
     private void reconheceDeclaracaoVariavel() {
+        System.out.println("listaVariaveis");
+        switch (proximo.getValor()) {
+            case "char":
+                terminal("char");
+                Tipo("id");
+                reconheceListaVariavel();
+                break;
+            case "int":
+                terminal("int");
+                Tipo("id");
+                reconheceListaVariavel();
+                break;
+            case "bool":
+                terminal("bool");
+                Tipo("id");
+                reconheceListaVariavel();
+                break;
+            case "string":
+                terminal("string");
+                Tipo("id");
+                reconheceListaVariavel();
+                break;
+            case "float":
+                terminal("float");
+                Tipo("id");
+                reconheceListaVariavel();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void reconheceIdDeclaracao() {
+        System.out.println("idDeclaração");
+        switch (proximo.getValor()) {
+            case "void":
+                terminal("void");
+                Tipo("id");
+                terminal("(");
+                reconheceDeclParametros();
+                terminal(")");
+                terminal("{");
+                reconheceConteudoMetodo();
+                terminal("}");
+                break;
+            case "char":
+                terminal("char");
+                Tipo("id");
+                reconheceCompId();
+                break;
+            case "int":
+                terminal("int");
+                Tipo("id");
+                reconheceCompId();
+                break;
+            case "bool":
+                terminal("bool");
+                Tipo("id");
+                reconheceCompId();
+                break;
+            case "string":
+                terminal("string");
+                Tipo("id");
+                reconheceCompId();
+                break;
+            case "float":
+                terminal("float");
+                Tipo("id");
+                reconheceCompId();
+                break;
+            default:
+                if (proximo.getTipo().equals("id")) {
+                    Tipo("id");
+                    Tipo("id");
+                    reconheceCompId();
+                    break;
+                } else {
+                    erroSintatico("espera um tipo");
+                }
+                break;
+        }
+    }
+
+    private void reconheceCompId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -302,8 +386,11 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void reconheceIdDeclaracao() {
+    private void reconheceListaVariavel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    private void reconheceDeclParametros() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
