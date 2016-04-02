@@ -802,99 +802,568 @@ public class AnalisadorSintatico {
     }
 
     private void recAtribuicao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "(":
+                terminal("(");
+                recAtribuicao();
+                terminal(")");
+                recOperacao();
+                break;
+            case "++":
+                recIdAcesso();
+                break;
+            case "--":
+                recIdAcesso();
+                break;
+            case "true":
+                terminal("true");
+                recOpLogico();
+                break;
+            case "-":
+                terminal("-");
+                recNegativo();
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "id":
+                        recIdAcesso();
+                        break;
+                    case "numero":
+                        Tipo("numero");
+                        recOperadorNumero();
+                        break;
+                    case "cadeia_constante":
+                        Tipo("cadeia_constante");
+                        break;
+                    case "caracter_constante":
+                        Tipo("caracter_constante");
+                        break;
+                    default:
+                        erroSintatico("Atribuição errada");
+                        break;
+                }
+        }
+
     }
 
     private void recOperadorNumero() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                terminal(">");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<":
+                terminal("<");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case ">=":
+                terminal(">=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<=":
+                terminal("<=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "+":
+                terminal("+");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "-":
+                terminal("-");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "*":
+                terminal("*");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "/":
+                terminal("/");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "==":
+                terminal("==");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "!=":
+                terminal("!=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recNegativo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "(":
+                terminal("(");
+                recNegativo();
+                terminal(")");
+                break;
+            case "++":
+                recIdAcesso();
+                break;
+            case "--":
+                recIdAcesso();
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "numero":
+                        Tipo("numero");
+                        recOperadorNumero();
+                        break;
+                    case "id":
+                        recIdAcesso();
+                        break;
+                    default:
+                        erroSintatico("Expressão mal formada");
+                        break;
+
+                }
+
+        }
     }
-    
+
     private void recExpRelacionalOpcional() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                terminal(">");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<":
+                terminal("<");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case ">=":
+                terminal(">=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<=":
+                terminal("<=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            default:
+                break;
+        }
     }
-    
+
     private void recOpLogico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "==":
+                terminal("==");
+                recExplogica();
+                break;
+            case "!=":
+                terminal("!=");
+                recExplogica();
+                break;
+            case "&&":
+                terminal("&&");
+                recExp();
+                break;
+            case "||":
+                terminal("||");
+                recExp();
+                break;
+            default:
+                break;
+        }
     }
-     
+
     private void recRetorno() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        recAtribuicao();
+        terminal(";");
     }
-     
+
     private void recIdAcesso() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "++":
+                terminal("++");
+                Tipo("id");
+                recOperacao();
+                break;
+            case "--":
+                terminal("--");
+                Tipo("id");
+                recOperacao();
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "id":
+                        Tipo("id");
+                        recAcesso();
+                        recOperacao();
+                        break;
+                    default:
+                        erroSintatico("Atribuição com erro");
+                }
+
+        }
     }
-     
+
     private void recAcesso() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "[":
+                terminal("[");
+                recIndice();
+                terminal("]");
+                break;
+            case "(":
+                terminal("(");
+                recParametros();
+                terminal(")");
+                break;
+            case ".":
+                terminal(".");
+                Tipo("id");
+                recChamadaMetodo();
+                break;
+            case "++":
+                terminal("++");
+                break;
+            case "--":
+                terminal("--");
+                break;
+            default:
+                break;
+        }
     }
-     
+
     private void recOperacao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                recOperador();
+                break;
+            case "<":
+                recOperador();
+                break;
+            case ">=":
+                recOperador();
+                break;
+            case "<=":
+                recOperador();
+                break;
+            case "+":
+                recOperador();
+                break;
+            case "-":
+                recOperador();
+                break;
+            case "*":
+                recOperador();
+                break;
+            case "/":
+                recOperador();
+                break;
+            case "==":
+                recOperador();
+                break;
+            case "!=":
+                recOperador();
+                break;
+            case "&&":
+                recOperador();
+                break;
+            case "||":
+                recOperador();
+                break;
+            default:
+                break;
+        }
     }
-    
+
     private void recChamadaMetodo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "(":
+                terminal("(");
+                recParametros();
+                terminal(")");
+                break;
+            default:
+                break;
+
+        }
     }
-    
+
     private void recOperador() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+
+            case ">":
+                terminal(">");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<":
+                terminal("<");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case ">=":
+                terminal(">=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<=":
+                terminal("<=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "+":
+                terminal("+");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "-":
+                terminal("-");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "*":
+                terminal("*");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "/":
+                terminal("/");
+                recExpAritmetica();
+                recExpRelacionalOpcional();
+                break;
+            case "==":
+                terminal("==");
+                recAtribuicao();
+                break;
+            case "!=":
+                terminal("!=");
+                recAtribuicao();
+                break;
+            case "&&":
+                terminal("&&");
+                recExp();
+                break;
+            case "||":
+                terminal("||");
+                recExp();
+                break;
+            default:
+                erroSintatico("Falta operador");
+                break;
+        }
     }
 
     private void recParametros() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "(":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            case "true":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            case "false":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            case "-":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            case "++":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            case "--":
+                recAtribuicao();
+                recNovoParametro();
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "id":
+                        recAtribuicao();
+                        recNovoParametro();
+                        break;
+                    case "numero":
+                        recAtribuicao();
+                        recNovoParametro();
+                        break;
+                    case "cadeia_constante":
+                        recAtribuicao();
+                        recNovoParametro();
+                        break;
+                    case "caracter_constante":
+                        recAtribuicao();
+                        recNovoParametro();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
     }
 
     private void recNovoParametro() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ",":
+                terminal(",");
+                recParametros();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recInicializaObjeto() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        terminal("new");
+        Tipo("id");
+        terminal(";");
     }
 
     private void recWhile() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        terminal("while");
+        terminal("(");
+        recExp();
+        terminal(")");
+        terminal("{");
+        recConteudoEstrutura();
+        terminal("}");
     }
 
     private void recRead() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        terminal("read");
+        terminal("(");
+        Tipo("id");
+        recListaRead();
+        terminal(")");
+        terminal(";");
     }
 
     private void recListaRead() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ",":
+                terminal(",");
+                Tipo("id");
+                recListaRead();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        terminal("write");
+        terminal("(");
+        recParametrosWrite();
+        terminal(")");
+        terminal(";");
     }
 
     private void recParametrosWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        recImprimiveis();
+        recNovoParametroWrite();
     }
 
     private void recNovoParametroWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        switch (proximo.getValor()) {
+            case ",":
+                terminal(",");
+                recParametrosWrite();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recImprimiveis() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getTipo()) {
+            case "id":
+                Tipo("id");
+                recOpWrite();
+                break;
+            case "numero":
+                Tipo("numero");
+                recOpWrite();
+                break;
+            case "cadeia_constante":
+                Tipo("cadeia_constante");
+                break;
+            case "caracter_constante":
+                Tipo("caracter_constante");
+                break;
+            default:
+                switch (proximo.getValor()) {
+                    case "(":
+                        terminal("(");
+                        recImprimiveis();
+                        terminal(")");
+                        break;
+                    default:
+                        erroSintatico("Parametro incompativel com método write");
+                        break;
+                }
+
+        }
     }
 
     private void recOpWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "+":
+                terminal("+");
+                recExpAritmetica();
+                break;
+            case "-":
+                terminal("-");
+                recExpAritmetica();
+                break;
+            case "*":
+                terminal("*");
+                recExpAritmetica();
+                break;
+            case "/":
+                terminal("");
+                recExpAritmetica();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recIf() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        terminal("if");
+        terminal("(");
+        recExp();
+        terminal(")");
+        terminal("{");
+        recConteudoEstrutura();
+        terminal("}");
+        recComplementoIf();
     }
 
     private void recComplementoIf() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "else":
+                terminal("else");
+                terminal("{");
+                recConteudoEstrutura();
+                terminal("}");
+                break;
+            default:
+                break;
+        }
     }
 
     private void recConteudoEstrutura() {
@@ -974,7 +1443,18 @@ public class AnalisadorSintatico {
     }
 
     private void recComplementoAritmetico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "++":
+                terminal("++");
+                recFatorAritmetico();
+                break;
+            case "--":
+                terminal("--");
+                recFatorAritmetico();
+                break;
+            default:
+                break;
+        }
     }
 
 }
