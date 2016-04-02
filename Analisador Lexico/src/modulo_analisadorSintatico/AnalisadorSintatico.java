@@ -1367,11 +1367,74 @@ public class AnalisadorSintatico {
     }
 
     private void recConteudoEstrutura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getTipo()) {
+            case "palavra_reservada":
+                recComandoEstrutura();
+                recConteudoEstrutura();
+                break;
+            case "id":
+                recComandoEstrutura();
+                recConteudoEstrutura();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recComandoEstrutura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "read":
+                recRead();
+                break;
+            case "write":
+                recWrite();
+                break;
+            case "new":
+                recInicializaObjeto();
+                recInicializaObjeto();
+                break;
+            case "if":
+                recIf();
+                break;
+            case "while":
+                recWhile();
+                break;
+            case "char":
+                terminal("char");
+                Tipo("id");
+                recIdDecl();
+                break;
+            case "int":
+                terminal("int");
+                Tipo("id");
+                recIdDecl();
+                break;
+            case "bool":
+                terminal("bool");
+                Tipo("id");
+                recIdDecl();
+                break;
+            case "string":
+                terminal("string");
+                Tipo("id");
+                recIdDecl();
+                break;
+            case "float":
+                terminal("float");
+                Tipo("id");
+                recIdDecl();
+                break;
+            default:
+                if (proximo.getTipo().equals("id")) {
+                    Tipo("id");
+                    recIdComando();
+
+                } else {
+                    erroSintatico("comando com erro.");
+                }
+                break;
+
+        }
     }
 
     private void recExp() {
