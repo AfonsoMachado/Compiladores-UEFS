@@ -1,4 +1,5 @@
 class a { 
+a=1;
 }
 void main(){
 }

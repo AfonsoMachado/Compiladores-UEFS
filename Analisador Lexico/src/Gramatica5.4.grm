@@ -61,11 +61,7 @@ Char1 = '' {Chars} ''
 <tipo_primitivo> ::= 'int' | 'char' | 'bool' | 'string' | 'float'
 
 !indice de declaração de vetor
-<indice> ::= '(' <indice> ')' | Numero <comp_indice> | <id_indice>
-<comp_indice>::= <operador_aritmetico> <exp_aritmetica>| <lambda>
-<id_indice> ::= <operador_incremento> Identifier <operador_indice>| Identifier <acesso_indice><operador_indice>
-<acesso_indice>::= '[' <indice> ']' | '(' <parametros> ')'  |'.' Identifier <chamada_metodo>|<operador_incremento> | <lambda>
-<operador_indice>::= <operador_aritmetico> <exp_aritmetica>| <lambda>
+<indice> ::= Numero | Identifier
 
 !parametros declaração de função
 <decl_parametros> ::= <tipo> Identifier <var_vet> <lista_parametros> | <lambda>
