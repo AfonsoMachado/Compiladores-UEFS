@@ -1716,23 +1716,103 @@ public class AnalisadorSintatico {
     }
 
     private void recExpAritmetica() {
-//<exp_aritmetica>::=<fator_aritmetico>|'-'<exp_aritmetica>
+        switch (proximo.getValor()) {
+            case "++":
+                recFatorAritmetico();
+                break;
+            case "--":
+                recFatorAritmetico();
+                break;
+            case "-":
+                terminal("-");
+                recExpAritmetica();
+                break;
+            case "(":
+                recFatorAritmetico();
+                break;
+            default:
+                if (proximo.getTipo().equals("id") || proximo.getTipo().equals("numero")) {
+                    recFatorAritmetico();
+                    break;
+                }
+                erroSintatico("Expressão com erro");
+                break;
+        }
 
     }
 
     private void recFatorAritmetico() {
-//<fator_aritmetico>::= <id_aritmetico><complemento_aritmetico>| Numero<complemento_aritmetico>| '('<fator_aritmetico>')'<complemento_aritmetico>
-
+        switch (proximo.getValor()) {
+            case "++":
+                recIdAritmetico();
+                recComplementoAritmetico();
+                break;
+            case "--":
+                recIdAritmetico();
+                recComplementoAritmetico();
+                break;
+            case "-":
+                terminal("-");
+                recExpAritmetica();
+                break;
+            case "(":
+                recFatorAritmetico();
+                recComplementoAritmetico();
+                break;
+            default:
+                if (proximo.getTipo().equals("id")) {
+                    recIdAritmetico();
+                    recComplementoAritmetico();
+                    break;
+                } else if (proximo.getTipo().equals("numero")) {
+                    Tipo("numero");
+                    recComplementoAritmetico();
+                }
+                erroSintatico("Expressão com erro");
+                break;
+        }
     }
 
     private void recIdAritmetico() {
-//<id_aritmetico>::=<operador_incremento>Identifier | Identifier <id_exp_arit> 
-
+        switch (proximo.getValor()) {
+            case "++":
+                terminal("++");
+                Tipo("id");
+                break;
+            case "--":
+                terminal("--");
+                Tipo("id");
+                break;
+            default:
+                if (proximo.getTipo().equals("id")) {
+                    Tipo("id");
+                    recIdExpArit();
+                }
+                erroSintatico("Espera um identificador");
+                break;
+        }
     }
 
     private void recIdExpArit() {
-//<id_exp_arit>::= <id_exp> | <operador_incremento>
-
+        switch (proximo.getValor()) {
+            case "(":
+                recIdExp();
+                break;
+            case ".":
+                recIdExp();
+                break;
+            case "[":
+                recIdExp();
+                break;
+            case "++":
+                terminal("++");
+                break;
+            case "--":
+                terminal("--");
+                break;
+            default:
+                break;
+        }
     }
 
     private void recComplementoAritmetico() {
