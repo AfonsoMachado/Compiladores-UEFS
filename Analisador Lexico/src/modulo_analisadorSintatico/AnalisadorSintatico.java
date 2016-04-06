@@ -34,12 +34,13 @@ public class AnalisadorSintatico {
         if (i < tokens.size()) {
             return tokens.get(i++);
         } else {
-            return null;
+            return new Token("EOF", "EOF", 0, 0);
         }
+
     }
 
     private void erroSintatico(String erro) {
-        if (proximo != null) {
+        if (!proximo.getValor().equals("EOF")) {
             erros.add("Erro na linha " + proximo.getLinha() + ". " + erro + "\n");
         } else {
             erros.add(erro);
@@ -47,7 +48,7 @@ public class AnalisadorSintatico {
     }
 
     private void terminal(String esperado) {
-        if (proximo == null ? esperado == null : proximo.getValor().equals(esperado)) {
+        if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
             erroSintatico("Token " + esperado + " esperado.");
@@ -55,7 +56,7 @@ public class AnalisadorSintatico {
     }
 
     private void Tipo(String esperado) {
-        if (proximo == null ? esperado == null : proximo.getTipo().equals(esperado)) {
+        if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
             erroSintatico("Erro na linha " + proximo.getLinha() + ". Token do tipo" + proximo.getTipo() + "esperado.");
@@ -70,7 +71,7 @@ public class AnalisadorSintatico {
 
     private void recPreMain() {
         System.out.println("pre-main");
-        if (proximo != null) {
+        if (!proximo.getValor().equals("EOF")) {
             switch (proximo.getValor()) {
                 case "void":
                     recMain();
@@ -89,7 +90,7 @@ public class AnalisadorSintatico {
     }
 
     private void recClasses() {
-        if (proximo != null) {
+        if (!proximo.getValor().equals("EOF")) {
             switch (proximo.getValor()) {
                 case "class":
                     recClasse();
@@ -460,108 +461,6 @@ public class AnalisadorSintatico {
                 break;
         }
     }
-    /*
-     private void recIndice() {
-     System.out.println("indice");
-     switch (proximo.getValor()) {
-     case "(":
-     terminal("(");
-     recIndice();
-     terminal(")");
-     break;
-     default:
-     switch (proximo.getTipo()) {
-     case "numero":
-     Tipo("numero");
-     recCompIndice();
-     break;
-     case "id":
-     recIdIndice();
-     break;
-     case "operador":
-     recIdIndice();
-     break;
-     default:
-     erroSintatico("Erro no indice");
-     }
-     }
-     }
-    
-     private void recCompIndice() {
-     switch (proximo.getValor()) {
-     case "+":
-     terminal("+");
-     recExpAritmetica();
-     break;
-     case "-":
-     terminal("");
-     recExpAritmetica();
-     break;
-     case "*":
-     terminal("*");
-     recExpAritmetica();
-     break;
-     case "/":
-     terminal("/");
-     recExpAritmetica();
-     break;
-     default:
-     break;
-     }
-     }
-    
-     private void recIdIndice() {
-     switch (proximo.getValor()) {
-     case "++":
-     terminal("++");
-     Tipo("id");
-     recCompIndice(); //igual a operador indice
-     break;
-     case "--":
-     terminal("--");
-     Tipo("id");
-     recCompIndice();
-     break;
-     default:
-     if (proximo.getTipo().equals("id")) {
-     Tipo("id");
-     recAcessoIndice();
-     recCompIndice();
-     }
-     erroSintatico("Erro no indice do vetor");
-     break;
-     }
-     }
-    
-     private void recAcessoIndice() {
-     switch (proximo.getValor()) {
-     case "[":
-     terminal("[");
-     recIndice();
-     terminal("]");
-     break;
-     case "(":
-     terminal("(");
-     recParametros();
-     terminal(")");
-     break;
-     case ".":
-     terminal(".");
-     Tipo("id");
-     recChamadaMetodo();
-     break;
-     case "++":
-     terminal("++");
-     break;
-     case "--":
-     terminal("--");
-     break;
-     default:
-     erroSintatico("Erro no indice do Vetor");
-     break;
-     }
-     }
-     */
 
     private void recDeclParametros() {
         switch (proximo.getValor()) {
