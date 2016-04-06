@@ -36,7 +36,6 @@ public class AnalisadorSintatico {
         } else {
             return new Token("EOF", "EOF", 0, 0);
         }
-
     }
 
     private void erroSintatico(String erro) {
@@ -83,6 +82,7 @@ public class AnalisadorSintatico {
                     break;
                 default:
                     erroSintatico("Espera uma classe ou o método main");
+                    break;
             }
         } else {
             erroSintatico("Fim de arquivo inesperado");
@@ -165,6 +165,7 @@ public class AnalisadorSintatico {
                 break;
             default:
                 erroSintatico("Classe com erro.");
+                break;
         }
     }
 
@@ -213,6 +214,7 @@ public class AnalisadorSintatico {
                 terminal("{");
                 recBlocoConstantes();
                 terminal("}");
+                break;
             default:
                 erroSintatico("Esperava um bloco de contantes");
                 break;
@@ -263,8 +265,8 @@ public class AnalisadorSintatico {
             case "cadeia_constante":
                 Tipo("cadeia_constante");
                 break;
-            case "caracter_constante":
-                Tipo("caracter_constante");
+            case "caractere_constante":
+                Tipo("caractere_constante");
                 break;
             default:
                 if (proximo.getValor().equals("true")) {
@@ -287,6 +289,7 @@ public class AnalisadorSintatico {
             case ";":
                 terminal(";");
                 recBlocoConstantes();
+                break;
             default:
                 erroSintatico(", ou ; esperados");
                 break;
@@ -738,8 +741,8 @@ public class AnalisadorSintatico {
                     case "cadeia_constante":
                         Tipo("cadeia_constante");
                         break;
-                    case "caracter_constante":
-                        Tipo("caracter_constante");
+                    case "caractere_constante":
+                        Tipo("caractere_constante");
                         break;
                     default:
                         erroSintatico("Atribuição errada");
@@ -1107,7 +1110,7 @@ public class AnalisadorSintatico {
                         recAtribuicao();
                         recNovoParametro();
                         break;
-                    case "caracter_constante":
+                    case "caractere_constante":
                         recAtribuicao();
                         recNovoParametro();
                         break;
@@ -1204,8 +1207,8 @@ public class AnalisadorSintatico {
             case "cadeia_constante":
                 Tipo("cadeia_constante");
                 break;
-            case "caracter_constante":
-                Tipo("caracter_constante");
+            case "caractere_constante":
+                Tipo("caractere_constante");
                 break;
             default:
                 switch (proximo.getValor()) {
