@@ -1438,71 +1438,262 @@ public class AnalisadorSintatico {
     }
 
     private void recExp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "true":
+                terminal("true");
+                recComplementoLogico();
+                break;
+            case "false":
+                terminal("false");
+                recComplementoLogico();
+                break;
+            case "++":
+                terminal("++");
+                Tipo("id");
+                recIdExp();
+                recComplementoAritmetico1();
+                break;
+            case "--":
+                terminal("--");
+                Tipo("id");
+                recIdExp();
+                recComplementoAritmetico1();
+                break;
+            case "(":
+                terminal("(");
+                recExp();
+                terminal(")");
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "id":
+                        Tipo("id");
+                        recIdExpArit();
+                        recComplementoAritmetico1();
+                        break;
+                    case "numero":
+                        Tipo("numero");
+                        recComplementoAritmetico();
+                        recOpRelacional();
+                        break;
+                    default:
+                        erroSintatico("Expressão invalida");
+                        break;
+                }
+
+        }
     }
 
     private void recComplementoAritmetico1() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "+":
+                terminal("+");
+                recFatorAritmetico();
+                recOpIdRelacional();
+                break;
+            case "-":
+                terminal("-");
+                recFatorAritmetico();
+                recOpIdRelacional();
+                break;
+            case "*":
+                terminal("*");
+                recFatorAritmetico();
+                recOpIdRelacional();
+                break;
+            case "/":
+                terminal("/");
+                recFatorAritmetico();
+                recOpIdRelacional();
+                break;
+            default:
+                recOpIdLogico();
+                break;
+
+        }
     }
 
     private void recExplogica() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<exp_logica> ::= <boolean> <complemento_logico> | <operador_incremento> Identifier <id_exp><complemento_aritmetico><op_id_logico> | Identifier <id_exp_arit><complemento_aritmetico><op_id_logico>| Numero<complemento_aritmetico><co_op_relacional> |'(' <exp_logica> ')' <complemento_exp_logica> 
     }
 
     private void recCoOpRelacional() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<co_op_relacional>::= <op_relacional> | <lambda>  | <operador_logico><exp>          
+
     }
 
     private void recComplementoExpLogica() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<complemento_exp_logica>::=<operador_logico><exp>|<operador_igualdade><exp_logica>|<operador_aritmetico><fator_aritmetico><complemento_logico>|<operador_relacional><fator_aritmetico><complemento_logico>|<lambda>
+
     }
 
     private void recIdExp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<id_exp> ::= '['<indice>']' | '(' <parametros> ')'  | '.' Identifier <chamada_metodo> |<lambda>
+
     }
 
     private void recOpIdLogico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                recOpIdRelacional();
+                break;
+            case "<":
+                recOpIdRelacional();
+                break;
+            case ">=":
+                recOpIdRelacional();
+                break;
+            case "<=":
+                recOpIdRelacional();
+                break;
+            case "==":
+                recOpIdRelacional();
+                break;
+            case "!=":
+                recOpIdRelacional();
+                break;
+            case "&&":
+                terminal("&&");
+                recExp();
+                break;
+            case "||":
+                terminal("||");
+                recExp();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recComplementoLogico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case "==":
+                terminal("==");
+                recExplogica();
+                break;
+            case "!=":
+                terminal("!=");
+                recExplogica();
+                break;
+            case "&&":
+                terminal("&&");
+                recExp();
+                break;
+            case "||":
+                terminal("||");
+                recExp();
+                break;
+            default:
+                break;
+        }
     }
+    /*
+     private void recOperadorLogico() {
+     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     }
 
-    private void recOperadorLogico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void recOperadorIgualdade() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+     private void recOperadorIgualdade() {
+     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     }
+     */
 
     private void recOpRelacional() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                terminal(">");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<":
+                terminal("<");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case ">=":
+                terminal(">=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<=":
+                terminal("<=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "==":
+                terminal("==");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "!=":
+                terminal("!=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            default:
+                erroSintatico("falta operador");
+                break;
+        }
     }
 
     private void recOpIdRelacional() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (proximo.getValor()) {
+            case ">":
+                terminal(">");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<":
+                terminal("<");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case ">=":
+                terminal(">=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "<=":
+                terminal("<=");
+                recExpAritmetica();
+                recOpLogico();
+                break;
+            case "==":
+                terminal("==");
+                recExplogica();
+                break;
+            case "!=":
+                terminal("!=");
+                recExplogica();
+                break;
+            default:
+                erroSintatico("falta operador");
+                break;
+        }
     }
-
-    private void recOperadorRelacional() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    /*
+     private void recOperadorRelacional() {
+     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     }
+     */
 
     private void recExpAritmetica() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<exp_aritmetica>::=<fator_aritmetico>|'-'<exp_aritmetica>
+
     }
 
     private void recFatorAritmetico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<fator_aritmetico>::= <id_aritmetico><complemento_aritmetico>| Numero<complemento_aritmetico>| '('<fator_aritmetico>')'<complemento_aritmetico>
+
     }
 
     private void recIdAritmetico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<id_aritmetico>::=<operador_incremento>Identifier | Identifier <id_exp_arit> 
+
     }
 
     private void recIdExpArit() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //<id_exp_arit>::= <id_exp> | <operador_incremento>
+
     }
 
     private void recComplementoAritmetico() {
