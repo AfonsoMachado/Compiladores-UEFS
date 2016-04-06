@@ -90,14 +90,14 @@ public class AnalisadorSintatico {
     }
 
     private void recClasses() {
-            switch (proximo.getValor()) {
-                case "class":
-                    recClasse();
-                    recClasses();
-                    break;
-                default:
-                    break;
-            }
+        switch (proximo.getValor()) {
+            case "class":
+                recClasse();
+                recClasses();
+                break;
+            default:
+                break;
+        }
     }
 
     private void recConstantes() {
@@ -195,9 +195,8 @@ public class AnalisadorSintatico {
             default:
                 System.out.println(proximo.getValor());
                 if (proximo.getTipo().equals("palavra_reservada") || proximo.getTipo().equals("id")) {
-                    
-                
-                System.out.println("aqui");
+
+                    System.out.println("aqui");
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
@@ -563,6 +562,9 @@ public class AnalisadorSintatico {
         System.out.println("conteudoMetodo");
         switch (proximo.getTipo()) {
             case "palavra_reservada":
+                if (proximo.getValor().equals("return")) {
+                    break;
+                }
                 recComando();
                 recConteudoMetodo();
                 break;
@@ -1465,8 +1467,8 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recCoOpRelacional() {       
-         switch (proximo.getValor()) {
+    private void recCoOpRelacional() {
+        switch (proximo.getValor()) {
             case ">":
                 recOpRelacional();
                 break;
@@ -1497,8 +1499,9 @@ public class AnalisadorSintatico {
                 break;
         }
     }
+
     private void recComplementoExpLogica() {
-         switch (proximo.getValor()) {
+        switch (proximo.getValor()) {
             case ">":
                 terminal(">");
                 recFatorAritmetico();
@@ -1727,7 +1730,7 @@ public class AnalisadorSintatico {
 
     }
 
-    private void recIdExpArit() { 
+    private void recIdExpArit() {
 //<id_exp_arit>::= <id_exp> | <operador_incremento>
 
     }

@@ -1,0 +1,31 @@
+const palavra_reservada 1:1
+{ delimitador 1:7
+} delimitador 2:1
+int palavra_reservada 4:1
+b id 4:5
+; delimitador 4:6
+void palavra_reservada 6:1
+main palavra_reservada 6:6
+( delimitador 6:10
+) delimitador 6:11
+{ delimitador 6:13
+} delimitador 8:1
+class palavra_reservada 10:1
+capim id 10:7
+> operador 10:13
+folha id 10:15
+{ delimitador 10:21
+float palavra_reservada 12:5
+isGreen id 12:11
+( delimitador 12:18
+) delimitador 12:19
+{ delimitador 12:21
+return palavra_reservada 13:9
+b id 13:16
+; delimitador 13:17
+} delimitador 14:5
+} delimitador 16:1
+; delimitador 16:2
+; delimitador 16:3
+
+nao ha erros lexicos

@@ -1,0 +1,16 @@
+const {
+}
+
+int b;
+
+void main() {
+
+}
+
+class capim > folha {
+    
+    float isGreen() {
+        return b;
+    }
+
+};;
