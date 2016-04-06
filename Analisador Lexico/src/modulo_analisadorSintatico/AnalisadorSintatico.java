@@ -48,7 +48,7 @@ public class AnalisadorSintatico {
     }
 
     private void terminal(String esperado) {
-        if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
+        if ((!proximo.getValor().equals("EOF")) && proximo.getValor().equals(esperado)) {
             proximo = proximo();
         } else {
             erroSintatico("Token " + esperado + " esperado.");
@@ -145,6 +145,7 @@ public class AnalisadorSintatico {
     }
 
     private void recMain() {
+        System.out.println("main");
         terminal("void");
         terminal("main");
         terminal("(");
@@ -196,7 +197,11 @@ public class AnalisadorSintatico {
                 recConteudoClasse();
                 break;
             default:
+                System.out.println(proximo.getValor());
                 if (proximo.getTipo().equals("palavra_reservada") || proximo.getTipo().equals("id")) {
+                    
+                
+                System.out.println("aqui");
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
@@ -1413,7 +1418,51 @@ public class AnalisadorSintatico {
     }
 
     private void recExplogica() {
-        //<exp_logica> ::= <boolean> <complemento_logico> | <operador_incremento> Identifier <id_exp><complemento_aritmetico><op_id_logico> | Identifier <id_exp_arit><complemento_aritmetico><op_id_logico>| Numero<complemento_aritmetico><co_op_relacional> |'(' <exp_logica> ')' <complemento_exp_logica> 
+//<exp_logica> ::= <boolean> <complemento_logico> | <operador_incremento> Identifier <id_exp><complemento_aritmetico><op_id_logico> | Identifier <id_exp_arit><complemento_aritmetico><op_id_logico>| Numero<complemento_aritmetico><co_op_relacional> |'(' <exp_logica> ')' <complemento_exp_logica> 
+        switch (proximo.getValor()) {
+            case "true":
+                terminal("true");
+                recComplementoLogico();
+                break;
+            case "false":
+                terminal("false");
+                recComplementoLogico();
+                break;
+            case "++":
+                terminal("++");
+                Tipo("id");
+                recIdExp();
+                recComplementoAritmetico1();
+                break;
+            case "--":
+                terminal("--");
+                Tipo("id");
+                recIdExp();
+                recComplementoAritmetico1();
+                break;
+            case "(":
+                terminal("(");
+                recExp();
+                terminal(")");
+                break;
+            default:
+                switch (proximo.getTipo()) {
+                    case "id":
+                        Tipo("id");
+                        recIdExpArit();
+                        recComplementoAritmetico1();
+                        break;
+                    case "numero":
+                        Tipo("numero");
+                        recComplementoAritmetico();
+                        recOpRelacional();
+                        break;
+                    default:
+                        erroSintatico("Expressão invalida");
+                        break;
+                }
+
+        }
     }
 
     private void recCoOpRelacional() {
@@ -1486,15 +1535,6 @@ public class AnalisadorSintatico {
                 break;
         }
     }
-    /*
-     private void recOperadorLogico() {
-     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-     }
-
-     private void recOperadorIgualdade() {
-     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-     }
-     */
 
     private void recOpRelacional() {
         switch (proximo.getValor()) {
@@ -1569,11 +1609,6 @@ public class AnalisadorSintatico {
                 break;
         }
     }
-    /*
-     private void recOperadorRelacional() {
-     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-     }
-     */
 
     private void recExpAritmetica() {
         //<exp_aritmetica>::=<fator_aritmetico>|'-'<exp_aritmetica>
