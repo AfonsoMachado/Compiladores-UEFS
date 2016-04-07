@@ -25,7 +25,6 @@ public class AnalisadorSintatico {
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
     private Compilador comp;            //compilador com a lista de simbolos
-    private Simbolos classEscopo;       //salvar a classe atual
     private Simbolos escopo;            //salvar o método atual 
     private Simbolos atual;             //simbolo atual
 
