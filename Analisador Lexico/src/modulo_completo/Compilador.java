@@ -21,6 +21,10 @@ import modulo_analisadorSintatico.AnalisadorSintatico;
 public class Compilador {
     private TabelaSimbolos tabelaSimbolos;
 
+    /**
+     *
+     * @param simbolo
+     */
     public void addSimbolo(Simbolos simbolo) {
         tabelaSimbolos.add(simbolo);
     }
@@ -68,7 +72,7 @@ public class Compilador {
             arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
             ArrayList<Token> listaTokens;
             listaTokens=arquivo.lerSaidaLexico();
-            analisadorSintatico = new AnalisadorSintatico();
+            analisadorSintatico = new AnalisadorSintatico(this);
             analisadorSintatico.analise(listaTokens);
             arquivo.escreverSaidaSintatico(analisadorSintatico.getErros());
         }

@@ -7,18 +7,36 @@ package modulo_analisadorSintatico;
 
 import java.util.ArrayList;
 import modulo_analisadorLexico.Token;
+import modulo_completo.Compilador;
+import modulo_completo.Simbolos;
 
 /**
- *
- * @author lucas
+ *  Classe responsável pela análise sintatica dos códigos fontes. 
+ * @author Lucas Carneiro
+ * @author Oto Lopes
+ * 
+ * @see Token
+ * @see Compilador
  */
 public class AnalisadorSintatico {
 
-    private Token proximo;
-    private ArrayList<Token> tokens;
-    private ArrayList<String> erros;
-    private int i = 0;
+    private Token proximo;              //token atual em análise
+    private ArrayList<Token> tokens;    //lista com os tokens recebidos
+    private ArrayList<String> erros;    //lista com os erros encontrados na análise.
+    private int contTokens = 0;         //contador que aponta para o proximo token da lista
+    private Compilador comp;            //compilador com a lista de simbolos
+    private Simbolos classEscopo;       //salvar a classe atual
+    private Simbolos escopo;            //salvar o método atual 
+    private Simbolos atual;             //simbolo atual
 
+    public AnalisadorSintatico(Compilador comp) {
+        this.comp = comp;
+    }
+
+    /**
+     *
+     * @param tokens
+     */
     public void analise(ArrayList<Token> tokens) {
         this.tokens = tokens;
         proximo = proximo();
@@ -26,13 +44,17 @@ public class AnalisadorSintatico {
         recArquivo();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getErros() {
         return erros;
     }
 
     private Token proximo() {
-        if (i < tokens.size()) {
-            return tokens.get(i++);
+        if (contTokens < tokens.size()) {
+            return tokens.get(contTokens++);
         } else {
             return new Token("EOF", "EOF", 0, 0);
         }
@@ -40,7 +62,7 @@ public class AnalisadorSintatico {
 
     private void erroSintatico(String erro) {
         if (!proximo.getValor().equals("EOF")) {
-            erros.add("Erro na linha " + proximo.getLinha() + ". " + erro + "\n");
+            erros.add("Erro na linha " + proximo.getLinha() + " coluna " + proximo.getColuna() + ". " + erro + "\n");
         } else {
             erros.add(erro);
         }
@@ -58,7 +80,7 @@ public class AnalisadorSintatico {
         if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico("Erro na linha " + proximo.getLinha() + ". Token do tipo" + proximo.getTipo() + "esperado.");
+            erroSintatico("Token do tipo " + esperado + " esperado.");
         }
     }
 
@@ -81,7 +103,11 @@ public class AnalisadorSintatico {
                     recPreMain();
                     break;
                 default:
-                    erroSintatico("Espera uma classe ou o método main");
+                    while (!proximo.getValor().equals("void") && !proximo.getValor().equals("class")) {
+                        erroSintatico("Espera uma classe ou o método main");
+                        proximo = proximo();
+                    }
+                    recPreMain();
                     break;
             }
         } else {
@@ -142,6 +168,7 @@ public class AnalisadorSintatico {
 
     private void recMain() {
         System.out.println("main");
+        escopo = new Simbolos(Simbolos.MAIN, Simbolos.VOID, "main", null);
         terminal("void");
         terminal("main");
         terminal("(");
@@ -149,6 +176,7 @@ public class AnalisadorSintatico {
         terminal("{");
         recConteudoMetodo();
         terminal("}");
+        comp.addSimbolo(escopo);
     }
 
     private void recClasse() {
@@ -196,8 +224,6 @@ public class AnalisadorSintatico {
             default:
                 System.out.println(proximo.getValor());
                 if (proximo.getTipo().equals("palavra_reservada") || proximo.getTipo().equals("id")) {
-
-                    System.out.println("aqui");
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
@@ -407,7 +433,7 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             default:
-                erroSintatico("Erro na declaração de variavel");
+                erroSintatico("Erro na declaração de variavel, esperava ; ou ,");
                 break;
         }
     }
@@ -424,7 +450,10 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             default:
-                erroSintatico("Erro na declaração de variavel");
+                while (!proximo.getValor().equals(",") && !proximo.getValor().equals(";") && !proximo.getTipo().equals("palavra_reservada")) {
+                    erroSintatico("Erro na declaração de variavel");
+                    proximo = proximo();
+                }
                 break;
         }
     }
@@ -590,7 +619,6 @@ public class AnalisadorSintatico {
                 break;
             case "new":
                 recInicializaObjeto();
-                recInicializaObjeto();
                 break;
             case "if":
                 recIf();
@@ -648,8 +676,9 @@ public class AnalisadorSintatico {
                 break;
             case "[":
                 terminal("[");
-                recListaVetor();
+                recIndice();
                 terminal("]");
+                recListaVetor();
                 break;
             default:
                 erroSintatico("Erro na declaração de variavel");
@@ -1218,7 +1247,7 @@ public class AnalisadorSintatico {
                         terminal(")");
                         break;
                     default:
-                        erroSintatico("Parametro incompativel com método write");
+                            erroSintatico("Parametro incompativel com método write");
                         break;
                 }
 

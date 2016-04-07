@@ -15,7 +15,9 @@ public class TabelaSimbolos {
     
     private final ArrayList<Simbolos> tabela;
     
-
+    /**
+     *
+     */
     public TabelaSimbolos() {
         tabela = new ArrayList<>();
     }

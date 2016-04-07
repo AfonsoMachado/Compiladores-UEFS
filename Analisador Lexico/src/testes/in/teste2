@@ -2,8 +2,21 @@ const {
 int a =2;
 char b ='a';
 }
+const{
+int a=2;
+}
 
 int b;
+int c;
+char d;
+float e;
+string a1;
+
+carro gol;
+
+asdas
+asfaf
+123
 
 void main() {
 if(a==2){
@@ -12,6 +25,16 @@ if(a==2){
 a=2;
 }
 }
+
+class a
+a a ; a a;
+a a a;
+a; 
+int a;
+int b;
+
+}
+
 
 class capim > folha {
     

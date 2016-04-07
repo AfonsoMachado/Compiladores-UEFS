@@ -1,2 +1,10 @@
-
-nao ha erros sintaticos
+Erro na linha 15 coluna 1. Espera uma classe ou o método main
+Erro na linha 15 coluna 7. Espera uma classe ou o método main
+Erro na linha 15 coluna 10. Espera uma classe ou o método main
+Erro na linha 17 coluna 1. Espera uma classe ou o método main
+Erro na linha 18 coluna 1. Espera uma classe ou o método main
+Erro na linha 19 coluna 1. Espera uma classe ou o método main
+Erro na linha 30 coluna 1. Token { esperado.
+Erro na linha 31 coluna 5. Erro na declaração de variavel, esperava ; ou ,
+Erro na linha 31 coluna 6. Token do tipo id esperado.
+Erro na linha 32 coluna 2. Token do tipo id esperado.

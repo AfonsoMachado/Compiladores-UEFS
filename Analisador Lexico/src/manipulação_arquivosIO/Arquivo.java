@@ -93,6 +93,11 @@ public class Arquivo {
         arq.close();
     }
 
+    /**
+     * Retorna a lista de tokens obtidas a partir da saída do analisador lexico.
+     * @return Lista de Tokens reconhecidos no lexico 
+     * @throws FileNotFoundException 
+     */
     public ArrayList<Token> lerSaidaLexico() throws FileNotFoundException {
         Scanner scanner = new Scanner(new FileReader("src/testes/out/lexico/" + localFile + ".out")); // Lendo o arquivo do código.
         ArrayList<Token> listaTokens = new ArrayList(); // Código obtido.
@@ -120,11 +125,11 @@ public class Arquivo {
     }
 
     /**
-     * Gera o arquivo de saída após a análise do código fonte. Neste arquivo de
-     * saída, conterá todos os tokens encontrados no código fonte e os erros
-     * encontrados (se houver).
+     * Gera o arquivo de saída após a análise sintática dos tokens. Neste arquivo de
+     * saída, conterá todos os erros encontrados (se houver) e uma mensagem de sucesso
+     * se não houver erros.
      *
-     * @param erros Erros obtidos após a análise do código fonte
+     * @param erros Erros obtidos após a análise sintatica do código fonte
      *
      * @throws IOException Arquivo de saida não foi gerado com sucesso
      */
