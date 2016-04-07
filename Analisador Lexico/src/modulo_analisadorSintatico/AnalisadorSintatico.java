@@ -227,6 +227,10 @@ public class AnalisadorSintatico {
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
+                }else if(!proximo.getValor().equals("}")){
+                    erroSintatico("Conteudo de classe inválido");
+                    proximo=proximo();
+                    recConteudoClasse();
                 }
                 break;
         }
@@ -271,6 +275,11 @@ public class AnalisadorSintatico {
                 recListaConst();
                 break;
             default:
+                if(!proximo.getValor().equals("}")){
+                    erroSintatico("Conteudo de constantes inválido, espera um tipo primitivo");
+                    proximo=proximo();
+                    recBlocoConstantes();
+                }
                 break;
         }
     }
@@ -605,6 +614,11 @@ public class AnalisadorSintatico {
                 recConteudoMetodo();
                 break;
             default:
+                if(!proximo.getValor().equals("}")){
+                    erroSintatico("Conteudo de médoto inválido, espera um comando.");
+                    proximo=proximo();
+                    recConteudoMetodo();
+                }
                 break;
         }
     }
@@ -1312,6 +1326,11 @@ public class AnalisadorSintatico {
                 recConteudoEstrutura();
                 break;
             default:
+                if(!proximo.getValor().equals("}")){
+                    erroSintatico("Conteudo de estrutura inválida, espera um comando.");
+                    proximo=proximo();
+                    recConteudoEstrutura();
+                }
                 break;
         }
     }

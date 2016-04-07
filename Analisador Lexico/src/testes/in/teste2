@@ -1,6 +1,9 @@
 const {
 int a =2;
 char b ='a';
+1
+a;
+char a=5;
 }
 const{
 int a=2;
@@ -19,6 +22,8 @@ asfaf
 123
 
 void main() {
+a;
+
 if(a==2){
 
 } else {
@@ -27,6 +32,7 @@ a=2;
 }
 
 class a
+1 1=a; a a;
 a a ; a a;
 a a a;
 a; 
