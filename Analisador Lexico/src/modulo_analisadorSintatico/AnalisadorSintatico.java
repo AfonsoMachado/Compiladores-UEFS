@@ -61,7 +61,7 @@ public class AnalisadorSintatico {
 
     private void erroSintatico(String erro) {
         if (!proximo.getValor().equals("EOF")) {
-            erros.add("Erro na linha " + proximo.getLinha() + " coluna " + proximo.getColuna() + ". " + erro + "\n");
+            erros.add(proximo.getLinha() + " " + erro + "\n");
         } else {
             erros.add(erro);
         }
@@ -71,7 +71,7 @@ public class AnalisadorSintatico {
         if ((!proximo.getValor().equals("EOF")) && proximo.getValor().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico("Token " + esperado + " esperado.");
+            erroSintatico("falta " + esperado);
         }
     }
 
@@ -79,7 +79,7 @@ public class AnalisadorSintatico {
         if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico("Token do tipo " + esperado + " esperado.");
+            erroSintatico("falta "  + esperado);
         }
     }
 
@@ -103,7 +103,7 @@ public class AnalisadorSintatico {
                     break;
                 default:
                     while (!proximo.getValor().equals("void") && !proximo.getValor().equals("class")) {
-                        erroSintatico("Espera uma classe ou o método main");
+                        erroSintatico("falta palavra reservada: class, void");
                         proximo = proximo();
                     }
                     recPreMain();
@@ -227,7 +227,7 @@ public class AnalisadorSintatico {
                     recConteudoClasse();
                     break;
                 }else if(!proximo.getValor().equals("}")){
-                    erroSintatico("Conteudo de classe inválido");
+                    erroSintatico("falta declaraçao de variavel ou de metodo");
                     proximo=proximo();
                     recConteudoClasse();
                 }
