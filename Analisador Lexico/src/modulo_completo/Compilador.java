@@ -19,15 +19,9 @@ import modulo_analisadorSintatico.AnalisadorSintatico;
  * @see Arquivo
  */
 public class Compilador {
-    private TabelaSimbolos tabelaSimbolos;
+    Simbolos tabelaSimbolos;
 
-    /**
-     *
-     * @param simbolo
-     */
-    public void addSimbolo(Simbolos simbolo) {
-        tabelaSimbolos.add(simbolo);
-    }
+    
     
     
     /**
@@ -47,7 +41,8 @@ public class Compilador {
     public Compilador() {
 
         arquivo = new Arquivo(); // Criação do manipulador de entrada e saída.
-        tabelaSimbolos = new TabelaSimbolos();
+        tabelaSimbolos = new Simbolos();
+        tabelaSimbolos.setNome("GLOBAL");
     }
 
     /**
@@ -72,7 +67,7 @@ public class Compilador {
             arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
             ArrayList<Token> listaTokens;
             listaTokens=arquivo.lerSaidaLexico();
-            analisadorSintatico = new AnalisadorSintatico(this);
+            analisadorSintatico = new AnalisadorSintatico(tabelaSimbolos);
             analisadorSintatico.analise(listaTokens);
             arquivo.escreverSaidaSintatico(analisadorSintatico.getErros());
         }
@@ -88,6 +83,8 @@ public class Compilador {
         try {
             Compilador compilador = new Compilador(); // Cria o compilador.
             compilador.compilar(); // Executa o compilador.
+            System.out.println(compilador.tabelaSimbolos);
+            
         } catch (FileNotFoundException error1) {
             System.out.println("Arquivo não encontrado");
             System.exit(0);
@@ -95,7 +92,6 @@ public class Compilador {
             System.out.println("Arquivo de saida não foi gerado com sucesso");
             System.exit(0);
         }
-        
         System.out.println("COMPILADO !");
     }
 }

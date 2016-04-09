@@ -11,10 +11,11 @@ import modulo_completo.Compilador;
 import modulo_completo.Simbolos;
 
 /**
- *  Classe responsável pela análise sintatica dos códigos fontes. 
+ * Classe responsável pela análise sintatica dos códigos fontes.
+ *
  * @author Lucas Carneiro
  * @author Oto Lopes
- * 
+ *
  * @see Token
  * @see Compilador
  */
@@ -24,35 +25,45 @@ public class AnalisadorSintatico {
     private ArrayList<Token> tokens;    //lista com os tokens recebidos
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
-    private Compilador comp;            //compilador com a lista de simbolos
-    private Simbolos escopo;            //salvar o método atual 
+    private Simbolos escopo;            //salvar o escopo atual 
+    private Simbolos global;            //salvar o escopo anterior 
     private Simbolos atual;             //simbolo atual
 
-    public AnalisadorSintatico(Compilador comp) {
-        this.comp = comp;
+    /**
+     * Construtor do analisador Sintatico. 
+     * @param escopo recebe a tabela de simbolos do compilador
+     */
+    public AnalisadorSintatico(Simbolos escopo) {
+        this.escopo = escopo; // 
+        this.global = escopo; //
     }
 
     /**
-     *
-     * @param tokens
+     * Metodo responsavel pela analise sintatica dos codigos fontes.  
+     * @param tokens lista com os tokens vindos do lexico. 
      */
     public void analise(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        proximo = proximo();
-        erros = new ArrayList<>();
-        recArquivo();
+        this.tokens = tokens; //recebe os tokens vindos do lexico.
+        proximo = proximo();  //recebe o primeiro token da lista
+        erros = new ArrayList<>(); //cria a lista de erros
+        recArquivo();   //inicia a analise do arquivo
     }
 
     /**
+     * Método que retorna os erros encontrados durante a análise sintatica.
      *
-     * @return
+     * @return lista de erros sintaticos encontrados.
      */
     public ArrayList<String> getErros() {
         return erros;
     }
 
+    /**
+     * Metodo para capturar o proximo token para ser analisado.
+     *
+     */
     private Token proximo() {
-        if (contTokens < tokens.size()) {
+        if (contTokens < tokens.size()) { //verifica se ainda possuem tokens para a analise.
             return tokens.get(contTokens++);
         } else {
             return new Token("EOF", "EOF", 0, 0);
@@ -79,7 +90,7 @@ public class AnalisadorSintatico {
         if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
             proximo = proximo();
         } else {
-            erroSintatico("falta "  + esperado);
+            erroSintatico("falta " + esperado);
         }
     }
 
@@ -110,7 +121,7 @@ public class AnalisadorSintatico {
                     break;
             }
         } else {
-            erroSintatico("Fim de arquivo inesperado");
+            erroSintatico("falta palavra reservada: class, void");
         }
     }
 
@@ -139,24 +150,31 @@ public class AnalisadorSintatico {
 
     private void recVariaveis() {
         System.out.println("variaveis");
+        atual=new Simbolos();
+        atual.setCategoria(Simbolos.VAR);
         switch (proximo.getValor()) {
             case "char":
+                atual.setTipo(Simbolos.CHAR);
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "int":
+                atual.setTipo(Simbolos.INT);
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "bool":
+                atual.setTipo(Simbolos.BOOL);
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "string":
+                atual.setTipo(Simbolos.STRING);
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "float":
+                atual.setTipo(Simbolos.FLOAT);
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
@@ -167,7 +185,6 @@ public class AnalisadorSintatico {
 
     private void recMain() {
         System.out.println("main");
-        escopo = new Simbolos(Simbolos.MAIN, Simbolos.VOID, "main", null);
         terminal("void");
         terminal("main");
         terminal("(");
@@ -175,7 +192,6 @@ public class AnalisadorSintatico {
         terminal("{");
         recConteudoMetodo();
         terminal("}");
-        comp.addSimbolo(escopo);
     }
 
     private void recClasse() {
@@ -183,7 +199,12 @@ public class AnalisadorSintatico {
         System.out.println(proximo.getValor());
         switch (proximo.getValor()) {
             case "class":
+                atual=new Simbolos();
+                atual.setCategoria(Simbolos.CLASS);
+                escopo = atual;
                 terminal("class");
+                atual.setNome(proximo.getValor());
+                global.addFilho(atual);
                 Tipo("id");
                 recExpressaoHerenca();
                 terminal("{");
@@ -226,9 +247,9 @@ public class AnalisadorSintatico {
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
-                }else if(!proximo.getValor().equals("}")){
+                } else if (!proximo.getValor().equals("}")) {
                     erroSintatico("falta declaraçao de variavel ou de metodo");
-                    proximo=proximo();
+                    proximo = proximo();
                     recConteudoClasse();
                 }
                 break;
@@ -252,31 +273,38 @@ public class AnalisadorSintatico {
 
     private void recBlocoConstantes() {
         System.out.println("blococonstantes");
+        atual = new Simbolos();
+        atual.setCategoria(Simbolos.CONST);
         switch (proximo.getValor()) {
             case "char":
                 terminal("char");
+                atual.setTipo(Simbolos.CHAR);
                 recListaConst();
                 break;
             case "int":
                 terminal("int");
+                atual.setTipo(Simbolos.INT);
                 recListaConst();
                 break;
             case "bool":
                 terminal("bool");
+                atual.setTipo(Simbolos.BOOL);
                 recListaConst();
                 break;
             case "string":
                 terminal("string");
+                atual.setTipo(Simbolos.STRING);
                 recListaConst();
                 break;
             case "float":
                 terminal("float");
+                atual.setTipo(Simbolos.FLOAT);
                 recListaConst();
                 break;
             default:
-                if(!proximo.getValor().equals("}")){
-                    erroSintatico("Conteudo de constantes inválido, espera um tipo primitivo");
-                    proximo=proximo();
+                if (!proximo.getValor().equals("}")) {
+                    erroSintatico("falta palavra reservada: int, char, bool, string, float");
+                    proximo = proximo();
                     recBlocoConstantes();
                 }
                 break;
@@ -284,6 +312,7 @@ public class AnalisadorSintatico {
     }
 
     private void recListaConst() {
+        atual.setNome(proximo.getValor());
         Tipo("id");
         terminal("=");
         recAtribuicaoConstante();
@@ -292,6 +321,7 @@ public class AnalisadorSintatico {
     }
 
     private void recAtribuicaoConstante() {
+        atual.setValor(proximo.getValor());
         switch (proximo.getTipo()) {
             case "numero":
                 Tipo("numero");
@@ -308,7 +338,7 @@ public class AnalisadorSintatico {
                 } else if (proximo.getValor().equals("false")) {
                     terminal("false");
                 } else {
-                    erroSintatico("Atribuição invalida");
+                    erroSintatico("falta  invalida");
                 }
                 break;
         }
@@ -318,16 +348,21 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
-                recListaConst();
+                int aux= atual.getTipo();
+                escopo.addFilho(atual);
+                atual = new Simbolos();
+                atual.setCategoria(Simbolos.CONST);
+                atual.setTipo(aux);
+               recListaConst();
                 break;
             case ";":
+                escopo.addFilho(atual);
                 terminal(";");
                 recBlocoConstantes();
                 break;
             default:
-                erroSintatico(", ou ; esperados");
+                erroSintatico("falta , ou ;");
                 break;
-
         }
     }
 
@@ -409,7 +444,7 @@ public class AnalisadorSintatico {
                     recCompId();
                     break;
                 } else {
-                    erroSintatico("espera um tipo");
+                    erroSintatico("espera um tipo: id, int, float, char, string, bool, void");
                 }
                 break;
         }
@@ -441,7 +476,7 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             default:
-                erroSintatico("Erro na declaração de variavel, esperava ; ou ,");
+                erroSintatico("falta ; ou , ou [ ou (");
                 break;
         }
     }
@@ -459,7 +494,7 @@ public class AnalisadorSintatico {
                 break;
             default:
                 while (!proximo.getValor().equals(",") && !proximo.getValor().equals(";") && !proximo.getTipo().equals("palavra_reservada")) {
-                    erroSintatico("Erro na declaração de variavel");
+                    erroSintatico("falta , ou ;");
                     proximo = proximo();
                 }
                 break;
@@ -481,9 +516,11 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             default:
-                erroSintatico("Erro na declaração de vetores");
+                while (!proximo.getValor().equals(",") && !proximo.getValor().equals(";") && !proximo.getTipo().equals("palavra_reservada")) {
+                    erroSintatico("falta , ou ;");
+                    proximo = proximo();
+                }
                 break;
-
         }
     }
 
@@ -497,7 +534,7 @@ public class AnalisadorSintatico {
                 Tipo("numero");
                 break;
             default:
-                erroSintatico("Erro no indice do vetor");
+                erroSintatico("falta identificador ou numero");
                 break;
         }
     }
@@ -580,7 +617,7 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     Tipo("id");
                 } else {
-                    erroSintatico("Espera um tipo");
+                    erroSintatico("falta um tipo: id, int, float, char, string, bool");
                 }
                 break;
         }
@@ -613,9 +650,9 @@ public class AnalisadorSintatico {
                 recConteudoMetodo();
                 break;
             default:
-                if(!proximo.getValor().equals("}")){
+                if (!proximo.getValor().equals("}")) {
                     erroSintatico("Conteudo de médoto inválido, espera um comando.");
-                    proximo=proximo();
+                    proximo = proximo();
                     recConteudoMetodo();
                 }
                 break;
@@ -675,7 +712,7 @@ public class AnalisadorSintatico {
                     }
 
                 } else {
-                    erroSintatico("comando com erro.");
+                    erroSintatico("falta identificador ou palavra reservada: read, write, new, if, while, char, int, float, string, bool");
                 }
                 break;
 
@@ -694,7 +731,7 @@ public class AnalisadorSintatico {
                 recListaVetor();
                 break;
             default:
-                erroSintatico("Erro na declaração de variavel");
+                erroSintatico("falta , ou [");
                 break;
         }
     }
@@ -727,7 +764,7 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             default:
-                erroSintatico("Erro de Comando");
+                erroSintatico("falta: [ ou = ou . ou (");
                 break;
         }
     }
@@ -744,7 +781,7 @@ public class AnalisadorSintatico {
                 recAtribuicao();
                 break;
             default:
-                erroSintatico("Erro de acesso a objeto");
+                erroSintatico("falta ( ou =");
                 break;
         }
     }
@@ -767,6 +804,10 @@ public class AnalisadorSintatico {
                 terminal("true");
                 recOpLogico();
                 break;
+            case "false":
+                terminal("false");
+                recOpLogico();
+                break;
             case "-":
                 terminal("-");
                 recNegativo();
@@ -787,7 +828,7 @@ public class AnalisadorSintatico {
                         Tipo("caractere_constante");
                         break;
                     default:
-                        erroSintatico("Atribuição errada");
+                        erroSintatico("falta booleano, numero, identificador, cadeia constante, caracter constante,  ( ou operadores: ++ ou -- ou - ");
                         break;
                 }
         }
@@ -874,7 +915,7 @@ public class AnalisadorSintatico {
                         recIdAcesso();
                         break;
                     default:
-                        erroSintatico("Expressão mal formada");
+                        erroSintatico("falta: ++, --, (, numero ou identificador");
                         break;
 
                 }
@@ -913,11 +954,11 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "==":
                 terminal("==");
-                recExplogica();
+                recExpLogica();
                 break;
             case "!=":
                 terminal("!=");
-                recExplogica();
+                recExpLogica();
                 break;
             case "&&":
                 terminal("&&");
@@ -957,7 +998,7 @@ public class AnalisadorSintatico {
                         recOperacao();
                         break;
                     default:
-                        erroSintatico("Atribuição com erro");
+                        erroSintatico("falta: ++, --, identificador");
                 }
 
         }
@@ -1107,7 +1148,7 @@ public class AnalisadorSintatico {
                 recExp();
                 break;
             default:
-                erroSintatico("Falta operador");
+                erroSintatico("falta operador: >, <, >=, <=, ==, !=, +, -, *, /, &&, ||");
                 break;
         }
     }
@@ -1260,7 +1301,7 @@ public class AnalisadorSintatico {
                         terminal(")");
                         break;
                     default:
-                            erroSintatico("Parametro incompativel com método write");
+                        erroSintatico("falta identificador, numero, cadeia constante, caracter consatante ou (");
                         break;
                 }
 
@@ -1325,9 +1366,9 @@ public class AnalisadorSintatico {
                 recConteudoEstrutura();
                 break;
             default:
-                if(!proximo.getValor().equals("}")){
-                    erroSintatico("Conteudo de estrutura inválida, espera um comando.");
-                    proximo=proximo();
+                if (!proximo.getValor().equals("}")) {
+                    erroSintatico("falta um comando: identificador ou palavra reservada");
+                    proximo = proximo();
                     recConteudoEstrutura();
                 }
                 break;
@@ -1383,7 +1424,7 @@ public class AnalisadorSintatico {
                     recIdComando();
 
                 } else {
-                    erroSintatico("comando com erro.");
+                    erroSintatico("falta um comando: identificador ou palavra reservada");
                 }
                 break;
 
@@ -1430,7 +1471,7 @@ public class AnalisadorSintatico {
                         recOpRelacional();
                         break;
                     default:
-                        erroSintatico("Expressão invalida");
+                        erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
                         break;
                 }
 
@@ -1466,7 +1507,7 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recExplogica() {
+    private void recExpLogica() {
         switch (proximo.getValor()) {
             case "true":
                 terminal("true");
@@ -1492,7 +1533,7 @@ public class AnalisadorSintatico {
                 break;
             case "(":
                 terminal("(");
-                recExplogica();
+                recExpLogica();
                 terminal(")");
                 recComplementoExpLogica();
                 break;
@@ -1510,7 +1551,7 @@ public class AnalisadorSintatico {
                         recCoOpRelacional();
                         break;
                     default:
-                        erroSintatico("Expressão invalida");
+                        erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
                         break;
                 }
 
@@ -1574,11 +1615,11 @@ public class AnalisadorSintatico {
                 break;
             case "==":
                 terminal("==");
-                recExplogica();
+                recExpLogica();
                 break;
             case "!=":
                 terminal("!=");
-                recExplogica();
+                recExpLogica();
                 break;
             case "&&":
                 terminal("&&");
@@ -1672,11 +1713,11 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "==":
                 terminal("==");
-                recExplogica();
+                recExpLogica();
                 break;
             case "!=":
                 terminal("!=");
-                recExplogica();
+                recExpLogica();
                 break;
             case "&&":
                 terminal("&&");
@@ -1724,7 +1765,7 @@ public class AnalisadorSintatico {
                 recOpLogico();
                 break;
             default:
-                erroSintatico("falta operador");
+                erroSintatico("falta operador: >, <, >=, <=, ==, !=");
                 break;
         }
     }
@@ -1753,14 +1794,14 @@ public class AnalisadorSintatico {
                 break;
             case "==":
                 terminal("==");
-                recExplogica();
+                recExpLogica();
                 break;
             case "!=":
                 terminal("!=");
-                recExplogica();
+                recExpLogica();
                 break;
             default:
-                erroSintatico("falta operador");
+                erroSintatico("falta operador: >, <, >=, <=, ==, !=");
                 break;
         }
     }
@@ -1785,7 +1826,7 @@ public class AnalisadorSintatico {
                     recFatorAritmetico();
                     break;
                 }
-                erroSintatico("Expressão com erro");
+                erroSintatico("falta identificar, numero, ( ou operador: ++, --, -");
                 break;
         }
 
@@ -1817,8 +1858,12 @@ public class AnalisadorSintatico {
                 } else if (proximo.getTipo().equals("numero")) {
                     Tipo("numero");
                     recComplementoAritmetico();
+                    break;
                 }
-                erroSintatico("Expressão com erro");
+                erroSintatico("falta numero, identificador, (, ou operador: ++, --, -");
+                while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}") && !proximo.getValor().equals(";")) {
+                    proximo = proximo();
+                }
                 break;
         }
     }
@@ -1838,7 +1883,7 @@ public class AnalisadorSintatico {
                     Tipo("id");
                     recIdExpArit();
                 }
-                erroSintatico("Espera um identificador");
+                erroSintatico("falta identificador ou operador: ++, --");
                 break;
         }
     }
@@ -1867,12 +1912,20 @@ public class AnalisadorSintatico {
 
     private void recComplementoAritmetico() {
         switch (proximo.getValor()) {
-            case "++":
-                terminal("++");
+            case "+":
+                terminal("+");
                 recFatorAritmetico();
                 break;
-            case "--":
-                terminal("--");
+            case "-":
+                terminal("-");
+                recFatorAritmetico();
+                break;
+            case "*":
+                terminal("*");
+                recFatorAritmetico();
+                break;
+            case "/":
+                terminal("/");
                 recFatorAritmetico();
                 break;
             default:

@@ -30,4 +30,10 @@ public class TabelaSimbolos {
     public void add(Simbolos simbolo) {
         tabela.add(simbolo);
     }
+
+    @Override
+    public String toString() {
+        return tabela.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

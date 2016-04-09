@@ -24,8 +24,8 @@ asfaf
 void main() {
 a;
 
-if(a==2){
-
+if(a==2+2+2*"char"+1+1(a[]){
+a;
 } else {
 a=2;
 }

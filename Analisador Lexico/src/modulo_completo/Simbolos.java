@@ -26,26 +26,16 @@ public class Simbolos {
     public static final int VET = 14;
     public static final int MAIN = 15;
 
-    private final String nome;
+    private String nome;
     private Object valor;
-    private final int categoria;
-    private final int tipo;
-    private final TabelaSimbolos filhos;
+    private int categoria;
+    private int tipo;
+    private TabelaSimbolos filhos;
 
-    /**
-     *
-     * @param categoria
-     * @param tipo
-     * @param nome
-     * @param valor
-     */
-    public Simbolos(int categoria, int tipo, String nome, Object valor) {
-        this.categoria = categoria;
-        this.tipo = tipo;
-        this.nome = nome;
-        this.valor = valor;
+    public Simbolos() {
         filhos = new TabelaSimbolos();
     }
+
 
     /**
      *
@@ -63,4 +53,41 @@ public class Simbolos {
         this.valor = valor;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(int categoria) {
+        this.categoria = categoria;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public TabelaSimbolos getFilhos() {
+        return filhos;
+    }
+
+    public void setFilhos(TabelaSimbolos filhos) {
+        this.filhos = filhos;
+    }
+
+    @Override
+    public String toString() {
+        return "categoria: " + categoria + " tipo: "+ tipo + " " + nome + filhos.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

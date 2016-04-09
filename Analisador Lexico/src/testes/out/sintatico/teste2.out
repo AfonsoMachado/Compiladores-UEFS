@@ -1,19 +1,22 @@
-4 Conteudo de constantes inválido, espera um tipo primitivo
-5 Conteudo de constantes inválido, espera um tipo primitivo
-5 Conteudo de constantes inválido, espera um tipo primitivo
+4 falta palavra reservada: int, char, bool, string, float
+5 falta palavra reservada: int, char, bool, string, float
+5 falta palavra reservada: int, char, bool, string, float
 18 falta palavra reservada: class, void
 18 falta palavra reservada: class, void
 18 falta palavra reservada: class, void
 20 falta palavra reservada: class, void
 21 falta palavra reservada: class, void
 22 falta palavra reservada: class, void
-25 Erro de Comando
+25 falta: [ ou = ou . ou (
 25 Conteudo de médoto inválido, espera um comando.
+27 falta numero, identificador, (, ou operador: ++, --, -
+28 falta: [ ou = ou . ou (
+28 falta um comando: identificador ou palavra reservada
 35 falta {
 35 falta declaraçao de variavel ou de metodo
 35 falta declaraçao de variavel ou de metodo
 35 falta declaraçao de variavel ou de metodo
 35 falta id
-37 Erro na declaração de variavel, esperava ; ou ,
+37 falta ; ou , ou [ ou (
 37 falta id
 38 falta id
