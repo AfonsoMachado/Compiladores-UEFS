@@ -41,7 +41,6 @@ public class Arquivo {
         for (File f : raiz.listFiles()) { // Inserindo caminho dos códigos.
             codigos.add(f.getName());
         }
-        System.out.println(codigos);
         return codigos;
     }
 
@@ -134,7 +133,6 @@ public class Arquivo {
      * @throws IOException Arquivo de saida não foi gerado com sucesso
      */
     public void escreverSaidaSintatico(ArrayList<String> erros) throws IOException {
-        System.out.println(this.localFile);
         FileWriter arq = new FileWriter("src/testes/out/sintatico/" + this.localFile + ".out", false); // Cria o arquivo de saída relacionado ao seu respectivo arquivo de entrada ("mesmo" nome). 
         PrintWriter gravar = new PrintWriter(arq);
         if (erros.isEmpty()) { // Se não houver erros léxicos.

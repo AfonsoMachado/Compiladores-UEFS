@@ -23,6 +23,7 @@ asfaf
 
 void main() {
 a;
+int a;
 
 if(a==2+2+2*"char"+1+1(a[]){
 a;

@@ -87,7 +87,7 @@ public class Simbolos {
 
     @Override
     public String toString() {
-        return "categoria: " + categoria + " tipo: "+ tipo + " " + nome + filhos.toString(); //To change body of generated methods, choose Tools | Templates.
+        return "categoria: " + categoria + " tipo: "+ tipo + " " + nome + filhos.toString() + "\n"; //To change body of generated methods, choose Tools | Templates.
     }
     
 }

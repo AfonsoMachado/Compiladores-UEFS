@@ -25,22 +25,26 @@ public class AnalisadorSintatico {
     private ArrayList<Token> tokens;    //lista com os tokens recebidos
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
-    private Simbolos escopo;            //salvar o escopo atual 
+    private Simbolos escopo;            //salvar o escopo atual
+    private Simbolos anterior;            //salvar o escopo atual 
     private Simbolos global;            //salvar o escopo anterior 
     private Simbolos atual;             //simbolo atual
 
     /**
-     * Construtor do analisador Sintatico. 
+     * Construtor do analisador Sintatico.
+     *
      * @param escopo recebe a tabela de simbolos do compilador
      */
     public AnalisadorSintatico(Simbolos escopo) {
         this.escopo = escopo; // 
         this.global = escopo; //
+        this.anterior = escopo; //
     }
 
     /**
-     * Metodo responsavel pela analise sintatica dos codigos fontes.  
-     * @param tokens lista com os tokens vindos do lexico. 
+     * Metodo responsavel pela analise sintatica dos codigos fontes.
+     *
+     * @param tokens lista com os tokens vindos do lexico.
      */
     public void analise(ArrayList<Token> tokens) {
         this.tokens = tokens; //recebe os tokens vindos do lexico.
@@ -61,47 +65,64 @@ public class AnalisadorSintatico {
     /**
      * Metodo para capturar o proximo token para ser analisado.
      *
+     * @return o proximo token da lista de tokens.
+     *
      */
     private Token proximo() {
         if (contTokens < tokens.size()) { //verifica se ainda possuem tokens para a analise.
             return tokens.get(contTokens++);
         } else {
-            return new Token("EOF", "EOF", 0, 0);
+            return new Token("EOF", "EOF", 0, 0);  //cria um token de fim de arquivo. 
         }
     }
 
+    /**
+     * Metodo para normalizaçao dos erros encontrados.
+     */
     private void erroSintatico(String erro) {
         if (!proximo.getValor().equals("EOF")) {
-            erros.add(proximo.getLinha() + " " + erro + "\n");
+            erros.add(proximo.getLinha() + " " + erro + "\n"); //gera o erro normalizado e adiciona na lista de erros.
         } else {
             erros.add(erro);
         }
     }
 
+    /**
+     * Metodo para verificar terminais.
+     *
+     * @param esperado valor do terminal esperado no proximo token.
+     */
     private void terminal(String esperado) {
-        if ((!proximo.getValor().equals("EOF")) && proximo.getValor().equals(esperado)) {
+        if ((!proximo.getValor().equals("EOF")) && proximo.getValor().equals(esperado)) { //verifica se o token atual e o que era esperado
             proximo = proximo();
         } else {
-            erroSintatico("falta " + esperado);
+            erroSintatico("falta " + esperado); //gera o erro se o token nao e o esperado 
         }
     }
 
+    /**
+     * Metodo para verificar os tipos.
+     *
+     * @param esperado valor do tipo esperado no proximo token.
+     */
     private void Tipo(String esperado) {
-        if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) {
+        if (!proximo.getValor().equals("EOF") && proximo.getTipo().equals(esperado)) { //verifica se o tipo do token atual e o que era esperado
             proximo = proximo();
         } else {
-            erroSintatico("falta " + esperado);
+            erroSintatico("falta " + esperado); //gera o erro se o tipo do token nao e o esperado 
         }
     }
 
+    /**
+     * Metodo para o reconhecimento do arquivo.
+     */
     private void recArquivo() {
-        recConstantes();
-        recVariaveis();
-        recPreMain();
+        recConstantes(); //reconhece as constante
+        recVariaveis(); //reconhece as variaveis
+        recPreMain();  //reconhece as classes e o metodo main
     }
 
     private void recPreMain() {
-        System.out.println("pre-main");
         if (!proximo.getValor().equals("EOF")) {
             switch (proximo.getValor()) {
                 case "void":
@@ -137,7 +158,6 @@ public class AnalisadorSintatico {
     }
 
     private void recConstantes() {
-        System.out.println("constantes");
         switch (proximo.getValor()) {
             case "const":
                 recConst();
@@ -149,8 +169,7 @@ public class AnalisadorSintatico {
     }
 
     private void recVariaveis() {
-        System.out.println("variaveis");
-        atual=new Simbolos();
+        atual = new Simbolos();
         atual.setCategoria(Simbolos.VAR);
         switch (proximo.getValor()) {
             case "char":
@@ -184,7 +203,12 @@ public class AnalisadorSintatico {
     }
 
     private void recMain() {
-        System.out.println("main");
+        atual=new Simbolos();
+        anterior=escopo;
+        atual.setCategoria(Simbolos.MAIN);
+        atual.setNome("MAIN");
+        global.addFilho(atual);
+        escopo=atual;
         terminal("void");
         terminal("main");
         terminal("(");
@@ -192,14 +216,13 @@ public class AnalisadorSintatico {
         terminal("{");
         recConteudoMetodo();
         terminal("}");
+        escopo=anterior;
     }
 
     private void recClasse() {
-        System.out.println("classe");
-        System.out.println(proximo.getValor());
         switch (proximo.getValor()) {
             case "class":
-                atual=new Simbolos();
+                atual = new Simbolos();
                 atual.setCategoria(Simbolos.CLASS);
                 escopo = atual;
                 terminal("class");
@@ -218,7 +241,6 @@ public class AnalisadorSintatico {
     }
 
     private void recExpressaoHerenca() {
-        System.out.println("ExpressaoHerenca");
         switch (proximo.getValor()) {
             case ">":
                 terminal(">");
@@ -231,7 +253,6 @@ public class AnalisadorSintatico {
     }
 
     private void recConteudoClasse() {
-        System.out.println("ConteudoClasse");
         switch (proximo.getValor()) {
             case "const":
                 recConst();
@@ -242,7 +263,6 @@ public class AnalisadorSintatico {
                 recConteudoClasse();
                 break;
             default:
-                System.out.println(proximo.getValor());
                 if (proximo.getTipo().equals("palavra_reservada") || proximo.getTipo().equals("id")) {
                     recIdDeclaracao();
                     recConteudoClasse();
@@ -257,7 +277,6 @@ public class AnalisadorSintatico {
     }
 
     private void recConst() {
-        System.out.println("Const");
         switch (proximo.getValor()) {
             case "const":
                 terminal("const");
@@ -272,7 +291,6 @@ public class AnalisadorSintatico {
     }
 
     private void recBlocoConstantes() {
-        System.out.println("blococonstantes");
         atual = new Simbolos();
         atual.setCategoria(Simbolos.CONST);
         switch (proximo.getValor()) {
@@ -348,12 +366,12 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
-                int aux= atual.getTipo();
+                int aux = atual.getTipo();
                 escopo.addFilho(atual);
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.CONST);
                 atual.setTipo(aux);
-               recListaConst();
+                recListaConst();
                 break;
             case ";":
                 escopo.addFilho(atual);
@@ -367,30 +385,34 @@ public class AnalisadorSintatico {
     }
 
     private void recDeclaracaoVariavel() {
-        System.out.println("listaVariaveis");
         switch (proximo.getValor()) {
             case "char":
                 terminal("char");
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
             case "int":
                 terminal("int");
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
             case "bool":
                 terminal("bool");
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
             case "string":
                 terminal("string");
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
             case "float":
                 terminal("float");
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
@@ -400,10 +422,16 @@ public class AnalisadorSintatico {
     }
 
     private void recIdDeclaracao() {
-        System.out.println("idDeclaração");
+        atual = new Simbolos();
         switch (proximo.getValor()) {
             case "void":
                 terminal("void");
+                atual.setCategoria(Simbolos.MET);
+                atual.setTipo(Simbolos.VOID);
+                atual.setNome(proximo.getValor());
+                escopo.addFilho(atual);
+                anterior = escopo;
+                escopo = atual;
                 Tipo("id");
                 terminal("(");
                 recDeclParametros();
@@ -411,35 +439,48 @@ public class AnalisadorSintatico {
                 terminal("{");
                 recConteudoMetodo();
                 terminal("}");
+                escopo = anterior;
                 break;
             case "char":
                 terminal("char");
+                atual.setTipo(Simbolos.CHAR);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recCompId();
                 break;
             case "int":
                 terminal("int");
+                atual.setTipo(Simbolos.INT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recCompId();
                 break;
             case "bool":
                 terminal("bool");
+                atual.setTipo(Simbolos.BOOL);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recCompId();
                 break;
             case "string":
                 terminal("string");
+                atual.setTipo(Simbolos.STRING);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recCompId();
                 break;
             case "float":
                 terminal("float");
+                atual.setTipo(Simbolos.FLOAT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recCompId();
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
                     Tipo("id");
+                    atual.setTipo(Simbolos.OBJECT);
+                    atual.setNome(proximo.getValor());
                     Tipo("id");
                     recCompId();
                     break;
@@ -451,15 +492,19 @@ public class AnalisadorSintatico {
     }
 
     private void recCompId() {
-        System.out.println("compID");
         switch (proximo.getValor()) {
             case "[":
+                atual.setTipo(Simbolos.VET);
                 terminal("[");
                 recIndice();
                 terminal("]");
                 recListaVetor();
                 break;
             case "(":
+                atual.setTipo(Simbolos.MET);
+                escopo.addFilho(atual);
+                anterior = escopo;
+                escopo = atual;
                 terminal("(");
                 recDeclParametros();
                 terminal(")");
@@ -468,11 +513,15 @@ public class AnalisadorSintatico {
                 terminal("return");
                 recRetorno();
                 terminal("}");
+                escopo = anterior;
                 break;
             case ",":
+                atual.setTipo(Simbolos.VAR);
                 recListaVariavel();
                 break;
             case ";":
+                atual.setTipo(Simbolos.VAR);
+                escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -482,14 +531,20 @@ public class AnalisadorSintatico {
     }
 
     private void recListaVariavel() {
-        System.out.println("lista variavel");
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
+                escopo.addFilho(atual);
+                int aux = atual.getTipo();
+                atual = new Simbolos();
+                atual.setCategoria(Simbolos.VAR);
+                atual.setTipo(aux);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recListaVariavel();
                 break;
             case ";":
+                escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -502,10 +557,15 @@ public class AnalisadorSintatico {
     }
 
     private void recListaVetor() {
-        System.out.println("lista vetor");
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
+                int aux = atual.getTipo();
+                escopo.addFilho(atual);
+                atual = new Simbolos();
+                atual.setCategoria(Simbolos.VET);
+                atual.setTipo(aux);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 terminal("[");
                 recIndice();
@@ -513,6 +573,7 @@ public class AnalisadorSintatico {
                 recListaVetor();
                 break;
             case ";":
+                escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -525,7 +586,6 @@ public class AnalisadorSintatico {
     }
 
     private void recIndice() {
-        System.out.println("indiceDecl");
         switch (proximo.getTipo()) {
             case "id":
                 Tipo("id");
@@ -540,40 +600,53 @@ public class AnalisadorSintatico {
     }
 
     private void recDeclParametros() {
+        atual = new Simbolos();
         switch (proximo.getValor()) {
             case "char":
                 terminal("char");
+                atual.setTipo(Simbolos.CHAR);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             case "int":
                 terminal("int");
+                atual.setTipo(Simbolos.INT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             case "bool":
                 terminal("bool");
+                atual.setTipo(Simbolos.BOOL);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             case "string":
                 terminal("string");
+                atual.setTipo(Simbolos.STRING);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             case "float":
                 terminal("float");
+                atual.setTipo(Simbolos.FLOAT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    atual.setTipo(Simbolos.OBJECT);
                     Tipo("id");
+                    atual.setNome(proximo.getValor());
                     Tipo("id");
                     recVarVet();
                     recListaParametros();
@@ -586,12 +659,16 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
+                escopo.addFilho(atual);
+                atual = new Simbolos();
                 recTipo();
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recVarVet();
                 recListaParametros();
                 break;
             default:
+                escopo.addFilho(atual);
                 break;
         }
     }
@@ -599,22 +676,28 @@ public class AnalisadorSintatico {
     private void recTipo() {
         switch (proximo.getValor()) {
             case "char":
+                atual.setTipo(Simbolos.CHAR);
                 terminal("char");
                 break;
             case "int":
+                atual.setTipo(Simbolos.INT);
                 terminal("int");
                 break;
             case "bool":
+                atual.setTipo(Simbolos.BOOL);
                 terminal("bool");
                 break;
             case "string":
+                atual.setTipo(Simbolos.STRING);
                 terminal("string");
                 break;
             case "float":
+                atual.setTipo(Simbolos.FLOAT);
                 terminal("float");
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    atual.setTipo(Simbolos.OBJECT);
                     Tipo("id");
                 } else {
                     erroSintatico("falta um tipo: id, int, float, char, string, bool");
@@ -626,17 +709,18 @@ public class AnalisadorSintatico {
     private void recVarVet() {
         switch (proximo.getValor()) {
             case "[":
+                atual.setCategoria(Simbolos.VET);
                 terminal("[");
                 recIndice();
                 terminal("]");
                 break;
             default:
+                atual.setCategoria(Simbolos.VAR);
                 break;
         }
     }
 
     private void recConteudoMetodo() {
-        System.out.println("conteudoMetodo");
         switch (proximo.getTipo()) {
             case "palavra_reservada":
                 if (proximo.getValor().equals("return")) {
@@ -660,6 +744,7 @@ public class AnalisadorSintatico {
     }
 
     private void recComando() {
+        atual = new Simbolos();
         switch (proximo.getValor()) {
             case "read":
                 recRead();
@@ -678,26 +763,36 @@ public class AnalisadorSintatico {
                 break;
             case "char":
                 terminal("char");
+                atual.setTipo(Simbolos.CHAR);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recIdDecl();
                 break;
             case "int":
                 terminal("int");
+                atual.setTipo(Simbolos.INT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recIdDecl();
                 break;
             case "bool":
                 terminal("bool");
+                atual.setTipo(Simbolos.BOOL);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recIdDecl();
                 break;
             case "string":
                 terminal("string");
+                atual.setTipo(Simbolos.STRING);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recIdDecl();
                 break;
             case "float":
                 terminal("float");
+                atual.setTipo(Simbolos.FLOAT);
+                atual.setNome(proximo.getValor());
                 Tipo("id");
                 recIdDecl();
                 break;
@@ -705,7 +800,9 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {
+                        atual.setNome(proximo.getValor());
                         Tipo("id");
+                        atual.setTipo(Simbolos.OBJECT);
                         recIdDecl();
                     } else {
                         recIdComando();
@@ -725,6 +822,7 @@ public class AnalisadorSintatico {
                 recListaVariavel();
                 break;
             case "[":
+                atual.setCategoria(Simbolos.VET);
                 terminal("[");
                 recIndice();
                 terminal("]");
