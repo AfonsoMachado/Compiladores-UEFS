@@ -26,7 +26,6 @@ public class AnalisadorSintatico {
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
     private Simbolos escopo;            //salvar o escopo atual
-    private Simbolos anterior;            //salvar o escopo atual 
     private Simbolos global;            //salvar o escopo anterior 
     private Simbolos atual;             //simbolo atual
 
@@ -38,7 +37,6 @@ public class AnalisadorSintatico {
     public AnalisadorSintatico(Simbolos escopo) {
         this.escopo = escopo; // 
         this.global = escopo; //
-        this.anterior = escopo; //
     }
 
     /**
@@ -204,7 +202,7 @@ public class AnalisadorSintatico {
 
     private void recMain() {
         atual=new Simbolos();
-        anterior=escopo;
+        Simbolos anterior=escopo;
         atual.setCategoria(Simbolos.MAIN);
         atual.setNome("MAIN");
         global.addFilho(atual);
@@ -430,7 +428,7 @@ public class AnalisadorSintatico {
                 atual.setTipo(Simbolos.VOID);
                 atual.setNome(proximo.getValor());
                 escopo.addFilho(atual);
-                anterior = escopo;
+                Simbolos anterior = escopo;
                 escopo = atual;
                 Tipo("id");
                 terminal("(");
@@ -503,7 +501,7 @@ public class AnalisadorSintatico {
             case "(":
                 atual.setTipo(Simbolos.MET);
                 escopo.addFilho(atual);
-                anterior = escopo;
+                Simbolos anterior = escopo;
                 escopo = atual;
                 terminal("(");
                 recDeclParametros();
@@ -821,6 +819,9 @@ public class AnalisadorSintatico {
             case ",":
                 recListaVariavel();
                 break;
+            case ";":
+                recListaVariavel();
+                break;
             case "[":
                 atual.setCategoria(Simbolos.VET);
                 terminal("[");
@@ -829,7 +830,7 @@ public class AnalisadorSintatico {
                 recListaVetor();
                 break;
             default:
-                erroSintatico("falta , ou [");
+                erroSintatico("falta ; ou , ou [");
                 break;
         }
     }

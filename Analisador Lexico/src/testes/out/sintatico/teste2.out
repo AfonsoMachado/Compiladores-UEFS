@@ -9,8 +9,6 @@
 22 falta palavra reservada: class, void
 25 falta: [ ou = ou . ou (
 25 Conteudo de médoto inválido, espera um comando.
-26 falta , ou [
-26 Conteudo de médoto inválido, espera um comando.
 28 falta numero, identificador, (, ou operador: ++, --, -
 29 falta: [ ou = ou . ou (
 29 falta um comando: identificador ou palavra reservada
