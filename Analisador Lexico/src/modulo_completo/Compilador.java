@@ -9,8 +9,8 @@ import modulo_analisadorLexico.Token;
 import modulo_analisadorSintatico.AnalisadorSintatico;
 
 /**
- * Classe responsável por executar os modulos do compilador, assim, capturando os
- * códigos fonte e gerando suas respectivas saídas.
+ * Classe responsável por executar os modulos do compilador, assim, capturando
+ * os códigos fonte e gerando suas respectivas saídas.
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -19,11 +19,9 @@ import modulo_analisadorSintatico.AnalisadorSintatico;
  * @see Arquivo
  */
 public class Compilador {
+
     Simbolos tabelaSimbolos;
 
-    
-    
-    
     /**
      * Manipulador dos documentos de entrada e saída.
      */
@@ -61,21 +59,24 @@ public class Compilador {
             System.exit(0);
         }
         for (String lF : localFiles) { // Para cada arquivo fonte, o analisador léxico gera as listas de tokens e erros (se houver).
+            tabelaSimbolos = new Simbolos(); //cria a tabela de simbolos
+            tabelaSimbolos.setNome("GLOBAL"); //nomeia o primeiro simbolo como global
             ArrayList<String> codigoFonte = arquivo.lerCodigoFonte(lF);
             analisadorLexico = new AnalisadorLexico();
             analisadorLexico.analise(codigoFonte);
             arquivo.escreverSaidaLexico(analisadorLexico.getTokens(), analisadorLexico.getErros());
             ArrayList<Token> listaTokens;
-            listaTokens=arquivo.lerSaidaLexico();
+            listaTokens = arquivo.lerSaidaLexico();
             analisadorSintatico = new AnalisadorSintatico(tabelaSimbolos);
             analisadorSintatico.analise(listaTokens);
             arquivo.escreverSaidaSintatico(analisadorSintatico.getErros());
+            System.out.println(tabelaSimbolos);
         }
     }
 
     /**
      * Inicializa os módulos do compilador.
-     * 
+     *
      * @param args
      */
     public static void main(String args[]) {
@@ -83,8 +84,7 @@ public class Compilador {
         try {
             Compilador compilador = new Compilador(); // Cria o compilador.
             compilador.compilar(); // Executa o compilador.
-            System.out.println(compilador.tabelaSimbolos);
-            
+
         } catch (FileNotFoundException error1) {
             System.out.println("Arquivo não encontrado");
             System.exit(0);

@@ -11,8 +11,9 @@ import modulo_completo.Compilador;
 import modulo_completo.Simbolos;
 
 /**
- * Classe responsável pela análise sintatica dos códigos fontes. Os metodos de reconhecimento
- * sao baseados nas produçoes da gramatica. A gramatica utilizada foi a versao 5.4. 
+ * Classe responsável pela análise sintatica dos códigos fontes. Os metodos de
+ * reconhecimento sao baseados nas produçoes da gramatica. A gramatica utilizada
+ * foi a versao 5.4.
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -26,7 +27,7 @@ public class AnalisadorSintatico {
     private ArrayList<Token> tokens;    //lista com os tokens recebidos
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
-    private Simbolos escopo;            //salvar o escopo atual
+    private Simbolos escopo;            //salvar o escopo atual da tabela de simbolos
     private Simbolos atual;             //simbolo atual
 
     /**
@@ -118,11 +119,13 @@ public class AnalisadorSintatico {
         recVariaveis(); //reconhece as variaveis
         recPreMain();  //reconhece as classes e o metodo main
     }
+
     /**
-     * Metodo para reconhecimento de classes antes do metodo main e do metodo main.
+     * Metodo para reconhecimento de classes antes do metodo main e do metodo
+     * main.
      */
     private void recPreMain() {
-        if (!proximo.getValor().equals("EOF")) { 
+        if (!proximo.getValor().equals("EOF")) {
             switch (proximo.getValor()) {
                 case "void":  //verifica se e uma classe ou o metodo main
                     recMain();
@@ -144,21 +147,23 @@ public class AnalisadorSintatico {
             erroSintatico("falta palavra reservada: class, void");
         }
     }
+
     /**
      * Metodo para reconhecimento de varias classes.
      */
     private void recClasses() {
         switch (proximo.getValor()) {
-            case "class": 
-                recClasse(); 
+            case "class":
+                recClasse();
                 recClasses();
                 break;
             default:
                 break;
         }
     }
+
     /**
-     * Metodo para verificar varias constantes. 
+     * Metodo para verificar varias constantes.
      */
     private void recConstantes() {
         switch (proximo.getValor()) {
@@ -171,6 +176,9 @@ public class AnalisadorSintatico {
         }
     }
 
+    /**
+     * Metodo para reconhecimento de variaveis.
+     */
     private void recVariaveis() {
         atual = new Simbolos();  //criaçao de um simbolo para adicionar na tabela de simbolos.
         atual.setCategoria(Simbolos.VAR); //salva a categoria do simbolo.
@@ -205,13 +213,16 @@ public class AnalisadorSintatico {
         }
     }
 
+    /**
+     * Metodo para reconhecimento da main.
+     */
     private void recMain() {
-        atual=new Simbolos(); //cria um simbolo.
+        atual = new Simbolos(); //cria um simbolo.
         atual.setCategoria(Simbolos.MAIN); //salva a categoria
-        atual.setNome("MAIN"); 
+        atual.setNome("MAIN");
         escopo.addFilho(atual); //adiciona a main na tabela de simbolos
-        Simbolos anterior=escopo; //salva o escopo atual para retorna ao sair do metodo
-        escopo=atual;
+        Simbolos anterior = escopo; //salva o escopo atual para retorna ao sair do metodo
+        escopo = atual;
         terminal("void");
         terminal("main");
         terminal("(");
@@ -219,9 +230,12 @@ public class AnalisadorSintatico {
         terminal("{");
         recConteudoMetodo();
         terminal("}");
-        escopo=anterior;
+        escopo = anterior;
     }
 
+    /**
+     * Metodo para reconhecimento de classe.
+     */
     private void recClasse() {
         switch (proximo.getValor()) {
             case "class":
@@ -244,7 +258,10 @@ public class AnalisadorSintatico {
                 break;
         }
     }
-
+    
+    /**
+     * Metodo para reconhecimento de herança.
+     */
     private void recExpressaoHerenca() {
         switch (proximo.getValor()) {
             case ">":
@@ -257,6 +274,9 @@ public class AnalisadorSintatico {
 
     }
 
+    /**
+     * Metodo para reconhecimento de conteudo de classe.
+     */
     private void recConteudoClasse() {
         switch (proximo.getValor()) {
             case "const":
@@ -272,7 +292,7 @@ public class AnalisadorSintatico {
                     recIdDeclaracao();
                     recConteudoClasse();
                     break;
-                } else if (!proximo.getValor().equals("}")) {
+                } else if (!proximo.getValor().equals("}") && !proximo.getValor().equals("class")) { //recuperaçao do erro, verifica se acabou o bloco, ou surgiu outra classe
                     erroSintatico("falta declaraçao de variavel ou de metodo");
                     proximo = proximo();
                     recConteudoClasse();
