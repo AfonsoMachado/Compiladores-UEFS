@@ -11,7 +11,8 @@ import modulo_completo.Compilador;
 import modulo_completo.Simbolos;
 
 /**
- * Classe responsável pela análise sintatica dos códigos fontes.
+ * Classe responsável pela análise sintatica dos códigos fontes. Os metodos de reconhecimento
+ * sao baseados nas produçoes da gramatica. A gramatica utilizada foi a versao 5.4. 
  *
  * @author Lucas Carneiro
  * @author Oto Lopes
@@ -26,7 +27,6 @@ public class AnalisadorSintatico {
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
     private Simbolos escopo;            //salvar o escopo atual
-    private Simbolos global;            //salvar o escopo anterior 
     private Simbolos atual;             //simbolo atual
 
     /**
@@ -35,8 +35,7 @@ public class AnalisadorSintatico {
      * @param escopo recebe a tabela de simbolos do compilador
      */
     public AnalisadorSintatico(Simbolos escopo) {
-        this.escopo = escopo; // 
-        this.global = escopo; //
+        this.escopo = escopo; //recebe a tabela de simbolos do compilador 
     }
 
     /**
@@ -119,11 +118,13 @@ public class AnalisadorSintatico {
         recVariaveis(); //reconhece as variaveis
         recPreMain();  //reconhece as classes e o metodo main
     }
-
+    /**
+     * Metodo para reconhecimento de classes antes do metodo main e do metodo main.
+     */
     private void recPreMain() {
-        if (!proximo.getValor().equals("EOF")) {
+        if (!proximo.getValor().equals("EOF")) { 
             switch (proximo.getValor()) {
-                case "void":
+                case "void":  //verifica se e uma classe ou o metodo main
                     recMain();
                     recClasses();
                     break;
@@ -132,7 +133,7 @@ public class AnalisadorSintatico {
                     recPreMain();
                     break;
                 default:
-                    while (!proximo.getValor().equals("void") && !proximo.getValor().equals("class")) {
+                    while (!proximo.getValor().equals("void") && !proximo.getValor().equals("class")) { //recuperaçao de erro, busca uma classe ou main no arquivo
                         erroSintatico("falta palavra reservada: class, void");
                         proximo = proximo();
                     }
@@ -143,18 +144,22 @@ public class AnalisadorSintatico {
             erroSintatico("falta palavra reservada: class, void");
         }
     }
-
+    /**
+     * Metodo para reconhecimento de varias classes.
+     */
     private void recClasses() {
         switch (proximo.getValor()) {
-            case "class":
-                recClasse();
+            case "class": 
+                recClasse(); 
                 recClasses();
                 break;
             default:
                 break;
         }
     }
-
+    /**
+     * Metodo para verificar varias constantes. 
+     */
     private void recConstantes() {
         switch (proximo.getValor()) {
             case "const":
@@ -167,31 +172,31 @@ public class AnalisadorSintatico {
     }
 
     private void recVariaveis() {
-        atual = new Simbolos();
-        atual.setCategoria(Simbolos.VAR);
+        atual = new Simbolos();  //criaçao de um simbolo para adicionar na tabela de simbolos.
+        atual.setCategoria(Simbolos.VAR); //salva a categoria do simbolo.
         switch (proximo.getValor()) {
             case "char":
-                atual.setTipo(Simbolos.CHAR);
+                atual.setTipo(Simbolos.CHAR);  //salva o tipo do simbolo.
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "int":
-                atual.setTipo(Simbolos.INT);
+                atual.setTipo(Simbolos.INT); //salva o tipo do simbolo.
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "bool":
-                atual.setTipo(Simbolos.BOOL);
+                atual.setTipo(Simbolos.BOOL); //salva o tipo do simbolo.
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "string":
-                atual.setTipo(Simbolos.STRING);
+                atual.setTipo(Simbolos.STRING); //salva o tipo do simbolo.
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
             case "float":
-                atual.setTipo(Simbolos.FLOAT);
+                atual.setTipo(Simbolos.FLOAT); //salva o tipo do simbolo.
                 recDeclaracaoVariavel();
                 recVariaveis();
                 break;
@@ -201,11 +206,11 @@ public class AnalisadorSintatico {
     }
 
     private void recMain() {
-        atual=new Simbolos();
-        Simbolos anterior=escopo;
-        atual.setCategoria(Simbolos.MAIN);
-        atual.setNome("MAIN");
-        global.addFilho(atual);
+        atual=new Simbolos(); //cria um simbolo.
+        atual.setCategoria(Simbolos.MAIN); //salva a categoria
+        atual.setNome("MAIN"); 
+        escopo.addFilho(atual); //adiciona a main na tabela de simbolos
+        Simbolos anterior=escopo; //salva o escopo atual para retorna ao sair do metodo
         escopo=atual;
         terminal("void");
         terminal("main");
@@ -222,15 +227,17 @@ public class AnalisadorSintatico {
             case "class":
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.CLASS);
-                escopo = atual;
                 terminal("class");
                 atual.setNome(proximo.getValor());
-                global.addFilho(atual);
+                escopo.addFilho(atual);
+                Simbolos anterior = escopo; //salva o antigo escopo
+                escopo = atual; //o novo escopo e a classe atual
                 Tipo("id");
                 recExpressaoHerenca();
                 terminal("{");
                 recConteudoClasse();
                 terminal("}");
+                escopo = anterior; //volta o escopo para o pai da classe.
                 break;
             default:
                 erroSintatico("Classe com erro.");
