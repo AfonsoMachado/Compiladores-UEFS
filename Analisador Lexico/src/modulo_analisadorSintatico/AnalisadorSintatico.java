@@ -958,7 +958,6 @@ public class AnalisadorSintatico {
                         break;
                 }
         }
-
     }
 
     private void recOperadorNumero() {
@@ -1043,7 +1042,6 @@ public class AnalisadorSintatico {
                     default:
                         erroSintatico("falta: ++, --, (, numero ou identificador");
                         break;
-
                 }
 
         }
@@ -1598,6 +1596,9 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
+                        while(!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
+                            proximo=proximo();
+                        }
                         break;
                 }
 
