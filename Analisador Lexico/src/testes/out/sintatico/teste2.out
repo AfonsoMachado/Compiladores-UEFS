@@ -10,14 +10,6 @@
 25 falta: [ ou = ou . ou (
 25 Conteudo de médoto inválido, espera um comando.
 28 falta identificador, numero, boolean, (, ou operador: ++, --
-28 falta )
-28 falta {
-28 falta identificador ou numero
-28 falta =
-28 falta booleano, numero, identificador, cadeia constante, caracter constante,  ( ou operadores: ++ ou -- ou - 
-28 falta ;
-28 falta um comando: identificador ou palavra reservada
-28 falta um comando: identificador ou palavra reservada
 29 falta: [ ou = ou . ou (
 29 falta um comando: identificador ou palavra reservada
 36 falta {

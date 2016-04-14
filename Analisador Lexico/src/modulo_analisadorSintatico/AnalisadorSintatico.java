@@ -381,7 +381,7 @@ public class AnalisadorSintatico {
                 } else if (proximo.getValor().equals("false")) {
                     terminal("false");
                 } else {
-                    erroSintatico("falta  invalida");
+                    erroSintatico("falta numero, cadeia constante, caracter constante ou boolean");
                 }
                 break;
         }
@@ -955,6 +955,9 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta booleano, numero, identificador, cadeia constante, caracter constante,  ( ou operadores: ++ ou -- ou - ");
+                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
+                            proximo=proximo();
+                        }
                         break;
                 }
         }
@@ -1596,7 +1599,7 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
-                        while(!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
+                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
                             proximo=proximo();
                         }
                         break;
@@ -1679,6 +1682,9 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
+                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
+                            proximo=proximo();
+                        }
                         break;
                 }
 
@@ -1954,6 +1960,9 @@ public class AnalisadorSintatico {
                     break;
                 }
                 erroSintatico("falta identificar, numero, ( ou operador: ++, --, -");
+                        while(!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
+                            proximo=proximo();
+                        }
                 break;
         }
 
