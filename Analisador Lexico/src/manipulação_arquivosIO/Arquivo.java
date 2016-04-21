@@ -144,4 +144,25 @@ public class Arquivo {
         }
         arq.close();
     }
+    /**
+     * Gera o arquivo de saída após a análise sintática dos tokens. Neste arquivo de
+     * saída, conterá todos os erros encontrados (se houver) e uma mensagem de sucesso
+     * se não houver erros.
+     *
+     * @param erros Erros obtidos após a análise sintatica do código fonte
+     *
+     * @throws IOException Arquivo de saida não foi gerado com sucesso
+     */
+    public void escreverSaidaSemantico(ArrayList<String> erros) throws IOException {
+        FileWriter arq = new FileWriter("src/testes/out/semantico/" + this.localFile + ".out", false); // Cria o arquivo de saída relacionado ao seu respectivo arquivo de entrada ("mesmo" nome). 
+        PrintWriter gravar = new PrintWriter(arq);
+        if (erros.isEmpty()) { // Se não houver erros léxicos.
+            gravar.printf("\nnao ha erros semanticos\n");
+        } else { // Se houver erros léxicos, os insere no arquivo de saída.
+            for (String erro : erros) {
+                gravar.printf(erro);
+            }
+        }
+        arq.close();
+    }
 }

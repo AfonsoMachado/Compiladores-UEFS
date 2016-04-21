@@ -26,6 +26,7 @@ public class AnalisadorSintatico {
     private Token proximo;              //token atual em análise
     private ArrayList<Token> tokens;    //lista com os tokens recebidos
     private ArrayList<String> erros;    //lista com os erros encontrados na análise.
+    private ArrayList<String> errosSemanticos;    //lista com os erros encontrados na análise.
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
     private Simbolos escopo;            //salvar o escopo atual da tabela de simbolos
     private Simbolos atual;             //simbolo atual
@@ -36,7 +37,7 @@ public class AnalisadorSintatico {
      * @param escopo recebe a tabela de simbolos do compilador
      */
     public AnalisadorSintatico(Simbolos escopo) {
-        this.escopo = escopo; //recebe a tabela de simbolos do compilador 
+        this.escopo = escopo; //recebe a tabela de simbolos do compilador
     }
 
     /**
@@ -48,6 +49,7 @@ public class AnalisadorSintatico {
         this.tokens = tokens; //recebe os tokens vindos do lexico.
         proximo = proximo();  //recebe o primeiro token da lista
         erros = new ArrayList<>(); //cria a lista de erros
+        errosSemanticos = new ArrayList<>(); //cria a lista de erros
         recArquivo();   //inicia a analise do arquivo
     }
 
@@ -84,7 +86,17 @@ public class AnalisadorSintatico {
             erros.add(erro);
         }
     }
-
+    
+    /**
+     * Metodo para normalizaçao dos erros semanticos encontrados.
+     */
+    private void erroSemantico(String erro) {
+        if (!proximo.getValor().equals("EOF")) {
+            erros.add(proximo.getLinha() + " " + erro + "\n"); //gera o erro normalizado e adiciona na lista de erros.
+        } else {
+            errosSemanticos.add(erro);
+        }
+    }
     /**
      * Metodo para verificar terminais.
      *
@@ -220,7 +232,10 @@ public class AnalisadorSintatico {
         atual = new Simbolos(); //cria um simbolo.
         atual.setCategoria(Simbolos.MAIN); //salva a categoria
         atual.setNome("MAIN");
-        escopo.addFilho(atual); //adiciona a main na tabela de simbolos
+        if(escopo.getFilhos().contains(atual)){
+            erroSemantico("Main ja declarada");
+        }
+        else escopo.addFilho(atual); //adiciona a main na tabela de simbolos
         Simbolos anterior = escopo; //salva o escopo atual para retorna ao sair do metodo
         escopo = atual;
         terminal("void");
@@ -243,7 +258,10 @@ public class AnalisadorSintatico {
                 atual.setCategoria(Simbolos.CLASS);
                 terminal("class");
                 atual.setNome(proximo.getValor());
-                escopo.addFilho(atual);
+                if(escopo.getFilhos().contains(atual)){
+                    erroSemantico("Identificador ja utilizado");
+                }
+                else escopo.addFilho(atual);
                 Simbolos anterior = escopo; //salva o antigo escopo
                 escopo = atual; //o novo escopo e a classe atual
                 Tipo("id");
@@ -364,7 +382,6 @@ public class AnalisadorSintatico {
     }
 
     private void recAtribuicaoConstante() {
-        atual.setValor(proximo.getValor());
         switch (proximo.getTipo()) {
             case "numero":
                 Tipo("numero");
@@ -2067,6 +2084,10 @@ public class AnalisadorSintatico {
             default:
                 break;
         }
+    }
+
+    public ArrayList<String> getErrosSemanticos() {
+        return errosSemanticos;
     }
 
 }
