@@ -69,7 +69,7 @@ public class Compilador {
             listaTokens = arquivo.lerSaidaLexico();
             analisadorSintatico = new AnalisadorSintatico(tabelaSimbolos);
             analisadorSintatico.analise(listaTokens);
-            arquivo.escreverSaidaSintatico(analisadorSintatico.getErros());            
+            arquivo.escreverSaidaSintatico(analisadorSintatico.getErros()); 
             arquivo.escreverSaidaSemantico(analisadorSintatico.getErrosSemanticos());
             System.out.println(tabelaSimbolos);
         }

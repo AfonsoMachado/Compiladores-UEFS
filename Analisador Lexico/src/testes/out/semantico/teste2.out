@@ -1,2 +1,6 @@
-
-nao ha erros semanticos
+15 uma classe so pode herdar de outra classe
+25 uma classe nao pode herdar dela mesma
+28 uma classe so pode herdar de outra classe declarada anteriormente
+31 Identificador ja utilizado
+34 Identificador ja utilizado
+56 uma classe so pode herdar de outra classe declarada anteriormente

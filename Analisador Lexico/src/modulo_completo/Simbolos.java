@@ -28,7 +28,6 @@ public class Simbolos {
     public static final int VET = 14;
     public static final int MAIN = 15;
     public static final int PARA = 16;
-    
 
     private String nome;
     private int categoria;
@@ -41,7 +40,6 @@ public class Simbolos {
         filhos = new ArrayList<>();
     }
 
-
     /**
      *
      * @param filho
@@ -49,7 +47,6 @@ public class Simbolos {
     public void addFilho(Simbolos filho) {
         filhos.add(filho);
     }
-
 
     public String getNome() {
         return nome;
@@ -85,7 +82,51 @@ public class Simbolos {
 
     @Override
     public String toString() {
-        return "categoria: " + categoria + " tipo: "+ tipo + " " + nome + filhos.toString() + "\n"; //To change body of generated methods, choose Tools | Templates.
+        return " categoria: " + categoria + " tipo: " + tipo + " nome: " + nome + " filhos: " + filhos.toString() 
+                + " pai: " + pai + " parametros: " + parametros +"\n"; //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    /**
+     * Metodo para verificar se o identificador ja esta em uso.
+     *
+     * @param simbolo simbolo para testar se o nome ja esta em uso
+     * @return retorna true se ja existe um simbolo com o mesmo nome e false
+     * caso contrario
+     */
+    public boolean contains(String simbolo) {
+        boolean var = false;
+        for (Simbolos next : filhos) {
+            if (next.getNome().equals(simbolo)) {
+                var = true;
+                break;
+            }
+        }
+        return var;
+    }
+
+    public ArrayList<Integer> getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(ArrayList<Integer> parametros) {
+        this.parametros = parametros;
+    }
+
+    public Simbolos getPai() {
+        return pai;
+    }
+
+    public void setPai(Simbolos pai) {
+        this.pai = pai;
+    }
+
+    public Simbolos getFilho(String valor) {
+        for(Simbolos next: filhos){
+            if(next.getNome().equals(valor)){
+                return next;
+            }
+        }
+        return null;
+    }
+
 }

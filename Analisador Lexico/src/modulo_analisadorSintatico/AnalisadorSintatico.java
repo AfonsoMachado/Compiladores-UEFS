@@ -92,7 +92,7 @@ public class AnalisadorSintatico {
      */
     private void erroSemantico(String erro) {
         if (!proximo.getValor().equals("EOF")) {
-            erros.add(proximo.getLinha() + " " + erro + "\n"); //gera o erro normalizado e adiciona na lista de erros.
+            errosSemanticos.add(proximo.getLinha() + " " + erro + "\n"); //gera o erro normalizado e adiciona na lista de erros.
         } else {
             errosSemanticos.add(erro);
         }
@@ -232,7 +232,7 @@ public class AnalisadorSintatico {
         atual = new Simbolos(); //cria um simbolo.
         atual.setCategoria(Simbolos.MAIN); //salva a categoria
         atual.setNome("MAIN");
-        if(escopo.getFilhos().contains(atual)){
+        if(escopo.contains(atual.getNome())){
             erroSemantico("Main ja declarada");
         }
         else escopo.addFilho(atual); //adiciona a main na tabela de simbolos
@@ -258,14 +258,14 @@ public class AnalisadorSintatico {
                 atual.setCategoria(Simbolos.CLASS);
                 terminal("class");
                 atual.setNome(proximo.getValor());
-                if(escopo.getFilhos().contains(atual)){
+                if(escopo.contains(atual.getNome())){
                     erroSemantico("Identificador ja utilizado");
                 }
                 else escopo.addFilho(atual);
                 Simbolos anterior = escopo; //salva o antigo escopo
-                escopo = atual; //o novo escopo e a classe atual
                 Tipo("id");
                 recExpressaoHerenca();
+                escopo = atual; //o novo escopo e a classe atual
                 terminal("{");
                 recConteudoClasse();
                 terminal("}");
@@ -284,6 +284,15 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ">":
                 terminal(">");
+                if(proximo.getValor().equals(atual.getNome())){
+                    erroSemantico("uma classe nao pode herdar dela mesma");
+                }else if(!escopo.contains(proximo.getValor())){
+                    erroSemantico("uma classe so pode herdar de outra classe declarada anteriormente");
+                }else if(escopo.contains(proximo.getValor()) && escopo.getFilho(proximo.getValor())!=null && escopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                    erroSemantico("uma classe so pode herdar de outra classe");
+                }else {
+                    atual.setPai(escopo.getFilho(proximo.getValor()));
+                }
                 Tipo("id");
                 break;
             default:

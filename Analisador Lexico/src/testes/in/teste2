@@ -12,6 +12,35 @@ int c;
 char d;
 float e;
 string a1;
+class abb > a1{
+
+}
+class dad{
+
+}
+
+class son > dad{
+
+}
+class aaa > aaa{
+
+}
+class aaaa > aba{
+
+}
+class a{
+
+}
+class aaa {
+const {
+int a=10.10;
+}
+int a;
+int b;
+
+}
+
+
 
 void main() {
 int a;
@@ -21,15 +50,6 @@ a =10;
 } else {
 a=2;
 }
-}
-
-class a {
-const {
-int a=10.10;
-}
-int a;
-int b;
-
 }
 
 
