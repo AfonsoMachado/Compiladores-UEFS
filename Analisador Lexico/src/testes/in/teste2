@@ -16,6 +16,12 @@ class abb > a1{
 
 }
 class dad{
+int ddd;
+const {
+int a =2;
+char b ='a';
+char a=5;
+}
 
 }
 
@@ -44,7 +50,7 @@ int b;
 
 void main() {
 int a;
-
+float a;
 if(a==2+2+2*2&&true){
 a =10;
 } else {
@@ -55,7 +61,7 @@ a=2;
 
 class capim > folha {
     
-    float isGreen() {
+    float isGreen(int a, int b) {
         return b;
     }
 

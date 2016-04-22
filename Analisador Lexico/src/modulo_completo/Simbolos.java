@@ -38,6 +38,7 @@ public class Simbolos {
 
     public Simbolos() {
         filhos = new ArrayList<>();
+        parametros = new ArrayList<>();
     }
 
     /**
@@ -127,6 +128,10 @@ public class Simbolos {
             }
         }
         return null;
+    }
+
+    public void addParametro(int tipo) {
+        parametros.add(tipo);
     }
 
 }
