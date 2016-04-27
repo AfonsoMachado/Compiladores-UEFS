@@ -100,7 +100,7 @@ public class AnalisadorSintatico {
             errosSemanticos.add(erro);
         }
     }
-    
+
     /**
      * Metodo para normalizaçao dos erros semanticos encontrados.
      */
@@ -523,7 +523,9 @@ public class AnalisadorSintatico {
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
                         erroSemantico("Identificador já utilizado", linha);
-                    } else anterior.addFilho(escopo);
+                    } else {
+                        anterior.addFilho(escopo);
+                    }
                 } else if (globalEscopo.containsConst(escopo.getNome())) {
                     erroSemantico("Identificador já utilizado", linha);
                 } else {
@@ -606,7 +608,9 @@ public class AnalisadorSintatico {
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
                         erroSemantico("Identificador já utilizado", linha);
-                    } else anterior.addFilho(escopo);
+                    } else {
+                        anterior.addFilho(escopo);
+                    }
                 } else if (globalEscopo.containsConst(escopo.getNome())) {
                     erroSemantico("Identificador já utilizado", linha);
                 } else {
@@ -718,6 +722,9 @@ public class AnalisadorSintatico {
     private void recIndice() {
         switch (proximo.getTipo()) {
             case "id":
+                if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo!=null && !classeEscopo.contains(proximo.getValor()))) {
+                    erroSemantico("variavel do indice não declarada");
+                }
                 Tipo("id");
                 break;
             case "numero":
@@ -2188,6 +2195,11 @@ public class AnalisadorSintatico {
         }
     }
 
+    /**
+     * Método para retornar os erros semanticos encontrados na analise.
+     *
+     * @return lista com erros semanticos
+     */
     public ArrayList<String> getErrosSemanticos() {
         return errosSemanticos;
     }

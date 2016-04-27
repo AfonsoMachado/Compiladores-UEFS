@@ -133,7 +133,7 @@ public class Simbolos {
         if (pai != null && pai.contains(simbolo.getNome())) {
             Simbolos aux = pai.getFilho(simbolo.getNome());
             if (aux.getCategoria() == Simbolos.MET) {
-                if (simbolo.getParametros().size() == aux.getParametros().size()) {
+                if (simbolo.getTipo()== aux.getTipo() && simbolo.getParametros().size() == aux.getParametros().size()) {
                     for (int i = 0; i < aux.getParametros().size(); i++) {
                         if (simbolo.getParametros().get(i).equals(aux.getParametros().get(i))) {
                             var = true;
@@ -162,7 +162,12 @@ public class Simbolos {
     public void setPai(Simbolos pai) {
         this.pai = pai;
     }
-
+    
+    /**
+     * Método que retorna um filho específico a partir do nome.
+     * @param valor nome do filho desejado
+     * @return retorna o simbolo com o nome desejado
+     */
     public Simbolos getFilho(String valor) {
         for (Simbolos next : filhos) {
             if (next.getNome().equals(valor)) {
@@ -179,9 +184,4 @@ public class Simbolos {
     public void addParametro(int tipo) {
         parametros.add(tipo);
     }
-
-    public void rmFilho(Simbolos escopo) {
-        filhos.remove(escopo);
-    }
-
 }

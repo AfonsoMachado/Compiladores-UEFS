@@ -18,6 +18,8 @@ class abb > a1{
 }
 class dad{
 int ddd;
+int vet[ddd];
+int vetor [nao]; 
 const {
 int a =2;
 char b ='a';
@@ -64,11 +66,26 @@ class folha{
  float isGreen(int a, int bbbb) {
         return bbb2;
     }
+    int batata(int maca, int uva){
+        return maca;
+    }
+    float isFruta(int banana, int beteraba) {
+        return banana;
+    }
 }
 class capim > folha {
     float isGreen(int a222, int b12222) {
         int abcd;
         return b;
+    }
+
+    int batata(int maca, float uva){
+        return maca;
+    }
+
+    int isFruta(int banana, int beteraba) {
+        int banana;
+        return banana;
     }
 
 }
