@@ -2,6 +2,7 @@ const {
 int a =2;
 char b ='a';
 char a=5;
+int abcd=0;
 }
 const{
 int a=2;
@@ -23,6 +24,7 @@ char b ='a';
 char a=5;
 }
 
+ int abcd;
 }
 
 class son > dad{
@@ -60,8 +62,8 @@ a=2;
 
 
 class capim > folha {
-    
-    float isGreen(int a, int b) {
+    float isGreen(int a, int bbbb) {
+        int abcd;
         return b;
     }
 

@@ -30,6 +30,8 @@ public class AnalisadorSintatico {
     private int contTokens = 0;         //contador que aponta para o proximo token da lista
     private Simbolos escopo;            //salvar o escopo atual da tabela de simbolos
     private Simbolos atual;             //simbolo atual
+    private final Simbolos globalEscopo;             //simbolo global
+    private Simbolos classeEscopo;             //simbolo classe
 
     /**
      * Construtor do analisador Sintatico.
@@ -38,6 +40,7 @@ public class AnalisadorSintatico {
      */
     public AnalisadorSintatico(Simbolos escopo) {
         this.escopo = escopo; //recebe a tabela de simbolos do compilador
+        this.globalEscopo = escopo;
     }
 
     /**
@@ -86,7 +89,7 @@ public class AnalisadorSintatico {
             erros.add(erro);
         }
     }
-    
+
     /**
      * Metodo para normalizaçao dos erros semanticos encontrados.
      */
@@ -97,6 +100,7 @@ public class AnalisadorSintatico {
             errosSemanticos.add(erro);
         }
     }
+
     /**
      * Metodo para verificar terminais.
      *
@@ -232,10 +236,11 @@ public class AnalisadorSintatico {
         atual = new Simbolos(); //cria um simbolo.
         atual.setCategoria(Simbolos.MAIN); //salva a categoria
         atual.setNome("MAIN");
-        if(escopo.contains(atual.getNome())){
+        if (escopo.contains(atual.getNome())) {
             erroSemantico("Main ja declarada");
+        } else {
+            escopo.addFilho(atual); //adiciona a main na tabela de simbolos
         }
-        else escopo.addFilho(atual); //adiciona a main na tabela de simbolos
         Simbolos anterior = escopo; //salva o escopo atual para retorna ao sair do metodo
         escopo = atual;
         terminal("void");
@@ -258,13 +263,15 @@ public class AnalisadorSintatico {
                 atual.setCategoria(Simbolos.CLASS);
                 terminal("class");
                 atual.setNome(proximo.getValor());
-                if(escopo.contains(atual.getNome())){
+                if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador ja utilizado");
+                } else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 Simbolos anterior = escopo; //salva o antigo escopo
                 Tipo("id");
                 recExpressaoHerenca();
+                classeEscopo = atual;
                 escopo = atual; //o novo escopo e a classe atual
                 terminal("{");
                 recConteudoClasse();
@@ -276,7 +283,7 @@ public class AnalisadorSintatico {
                 break;
         }
     }
-    
+
     /**
      * Metodo para reconhecimento de herança.
      */
@@ -284,13 +291,13 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ">":
                 terminal(">");
-                if(proximo.getValor().equals(atual.getNome())){
+                if (proximo.getValor().equals(atual.getNome())) {
                     erroSemantico("uma classe nao pode herdar dela mesma");
-                }else if(!escopo.contains(proximo.getValor())){
+                } else if (!escopo.contains(proximo.getValor())) {
                     erroSemantico("uma classe so pode herdar de outra classe declarada anteriormente");
-                }else if(escopo.contains(proximo.getValor()) && escopo.getFilho(proximo.getValor())!=null && escopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                } else if (escopo.contains(proximo.getValor()) && escopo.getFilho(proximo.getValor()) != null && escopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
                     erroSemantico("uma classe so pode herdar de outra classe");
-                }else {
+                } else {
                     atual.setPai(escopo.getFilho(proximo.getValor()));
                 }
                 Tipo("id");
@@ -418,18 +425,26 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 int aux = atual.getTipo();
-                if(escopo.contains(atual.getNome())){
+                if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
-                }else escopo.addFilho(atual);
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
+                }
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.CONST);
                 atual.setTipo(aux);
                 recListaConst();
                 break;
             case ";":
-                if(escopo.contains(atual.getNome())){
+                if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
-                }else escopo.addFilho(atual);
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
+                }
                 terminal(";");
                 recBlocoConstantes();
                 break;
@@ -484,9 +499,13 @@ public class AnalisadorSintatico {
                 atual.setCategoria(Simbolos.MET);
                 atual.setTipo(Simbolos.VOID);
                 atual.setNome(proximo.getValor());
-                if(escopo.contains(atual.getNome())){
+                if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
-                }else escopo.addFilho(atual);
+                } else if(globalEscopo.containsConst(atual.getNome())){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
+                }
                 Simbolos anterior = escopo;
                 escopo = atual;
                 Tipo("id");
@@ -496,6 +515,9 @@ public class AnalisadorSintatico {
                 terminal("{");
                 recConteudoMetodo();
                 terminal("}");
+                if(anterior.isOverload(escopo)){
+                    anterior.rmFilho(escopo);
+                }
                 escopo = anterior;
                 break;
             case "char":
@@ -551,17 +573,21 @@ public class AnalisadorSintatico {
     private void recCompId() {
         switch (proximo.getValor()) {
             case "[":
-                atual.setTipo(Simbolos.VET);
+                atual.setCategoria(Simbolos.VET);
                 terminal("[");
                 recIndice();
                 terminal("]");
                 recListaVetor();
                 break;
             case "(":
-                atual.setTipo(Simbolos.MET);
-                if(escopo.contains(atual.getNome())){
+                atual.setCategoria(Simbolos.MET);
+                if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
-                }else escopo.addFilho(atual);
+                } else if(globalEscopo.containsConst(atual.getNome())){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
+                }
                 Simbolos anterior = escopo;
                 escopo = atual;
                 terminal("(");
@@ -572,18 +598,24 @@ public class AnalisadorSintatico {
                 terminal("return");
                 recRetorno();
                 terminal("}");
+                if(anterior.isOverload(escopo)){
+                    anterior.rmFilho(escopo);
+                }
                 escopo = anterior;
                 break;
             case ",":
-                atual.setTipo(Simbolos.VAR);
+                atual.setCategoria(Simbolos.VAR);
                 recListaVariavel();
                 break;
             case ";":
-                atual.setTipo(Simbolos.VAR);
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                atual.setCategoria(Simbolos.VAR);
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -596,10 +628,13 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 int aux = atual.getTipo();
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.VAR);
@@ -609,10 +644,14 @@ public class AnalisadorSintatico {
                 recListaVariavel();
                 break;
             case ";":
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                System.out.println(escopo.getCategoria() + "   " + atual.getNome());
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -629,10 +668,13 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 int aux = atual.getTipo();
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.VET);
                 atual.setTipo(aux);
@@ -644,10 +686,13 @@ public class AnalisadorSintatico {
                 recListaVetor();
                 break;
             case ";":
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 terminal(";");
                 break;
             default:
@@ -734,10 +779,13 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 escopo.addParametro(atual.getTipo());
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 atual = new Simbolos();
                 recTipo();
                 atual.setNome(proximo.getValor());
@@ -747,10 +795,13 @@ public class AnalisadorSintatico {
                 break;
             default:
                 escopo.addParametro(atual.getTipo());
-                if(escopo.contains(atual.getNome())){
-                    erroSemantico("Identificador ja utilizado");
+                if (escopo.contains(atual.getNome())) {
+                    erroSemantico("Identificador já utilizado");
+                } else if(globalEscopo.containsConst(atual.getNome()) || (classeEscopo!=null && classeEscopo.containsConst(atual.getNome()))){
+                    erroSemantico("Identificador já utilizado");
+                }else {
+                    escopo.addFilho(atual);
                 }
-                else escopo.addFilho(atual);
                 break;
         }
     }
@@ -1012,8 +1063,8 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta booleano, numero, identificador, cadeia constante, caracter constante,  ( ou operadores: ++ ou -- ou - ");
-                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
-                            proximo=proximo();
+                        while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
+                            proximo = proximo();
                         }
                         break;
                 }
@@ -1656,8 +1707,8 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
-                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
-                            proximo=proximo();
+                        while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
+                            proximo = proximo();
                         }
                         break;
                 }
@@ -1739,8 +1790,8 @@ public class AnalisadorSintatico {
                         break;
                     default:
                         erroSintatico("falta identificador, numero, boolean, (, ou operador: ++, --");
-                        while(!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
-                            proximo=proximo();
+                        while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
+                            proximo = proximo();
                         }
                         break;
                 }
@@ -2017,9 +2068,9 @@ public class AnalisadorSintatico {
                     break;
                 }
                 erroSintatico("falta identificar, numero, ( ou operador: ++, --, -");
-                        while(!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")){
-                            proximo=proximo();
-                        }
+                while (!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
+                    proximo = proximo();
+                }
                 break;
         }
 
