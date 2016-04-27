@@ -60,9 +60,13 @@ a=2;
 }
 }
 
-
+class folha{
+ float isGreen(int a, int bbbb) {
+        return bbb2;
+    }
+}
 class capim > folha {
-    float isGreen(int a, int bbbb) {
+    float isGreen(int a222, int b12222) {
         int abcd;
         return b;
     }
