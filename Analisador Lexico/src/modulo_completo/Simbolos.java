@@ -30,6 +30,7 @@ public class Simbolos {
     public static final int PARA = 16;
 
     private String nome;
+    private String objectNome  ="";
     private int categoria;
     private int tipo;
     private ArrayList<Integer> parametros;
@@ -80,6 +81,14 @@ public class Simbolos {
 
     public void setFilhos(ArrayList filhos) {
         this.filhos = filhos;
+    }
+
+    public String getObjectNome() {
+        return objectNome;
+    }
+
+    public void setObjectNome(String objectNome) {
+        this.objectNome = objectNome;
     }
 
     @Override
@@ -165,12 +174,12 @@ public class Simbolos {
     
     /**
      * Método que retorna um filho específico a partir do nome.
-     * @param valor nome do filho desejado
+     * @param nome nome do filho desejado
      * @return retorna o simbolo com o nome desejado
      */
-    public Simbolos getFilho(String valor) {
+    public Simbolos getFilho(String nome) {
         for (Simbolos next : filhos) {
-            if (next.getNome().equals(valor)) {
+            if (next.getNome().equals(nome)) {
                 return next;
             }
         }

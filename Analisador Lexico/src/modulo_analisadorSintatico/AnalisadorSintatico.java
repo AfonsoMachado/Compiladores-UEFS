@@ -436,6 +436,7 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 int aux = atual.getTipo();
+                String obj = atual.getObjectNome();
                 if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
@@ -446,6 +447,7 @@ public class AnalisadorSintatico {
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.CONST);
                 atual.setTipo(aux);
+                atual.setObjectNome(obj);
                 recListaConst();
                 break;
             case ";":
@@ -517,9 +519,6 @@ public class AnalisadorSintatico {
                 terminal("(");
                 recDeclParametros();
                 terminal(")");
-                terminal("{");
-                recConteudoMetodo();
-                terminal("}");
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
                         erroSemantico("Identificador já utilizado", linha);
@@ -531,6 +530,9 @@ public class AnalisadorSintatico {
                 } else {
                     anterior.addFilho(escopo);
                 }
+                terminal("{");
+                recConteudoMetodo();
+                terminal("}");
                 escopo = anterior;
                 break;
             case "char":
@@ -570,8 +572,16 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
-                    Tipo("id");
                     atual.setTipo(Simbolos.OBJECT);
+                    atual.setObjectNome(proximo.getValor());
+                    if(globalEscopo.contains(proximo.getValor())){
+                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                             erroSemantico("Classe não declarada");
+                        }
+                    }else {
+                       erroSemantico("Classe não declarada"); 
+                    }
+                    Tipo("id");
                     atual.setNome(proximo.getValor());
                     Tipo("id");
                     recCompId();
@@ -600,11 +610,6 @@ public class AnalisadorSintatico {
                 terminal("(");
                 recDeclParametros();
                 terminal(")");
-                terminal("{");
-                recConteudoMetodo();
-                terminal("return");
-                recRetorno();
-                terminal("}");
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
                         erroSemantico("Identificador já utilizado", linha);
@@ -616,6 +621,11 @@ public class AnalisadorSintatico {
                 } else {
                     anterior.addFilho(escopo);
                 }
+                terminal("{");
+                recConteudoMetodo();
+                terminal("return");
+                recRetorno();
+                terminal("}");
                 escopo = anterior;
                 break;
             case ",":
@@ -651,7 +661,9 @@ public class AnalisadorSintatico {
                     escopo.addFilho(atual);
                 }
                 int aux = atual.getTipo();
+                String obj = atual.getObjectNome();
                 atual = new Simbolos();
+                atual.setObjectNome(obj);
                 atual.setCategoria(Simbolos.VAR);
                 atual.setTipo(aux);
                 atual.setNome(proximo.getValor());
@@ -683,6 +695,7 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 int aux = atual.getTipo();
+                String obj = atual.getObjectNome();
                 if (escopo.contains(atual.getNome())) {
                     erroSemantico("Identificador já utilizado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
@@ -693,6 +706,7 @@ public class AnalisadorSintatico {
                 atual = new Simbolos();
                 atual.setCategoria(Simbolos.VET);
                 atual.setTipo(aux);
+                atual.setObjectNome(obj);
                 atual.setNome(proximo.getValor());
                 Tipo("id");
                 terminal("[");
@@ -781,7 +795,16 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    
                     atual.setTipo(Simbolos.OBJECT);
+                    atual.setObjectNome(proximo.getValor());
+                    if(globalEscopo.contains(proximo.getValor())){
+                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                             erroSemantico("Classe não declarada");
+                        }
+                    }else {
+                       erroSemantico("Classe não declarada"); 
+                    }
                     Tipo("id");
                     atual.setNome(proximo.getValor());
                     Tipo("id");
@@ -849,6 +872,14 @@ public class AnalisadorSintatico {
             default:
                 if (proximo.getTipo().equals("id")) {
                     atual.setTipo(Simbolos.OBJECT);
+                    atual.setObjectNome(proximo.getValor());
+                    if(globalEscopo.contains(proximo.getValor())){
+                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                             erroSemantico("Classe não declarada");
+                        }
+                    }else {
+                       erroSemantico("Classe não declarada"); 
+                    }
                     Tipo("id");
                 } else {
                     erroSintatico("falta um tipo: id, int, float, char, string, bool");
@@ -949,11 +980,19 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    atual.setTipo(Simbolos.OBJECT);
+                    atual.setObjectNome(proximo.getValor());
+                    if(globalEscopo.contains(proximo.getValor())){
+                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
+                             erroSemantico("Classe não declarada");
+                        }
+                    }else {
+                       erroSemantico("Classe não declarada"); 
+                    }
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {
                         atual.setNome(proximo.getValor());
                         Tipo("id");
-                        atual.setTipo(Simbolos.OBJECT);
                         recIdDecl();
                     } else {
                         recIdComando();
