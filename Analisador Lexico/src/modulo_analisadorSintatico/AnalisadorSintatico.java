@@ -411,21 +411,42 @@ public class AnalisadorSintatico {
     private void recAtribuicaoConstante() {
         switch (proximo.getTipo()) {
             case "numero":
+                if (atual.getTipo() != Simbolos.INT && atual.getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("tipos incompatives");
+                } else if (atual.getTipo() == Simbolos.INT && proximo.getValor().contains(".")) {
+                    erroSemantico("tipos incompatives, nao pode converter int para float");
+                } else if (atual.getTipo() == Simbolos.FLOAT && !proximo.getValor().contains(".")) {
+                    erroSemantico("tipos incompatives, nao pode converter float para int");
+                }
+
                 Tipo("numero");
                 break;
             case "cadeia_constante":
+                if (atual.getTipo() != Simbolos.STRING) {
+                    erroSemantico("tipos incompatives");
+                }
                 Tipo("cadeia_constante");
                 break;
             case "caractere_constante":
+                if (atual.getTipo() != Simbolos.CHAR) {
+                    erroSemantico("tipos incompatives");
+                }
                 Tipo("caractere_constante");
                 break;
             default:
-                if (proximo.getValor().equals("true")) {
-                    terminal("true");
-                } else if (proximo.getValor().equals("false")) {
-                    terminal("false");
-                } else {
-                    erroSintatico("falta numero, cadeia constante, caracter constante ou boolean");
+                if (atual.getTipo() != Simbolos.BOOL) {
+                    erroSemantico("tipos incompatives");
+                }
+                switch (proximo.getValor()) {
+                    case "true":
+                        terminal("true");
+                        break;
+                    case "false":
+                        terminal("false");
+                        break;
+                    default:
+                        erroSintatico("falta numero, cadeia constante, caracter constante ou boolean");
+                        break;
                 }
                 break;
         }
@@ -574,12 +595,12 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     atual.setTipo(Simbolos.OBJECT);
                     atual.setObjectNome(proximo.getValor());
-                    if(globalEscopo.contains(proximo.getValor())){
-                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
-                             erroSemantico("Classe não declarada");
+                    if (globalEscopo.contains(proximo.getValor())) {
+                        if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
+                            erroSemantico("Classe não declarada");
                         }
-                    }else {
-                       erroSemantico("Classe não declarada"); 
+                    } else {
+                        erroSemantico("Classe não declarada");
                     }
                     Tipo("id");
                     atual.setNome(proximo.getValor());
@@ -736,12 +757,17 @@ public class AnalisadorSintatico {
     private void recIndice() {
         switch (proximo.getTipo()) {
             case "id":
-                if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo!=null && !classeEscopo.contains(proximo.getValor()))) {
+                if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo != null && !classeEscopo.contains(proximo.getValor()))) {
                     erroSemantico("variavel do indice não declarada");
+                }else if(escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT)){
+                    erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
                 }
                 Tipo("id");
                 break;
             case "numero":
+                if(proximo.getValor().contains(".")){
+                    erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
+                }
                 Tipo("numero");
                 break;
             default:
@@ -795,15 +821,15 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
-                    
+
                     atual.setTipo(Simbolos.OBJECT);
                     atual.setObjectNome(proximo.getValor());
-                    if(globalEscopo.contains(proximo.getValor())){
-                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
-                             erroSemantico("Classe não declarada");
+                    if (globalEscopo.contains(proximo.getValor())) {
+                        if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
+                            erroSemantico("Classe não declarada");
                         }
-                    }else {
-                       erroSemantico("Classe não declarada"); 
+                    } else {
+                        erroSemantico("Classe não declarada");
                     }
                     Tipo("id");
                     atual.setNome(proximo.getValor());
@@ -873,12 +899,12 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     atual.setTipo(Simbolos.OBJECT);
                     atual.setObjectNome(proximo.getValor());
-                    if(globalEscopo.contains(proximo.getValor())){
-                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
-                             erroSemantico("Classe não declarada");
+                    if (globalEscopo.contains(proximo.getValor())) {
+                        if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
+                            erroSemantico("Classe não declarada");
                         }
-                    }else {
-                       erroSemantico("Classe não declarada"); 
+                    } else {
+                        erroSemantico("Classe não declarada");
                     }
                     Tipo("id");
                 } else {
@@ -982,12 +1008,12 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     atual.setTipo(Simbolos.OBJECT);
                     atual.setObjectNome(proximo.getValor());
-                    if(globalEscopo.contains(proximo.getValor())){
-                        if(globalEscopo.getFilho(proximo.getValor()).getCategoria()!=Simbolos.CLASS){
-                             erroSemantico("Classe não declarada");
+                    if (globalEscopo.contains(proximo.getValor())) {
+                        if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
+                            erroSemantico("Classe não declarada");
                         }
-                    }else {
-                       erroSemantico("Classe não declarada"); 
+                    } else {
+                        erroSemantico("Classe não declarada");
                     }
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {

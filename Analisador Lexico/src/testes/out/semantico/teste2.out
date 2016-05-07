@@ -1,23 +1,28 @@
+4 tipos incompatives
 4 Identificador já utilizado
 8 Identificador já utilizado
 11 Identificador já utilizado
 16 uma classe so pode herdar de outra classe
-22 variavel do indice não declarada
-24 Identificador já utilizado
+21 tipos incompatives, o indice nao pode ser do tipo float
+22 tipos incompatives, o indice nao pode ser do tipo float
+23 variavel do indice não declarada
 25 Identificador já utilizado
 26 Identificador já utilizado
-29 Identificador já utilizado
-35 uma classe nao pode herdar dela mesma
-38 uma classe so pode herdar de outra classe declarada anteriormente
-41 Identificador ja utilizado
-44 Identificador ja utilizado
-46 Identificador já utilizado
-48 Identificador já utilizado
+27 tipos incompatives
+27 Identificador já utilizado
+30 Identificador já utilizado
+36 uma classe nao pode herdar dela mesma
+39 uma classe so pode herdar de outra classe declarada anteriormente
+42 Identificador ja utilizado
+45 Identificador ja utilizado
+47 tipos incompatives, nao pode converter int para float
+47 Identificador já utilizado
 49 Identificador já utilizado
-56 Identificador já utilizado
+50 Identificador já utilizado
 57 Identificador já utilizado
-66 Identificador já utilizado
-78 Identificador já utilizado
-82 Identificador já utilizado
-86 Identificador já utilizado
+58 Identificador já utilizado
+67 Identificador já utilizado
+79 Identificador já utilizado
+83 Identificador já utilizado
 87 Identificador já utilizado
+88 Identificador já utilizado
