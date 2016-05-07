@@ -6,6 +6,7 @@
 package modulo_analisadorSintatico;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modulo_analisadorLexico.Token;
 import modulo_completo.Compilador;
 import modulo_completo.Simbolos;
@@ -759,13 +760,13 @@ public class AnalisadorSintatico {
             case "id":
                 if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo != null && !classeEscopo.contains(proximo.getValor()))) {
                     erroSemantico("variavel do indice não declarada");
-                }else if(escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo()==Simbolos.FLOAT)){
+                } else if (escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT)) {
                     erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
                 }
                 Tipo("id");
                 break;
             case "numero":
-                if(proximo.getValor().contains(".")){
+                if (proximo.getValor().contains(".")) {
                     erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
                 }
                 Tipo("numero");
@@ -1006,21 +1007,24 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
-                    atual.setTipo(Simbolos.OBJECT);
-                    atual.setObjectNome(proximo.getValor());
-                    if (globalEscopo.contains(proximo.getValor())) {
-                        if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
-                            erroSemantico("Classe não declarada");
-                        }
-                    } else {
-                        erroSemantico("Classe não declarada");
-                    }
+                    String aux = proximo.getValor();
+                    System.out.println(aux);
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {
+                        atual.setTipo(Simbolos.OBJECT);
+                        atual.setObjectNome(aux);
+                        if (globalEscopo.contains(aux)) {
+                            if (globalEscopo.getFilho(aux).getCategoria() != Simbolos.CLASS) {
+                                erroSemantico("Classe não declarada");
+                            }
+                        } else {
+                            erroSemantico("Classe não declarada");
+                        }
                         atual.setNome(proximo.getValor());
                         Tipo("id");
                         recIdDecl();
                     } else {
+                        atual=escopo.getFilho(aux);
                         recIdComando();
                     }
 
@@ -1056,23 +1060,38 @@ public class AnalisadorSintatico {
     private void recIdComando() {
         switch (proximo.getValor()) {
             case "(":
+                if (atual.getCategoria() != Simbolos.MET) {
+                    erroSemantico("esta identificador nao eh um metodo");
+                }
                 terminal("(");
                 recParametros();
                 terminal(")");
                 terminal(";");
                 break;
             case ".":
+                if (atual.getCategoria() != Simbolos.OBJECT) {
+                    erroSemantico("esta identificador nao eh um objeto");
+                }
                 terminal(".");
+                atual = escopo.getFilho(proximo.getValor());
                 Tipo("id");
                 recAcessoObjeto();
                 terminal(";");
                 break;
             case "=":
+                if(atual==null){
+                    erroSemantico("esta variavel nao existe");
+                }else if (atual.getCategoria() != Simbolos.VAR) {
+                    erroSemantico("este identificador nao eh uma variavel");
+                }
                 terminal("=");
                 recAtribuicao();
                 terminal(";");
                 break;
             case "[":
+                if (atual.getCategoria() != Simbolos.VET) {
+                    erroSemantico("esta identificador nao eh um vetor");
+                }
                 terminal("[");
                 recIndice();
                 terminal("]");
@@ -1738,6 +1757,7 @@ public class AnalisadorSintatico {
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    atual = this.getFilho(proximo.getValor());
                     Tipo("id");
                     recIdComando();
 
@@ -2267,6 +2287,10 @@ public class AnalisadorSintatico {
      */
     public ArrayList<String> getErrosSemanticos() {
         return errosSemanticos;
+    }
+
+    private Simbolos getFilho(String valor) {
+        return escopo.contains(valor) ? escopo.getFilho(valor) : (classeEscopo.contains(valor) ? classeEscopo.getFilho(valor) : (globalEscopo.getFilho(valor)));
     }
 
 }

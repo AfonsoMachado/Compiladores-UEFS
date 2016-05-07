@@ -10,19 +10,21 @@
 26 Identificador já utilizado
 27 tipos incompatives
 27 Identificador já utilizado
-30 Identificador já utilizado
-36 uma classe nao pode herdar dela mesma
-39 uma classe so pode herdar de outra classe declarada anteriormente
-42 Identificador ja utilizado
-45 Identificador ja utilizado
-47 tipos incompatives, nao pode converter int para float
-47 Identificador já utilizado
+29 Identificador já utilizado
+35 uma classe nao pode herdar dela mesma
+38 uma classe so pode herdar de outra classe declarada anteriormente
+41 Identificador ja utilizado
+44 Identificador ja utilizado
+46 tipos incompatives, nao pode converter int para float
+46 Identificador já utilizado
+48 Identificador já utilizado
 49 Identificador já utilizado
-50 Identificador já utilizado
+56 Identificador já utilizado
 57 Identificador já utilizado
-58 Identificador já utilizado
-67 Identificador já utilizado
-79 Identificador já utilizado
-83 Identificador já utilizado
-87 Identificador já utilizado
-88 Identificador já utilizado
+59 este identificador nao eh uma variavel
+64 este identificador nao eh uma variavel
+69 Identificador já utilizado
+81 Identificador já utilizado
+85 Identificador já utilizado
+89 Identificador já utilizado
+90 Identificador já utilizado

@@ -26,7 +26,6 @@ int a =2;
 char b ='a';
 char a=5;
 }
-
  int abcd;
 }
 
@@ -59,6 +58,9 @@ float a;
 if(a==2+2+2*2&&true){
 a =10;
 } else {
+
+
+e = 10.10;
 a=2;
 }
 }
