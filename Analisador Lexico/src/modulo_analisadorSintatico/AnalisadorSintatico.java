@@ -1334,17 +1334,28 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "++":
                 terminal("++");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
+                }
                 Tipo("id");
                 recOperacao();
                 break;
             case "--":
                 terminal("--");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
+                }
                 Tipo("id");
                 recOperacao();
                 break;
             default:
                 switch (proximo.getTipo()) {
                     case "id":
+                        atual = this.getFilho(proximo.getValor());
                         Tipo("id");
                         recAcesso();
                         recOperacao();
@@ -1359,17 +1370,30 @@ public class AnalisadorSintatico {
     private void recAcesso() {
         switch (proximo.getValor()) {
             case "[":
+                if (atual.getCategoria() != Simbolos.VET) {
+                    erroSemantico("este identificador não é um vetor");
+                }
                 terminal("[");
                 recIndice();
                 terminal("]");
                 break;
             case "(":
+                if (atual.getCategoria() != Simbolos.MET) {
+                    erroSemantico("este identificador não é um metodo");
+                }
                 terminal("(");
                 recParametros();
                 terminal(")");
                 break;
             case ".":
+                if (atual.getCategoria() != Simbolos.OBJECT) {
+                    erroSemantico("este identificador não é um objeto");
+                }
                 terminal(".");
+                atual = getFilho(proximo.getValor());
+                if (atual.getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("a classe não possue este atributo");
+                }
                 Tipo("id");
                 recChamadaMetodo();
                 break;
@@ -1430,6 +1454,9 @@ public class AnalisadorSintatico {
     private void recChamadaMetodo() {
         switch (proximo.getValor()) {
             case "(":
+                if (atual.getCategoria() != Simbolos.MET) {
+                    erroSemantico("este identificador não é um metodo");
+                }
                 terminal("(");
                 recParametros();
                 terminal(")");
@@ -1569,6 +1596,11 @@ public class AnalisadorSintatico {
 
     private void recInicializaObjeto() {
         terminal("new");
+        if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+            erroSemantico("objeto não declarado");
+        } else if (this.getFilho(proximo.getValor()).getCategoria() != Simbolos.OBJECT) {
+            erroSemantico("este identificador não é um objeto");
+        }
         Tipo("id");
         terminal(";");
     }
@@ -1586,6 +1618,9 @@ public class AnalisadorSintatico {
     private void recRead() {
         terminal("read");
         terminal("(");
+        if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+            erroSemantico("identificador não declarado");
+        }
         Tipo("id");
         recListaRead();
         terminal(")");
@@ -1596,6 +1631,9 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case ",":
                 terminal(",");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                }
                 Tipo("id");
                 recListaRead();
                 break;
@@ -1632,6 +1670,9 @@ public class AnalisadorSintatico {
     private void recImprimiveis() {
         switch (proximo.getTipo()) {
             case "id":
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                }
                 Tipo("id");
                 recOpWrite();
                 break;
@@ -1796,12 +1837,22 @@ public class AnalisadorSintatico {
                 break;
             case "++":
                 terminal("++");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("operação não permitida, somente numeros podem ser incremetados");
+                }
                 Tipo("id");
                 recIdExp();
                 recComplementoAritmetico1();
                 break;
             case "--":
                 terminal("--");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                }else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("operação não permitida, somente numeros podem ser incremetados");
+                }
                 Tipo("id");
                 recIdExp();
                 recComplementoAritmetico1();
@@ -1815,6 +1866,9 @@ public class AnalisadorSintatico {
                 switch (proximo.getTipo()) {
                     case "id":
                         Tipo("id");
+                        if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                            erroSemantico("identificador não declarado");
+                        }
                         recIdExpArit();
                         recComplementoAritmetico1();
                         break;
