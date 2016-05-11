@@ -759,8 +759,8 @@ public class AnalisadorSintatico {
             case "id":
                 if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo != null && !classeEscopo.contains(proximo.getValor()))) {
                     erroSemantico("variavel do indice não declarada");
-                } else if (escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo() == Simbolos.FLOAT)) {
-                    erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
+                } else if (escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT)) {
+                    erroSemantico("tipos incompatives, o indice só pode ser do tipo int");
                 }
                 Tipo("id");
                 break;
