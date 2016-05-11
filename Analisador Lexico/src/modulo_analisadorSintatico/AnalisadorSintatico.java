@@ -6,7 +6,6 @@
 package modulo_analisadorSintatico;
 
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import modulo_analisadorLexico.Token;
 import modulo_completo.Compilador;
 import modulo_completo.Simbolos;
@@ -1024,7 +1023,10 @@ public class AnalisadorSintatico {
                         Tipo("id");
                         recIdDecl();
                     } else {
-                        atual=escopo.getFilho(aux);
+                        atual = escopo.getFilho(aux);
+                        if (atual.getTipo() == Simbolos.ERRO) {
+                            erroSemantico("Identificador não declarado");
+                        }
                         recIdComando();
                     }
 
@@ -1074,14 +1076,15 @@ public class AnalisadorSintatico {
                 }
                 terminal(".");
                 atual = escopo.getFilho(proximo.getValor());
+                if (atual.getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("o objeto não possue este atributo");
+                }
                 Tipo("id");
                 recAcessoObjeto();
                 terminal(";");
                 break;
             case "=":
-                if(atual==null){
-                    erroSemantico("esta variavel nao existe");
-                }else if (atual.getCategoria() != Simbolos.VAR) {
+                if (atual.getCategoria() != Simbolos.VAR) {
                     erroSemantico("este identificador nao eh uma variavel");
                 }
                 terminal("=");
@@ -1108,11 +1111,17 @@ public class AnalisadorSintatico {
     private void recAcessoObjeto() {
         switch (proximo.getValor()) {
             case "(":
+                if (atual.getCategoria() != Simbolos.MET) {
+                    erroSemantico("este atributo não é um método");
+                }
                 terminal("(");
                 recParametros();
                 terminal(")");
                 break;
             case "=":
+                if (atual.getCategoria() != Simbolos.VAR) {
+                    erroSemantico("este atributo não é uma variavel");
+                }
                 terminal("=");
                 recAtribuicao();
                 break;
@@ -1137,10 +1146,16 @@ public class AnalisadorSintatico {
                 recIdAcesso();
                 break;
             case "true":
+                if (atual.getTipo() != Simbolos.BOOL) {
+                    erroSemantico("a variavel não é do tipo booleana");
+                }
                 terminal("true");
                 recOpLogico();
                 break;
             case "false":
+                if (atual.getTipo() != Simbolos.BOOL) {
+                    erroSemantico("a variavel não é do tipo booleana");
+                }
                 terminal("false");
                 recOpLogico();
                 break;
@@ -2216,17 +2231,36 @@ public class AnalisadorSintatico {
     }
 
     private void recIdAritmetico() {
+        Simbolos aux;
         switch (proximo.getValor()) {
             case "++":
                 terminal("++");
+                aux = this.getFilho(proximo.getValor());
+                if (aux.getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                }
                 Tipo("id");
                 break;
             case "--":
                 terminal("--");
+                aux = this.getFilho(proximo.getValor());
+                if (aux.getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
+                    erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                }
                 Tipo("id");
                 break;
             default:
                 if (proximo.getTipo().equals("id")) {
+                    aux = this.getFilho(proximo.getValor());
+                    if (aux.getCategoria() == Simbolos.ERRO) {
+                        erroSemantico("identificador não declarado");
+                    } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
+                        erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                    }
                     Tipo("id");
                     recIdExpArit();
                 }
