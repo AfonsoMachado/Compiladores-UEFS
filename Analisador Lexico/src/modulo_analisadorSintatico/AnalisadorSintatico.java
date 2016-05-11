@@ -1007,7 +1007,6 @@ public class AnalisadorSintatico {
             default:
                 if (proximo.getTipo().equals("id")) {
                     String aux = proximo.getValor();
-                    System.out.println(aux);
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {
                         atual.setTipo(Simbolos.OBJECT);
@@ -1173,9 +1172,15 @@ public class AnalisadorSintatico {
                         recOperadorNumero();
                         break;
                     case "cadeia_constante":
+                        if (atual.getTipo() != Simbolos.STRING) {
+                            erroSemantico("a variavel não é do tipo string");
+                        }
                         Tipo("cadeia_constante");
                         break;
                     case "caractere_constante":
+                        if (atual.getTipo() != Simbolos.STRING) {
+                            erroSemantico("a variavel não é do tipo char");
+                        }
                         Tipo("caractere_constante");
                         break;
                     default:
@@ -1850,7 +1855,7 @@ public class AnalisadorSintatico {
                 terminal("--");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
                     erroSemantico("identificador não declarado");
-                }else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
+                } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
                     erroSemantico("operação não permitida, somente numeros podem ser incremetados");
                 }
                 Tipo("id");
@@ -1865,10 +1870,10 @@ public class AnalisadorSintatico {
             default:
                 switch (proximo.getTipo()) {
                     case "id":
-                        Tipo("id");
                         if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
                             erroSemantico("identificador não declarado");
                         }
+                        Tipo("id");
                         recIdExpArit();
                         recComplementoAritmetico1();
                         break;
@@ -1950,6 +1955,9 @@ public class AnalisadorSintatico {
             default:
                 switch (proximo.getTipo()) {
                     case "id":
+                        if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                            erroSemantico("identificador não declarado");
+                        }
                         Tipo("id");
                         recIdExpArit();
                         recComplementoAritmetico();
@@ -2076,6 +2084,9 @@ public class AnalisadorSintatico {
                 break;
             case ".":
                 terminal(".");
+                if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
+                    erroSemantico("identificador não declarado");
+                }
                 Tipo("id");
                 recChamadaMetodo();
                 break;
