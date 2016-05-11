@@ -29,8 +29,10 @@ public class Simbolos {
     public static final int MAIN = 15;
     public static final int PARA = 16;
 
+    public static final int ERRO = 100;
+
     private String nome;
-    private String objectNome  ="";
+    private String objectNome = "";
     private int categoria;
     private int tipo;
     private ArrayList<Integer> parametros;
@@ -75,7 +77,7 @@ public class Simbolos {
         this.tipo = tipo;
     }
 
-    public ArrayList getFilhos() {
+    public ArrayList<Simbolos> getFilhos() {
         return filhos;
     }
 
@@ -117,10 +119,13 @@ public class Simbolos {
         }
         return var;
     }
+
     /**
      * Método para verificar se já existe uma constante declarada.
-     * @param simbolo Nome do simbolo a ser identificado. 
-     * @return retorna verdadeiro se existe uma constante com esse nome ou false se não existe.
+     *
+     * @param simbolo Nome do simbolo a ser identificado.
+     * @return retorna verdadeiro se existe uma constante com esse nome ou false
+     * se não existe.
      */
     public boolean containsConst(String simbolo) {
         boolean var = false;
@@ -131,18 +136,21 @@ public class Simbolos {
         }
         return var;
     }
-    
+
     /**
-     * Método para verificar se um método está fazendo overload de um método do pai. 
+     * Método para verificar se um método está fazendo overload de um método do
+     * pai.
+     *
      * @param simbolo Método para verificar o overload
-     * @return retorna true se existe um método no pai igual ao do filho ou false caso contrario.
+     * @return retorna true se existe um método no pai igual ao do filho ou
+     * false caso contrario.
      */
     public boolean isOverload(Simbolos simbolo) {
         boolean var = false;
         if (pai != null && pai.contains(simbolo.getNome())) {
             Simbolos aux = pai.getFilho(simbolo.getNome());
             if (aux.getCategoria() == Simbolos.MET) {
-                if (simbolo.getTipo()== aux.getTipo() && simbolo.getParametros().size() == aux.getParametros().size()) {
+                if (simbolo.getTipo() == aux.getTipo() && simbolo.getParametros().size() == aux.getParametros().size()) {
                     for (int i = 0; i < aux.getParametros().size(); i++) {
                         if (simbolo.getParametros().get(i).equals(aux.getParametros().get(i))) {
                             var = true;
@@ -171,9 +179,10 @@ public class Simbolos {
     public void setPai(Simbolos pai) {
         this.pai = pai;
     }
-    
+
     /**
      * Método que retorna um filho específico a partir do nome.
+     *
      * @param nome nome do filho desejado
      * @return retorna o simbolo com o nome desejado
      */
@@ -183,11 +192,23 @@ public class Simbolos {
                 return next;
             }
         }
-        return null;
+        if (pai != null) {
+            for (Simbolos next : pai.getFilhos()) {
+                if (next.getNome().equals(nome)) {
+                    return next;
+                }
+            }
+        }
+        Simbolos aux = new Simbolos();
+        aux.nome = "ERRO";
+        aux.tipo = ERRO;
+        aux.categoria = ERRO;
+        return aux;
     }
 
     /**
      * Método para salvar os parametros de funções.
+     *
      * @param tipo adiciona o tipo do parametro.
      */
     public void addParametro(int tipo) {
