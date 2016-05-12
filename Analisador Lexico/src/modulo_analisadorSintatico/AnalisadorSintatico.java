@@ -1087,7 +1087,9 @@ public class AnalisadorSintatico {
                     erroSemantico("este identificador nao eh uma variavel");
                 }
                 terminal("=");
-                recAtribuicao();
+                if (atual.getTipo() != recAtribuicao()) {
+                    erroSemantico("atribuição invalida, tipos incompativeis");
+                }
                 terminal(";");
                 break;
             case "[":
@@ -1098,7 +1100,9 @@ public class AnalisadorSintatico {
                 recIndice();
                 terminal("]");
                 terminal("=");
-                recAtribuicao();
+                if (atual.getTipo() != recAtribuicao()) {
+                    erroSemantico("atribuição invalida, tipos incompativeis");
+                }
                 terminal(";");
                 break;
             default:
@@ -1122,7 +1126,9 @@ public class AnalisadorSintatico {
                     erroSemantico("este atributo não é uma variavel");
                 }
                 terminal("=");
-                recAtribuicao();
+                if (atual.getTipo() != recAtribuicao()) {
+                    erroSemantico("atribuição invalida, tipos incompativeis");
+                }
                 break;
             default:
                 erroSintatico("falta ( ou =");
@@ -1130,180 +1136,172 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recAtribuicao() {
+    private int recAtribuicao() {
+        int aux2;
         switch (proximo.getValor()) {
             case "(":
                 terminal("(");
-                recAtribuicao();
+                aux2 = recAtribuicao();
                 terminal(")");
                 recOperacao();
-                break;
+                return aux2;
             case "++":
-                recIdAcesso();
-                break;
+                return recIdAcesso();
             case "--":
-                recIdAcesso();
-                break;
+                return recIdAcesso();
             case "true":
                 if (atual.getTipo() != Simbolos.BOOL) {
                     erroSemantico("a variavel não é do tipo booleana");
                 }
                 terminal("true");
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "false":
                 if (atual.getTipo() != Simbolos.BOOL) {
                     erroSemantico("a variavel não é do tipo booleana");
                 }
                 terminal("false");
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "-":
                 terminal("-");
-                recNegativo();
-                break;
+                return recNegativo();
             default:
                 switch (proximo.getTipo()) {
                     case "id":
-                        recIdAcesso();
-                        break;
+                        return recIdAcesso();
                     case "numero":
+                        aux2 = proximo.getValor().contains(".")?Simbolos.FLOAT:Simbolos.INT;
                         Tipo("numero");
-                        recOperadorNumero();
-                        break;
+                        int aux3 = recOperadorNumero(); 
+                        return aux2;
                     case "cadeia_constante":
                         if (atual.getTipo() != Simbolos.STRING) {
                             erroSemantico("a variavel não é do tipo string");
                         }
                         Tipo("cadeia_constante");
-                        break;
+                        return Simbolos.STRING;
                     case "caractere_constante":
-                        if (atual.getTipo() != Simbolos.STRING) {
+                        if (atual.getTipo() != Simbolos.CHAR) {
                             erroSemantico("a variavel não é do tipo char");
                         }
                         Tipo("caractere_constante");
-                        break;
+                        return Simbolos.CHAR;
                     default:
                         erroSintatico("falta booleano, numero, identificador, cadeia constante, caracter constante,  ( ou operadores: ++ ou -- ou - ");
                         while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
                             proximo = proximo();
                         }
-                        break;
+                        return Simbolos.ERRO;
                 }
         }
     }
 
-    private void recOperadorNumero() {
+    private int recOperadorNumero() {
         switch (proximo.getValor()) {
             case ">":
                 terminal(">");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<":
                 terminal("<");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case ">=":
                 terminal(">=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<=":
                 terminal("<=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "+":
                 terminal("+");
-                recExpAritmetica();
+                int aux = recExpAritmetica();
                 recExpRelacionalOpcional();
-                break;
+                return aux;
             case "-":
                 terminal("-");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "*":
                 terminal("*");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "/":
                 terminal("/");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "==":
                 terminal("==");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "!=":
                 terminal("!=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             default:
-                break;
+                return Simbolos.ERRO;
         }
     }
 
-    private void recNegativo() {
+    private int recNegativo() {
+        int aux2;
         switch (proximo.getValor()) {
             case "(":
                 terminal("(");
-                recNegativo();
+                aux2 = recNegativo();
                 terminal(")");
-                break;
+                return aux2;
             case "++":
-                recIdAcesso();
-                break;
+                return recIdAcesso();
             case "--":
-                recIdAcesso();
-                break;
+                return recIdAcesso();
             default:
                 switch (proximo.getTipo()) {
                     case "numero":
                         Tipo("numero");
-                        recOperadorNumero();
-                        break;
+                        return recOperadorNumero();
                     case "id":
-                        recIdAcesso();
-                        break;
+                        return recIdAcesso();
                     default:
                         erroSintatico("falta: ++, --, (, numero ou identificador");
-                        break;
+                        return -1;
                 }
 
         }
     }
 
-    private void recExpRelacionalOpcional() {
+    private int recExpRelacionalOpcional() {
         switch (proximo.getValor()) {
             case ">":
                 terminal(">");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<":
                 terminal("<");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case ">=":
                 terminal(">=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<=":
                 terminal("<=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             default:
-                break;
+                return -1;
         }
     }
 
@@ -1331,11 +1329,13 @@ public class AnalisadorSintatico {
     }
 
     private void recRetorno() {
-        recAtribuicao();
+        if (escopo.getTipo() != recAtribuicao()) {
+            erroSemantico("atribuição invalida, tipos incompativeis");
+        }
         terminal(";");
     }
 
-    private void recIdAcesso() {
+    private int recIdAcesso() {
         switch (proximo.getValor()) {
             case "++":
                 terminal("++");
@@ -1345,8 +1345,7 @@ public class AnalisadorSintatico {
                     erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
                 }
                 Tipo("id");
-                recOperacao();
-                break;
+                return recOperacao();
             case "--":
                 terminal("--");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
@@ -1355,18 +1354,19 @@ public class AnalisadorSintatico {
                     erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
                 }
                 Tipo("id");
-                recOperacao();
-                break;
+                return recOperacao();
             default:
                 switch (proximo.getTipo()) {
                     case "id":
                         atual = this.getFilho(proximo.getValor());
+                        int aux2 = atual.getTipo();
                         Tipo("id");
                         recAcesso();
                         recOperacao();
-                        break;
+                        return aux2;
                     default:
                         erroSintatico("falta: ++, --, identificador");
+                        return -1;
                 }
 
         }
@@ -1413,46 +1413,42 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recOperacao() {
+    private int recOperacao() {
         switch (proximo.getValor()) {
             case ">":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "<":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case ">=":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "<=":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "+":
-                recOperador();
-                break;
+                return recOperador();
             case "-":
-                recOperador();
-                break;
+                return recOperador();
             case "*":
-                recOperador();
-                break;
+                return recOperador();
             case "/":
-                recOperador();
-                break;
+                return recOperador();
             case "==":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "!=":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "&&":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             case "||":
                 recOperador();
-                break;
+                return Simbolos.BOOL;
             default:
-                break;
+                return -1;
         }
     }
 
@@ -1472,68 +1468,67 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recOperador() {
+    private int recOperador() {
         switch (proximo.getValor()) {
-
             case ">":
                 terminal(">");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<":
                 terminal("<");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case ">=":
                 terminal(">=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "<=":
                 terminal("<=");
                 recExpAritmetica();
                 recOpLogico();
-                break;
+                return Simbolos.BOOL;
             case "+":
                 terminal("+");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "-":
                 terminal("-");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "*":
                 terminal("*");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "/":
                 terminal("/");
                 recExpAritmetica();
-                recExpRelacionalOpcional();
-                break;
+                return recExpRelacionalOpcional();
             case "==":
                 terminal("==");
-                recAtribuicao();
-                break;
+                if (atual.getTipo() != recAtribuicao()) {
+                    erroSemantico("operação invalida, tipos incompativeis");
+                }
+                return Simbolos.BOOL;
             case "!=":
                 terminal("!=");
-                recAtribuicao();
-                break;
+                if (atual.getTipo() != recAtribuicao()) {
+                    erroSemantico("operação invalida, tipos incompativeis");
+                }
+                return Simbolos.BOOL;
             case "&&":
                 terminal("&&");
                 recExp();
-                break;
+                return Simbolos.BOOL;
             case "||":
                 terminal("||");
                 recExp();
-                break;
+                return Simbolos.BOOL;
             default:
                 erroSintatico("falta operador: >, <, >=, <=, ==, !=, +, -, *, /, &&, ||");
-                break;
+                return -1;
         }
     }
 
@@ -2075,13 +2070,13 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recIdExp() {
+    private int recIdExp() {
         switch (proximo.getValor()) {
             case "(":
                 terminal("(");
                 recParametros();
                 terminal(")");
-                break;
+                return -1;
             case ".":
                 terminal(".");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
@@ -2089,14 +2084,14 @@ public class AnalisadorSintatico {
                 }
                 Tipo("id");
                 recChamadaMetodo();
-                break;
+                return -1;
             case "[":
                 terminal("[");
                 recIndice();
                 terminal("]");
-                break;
+                return -1;
             default:
-                break;
+                return -1;
         }
     }
 
@@ -2230,73 +2225,64 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void recExpAritmetica() {
+    private int recExpAritmetica() {
         switch (proximo.getValor()) {
             case "++":
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             case "--":
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             case "-":
                 terminal("-");
-                recExpAritmetica();
-                break;
+                return recExpAritmetica();
             case "(":
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             default:
                 if (proximo.getTipo().equals("id") || proximo.getTipo().equals("numero")) {
-                    recFatorAritmetico();
-                    break;
+                    return recFatorAritmetico();
                 }
                 erroSintatico("falta identificar, numero, ( ou operador: ++, --, -");
                 while (!proximo.getTipo().equals("id") && !proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}")) {
                     proximo = proximo();
                 }
-                break;
+                return -1;
         }
 
     }
 
-    private void recFatorAritmetico() {
+    private int recFatorAritmetico() {
+        int aux2;
         switch (proximo.getValor()) {
             case "++":
                 recIdAritmetico();
-                recComplementoAritmetico();
-                break;
+                return recComplementoAritmetico();
             case "--":
                 recIdAritmetico();
-                recComplementoAritmetico();
-                break;
+                return recComplementoAritmetico();
             case "-":
                 terminal("-");
-                recExpAritmetica();
-                break;
+                return recExpAritmetica();
             case "(":
                 recFatorAritmetico();
-                recComplementoAritmetico();
-                break;
+                return recComplementoAritmetico();
             default:
                 if (proximo.getTipo().equals("id")) {
                     recIdAritmetico();
-                    recComplementoAritmetico();
-                    break;
+                    return recComplementoAritmetico();
                 } else if (proximo.getTipo().equals("numero")) {
                     Tipo("numero");
-                    recComplementoAritmetico();
-                    break;
+                    return recComplementoAritmetico();
                 }
                 erroSintatico("falta numero, identificador, (, ou operador: ++, --, -");
                 while (!proximo.getTipo().equals("palavra_reservada") && !proximo.getValor().equals(")") && !proximo.getValor().equals("{") && !proximo.getValor().equals("}") && !proximo.getValor().equals(";")) {
                     proximo = proximo();
                 }
-                break;
+                return -1;
         }
     }
 
-    private void recIdAritmetico() {
+    private int recIdAritmetico() {
         Simbolos aux;
+        int aux2;
         switch (proximo.getValor()) {
             case "++":
                 terminal("++");
@@ -2306,8 +2292,9 @@ public class AnalisadorSintatico {
                 } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
                     erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
                 }
+                aux2 = this.getFilho(proximo.getValor()).getTipo();
                 Tipo("id");
-                break;
+                return aux2;
             case "--":
                 terminal("--");
                 aux = this.getFilho(proximo.getValor());
@@ -2316,8 +2303,9 @@ public class AnalisadorSintatico {
                 } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
                     erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
                 }
+                aux2 = this.getFilho(proximo.getValor()).getTipo();
                 Tipo("id");
-                break;
+                return aux2;
             default:
                 if (proximo.getTipo().equals("id")) {
                     aux = this.getFilho(proximo.getValor());
@@ -2327,55 +2315,58 @@ public class AnalisadorSintatico {
                         erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
                     }
                     Tipo("id");
-                    recIdExpArit();
+                    return recIdExpArit();
+                } else {
+                    erroSintatico("falta identificador ou operador: ++, --");
+                    return -1;
                 }
-                erroSintatico("falta identificador ou operador: ++, --");
-                break;
         }
     }
 
-    private void recIdExpArit() {
+    private int recIdExpArit() {
         switch (proximo.getValor()) {
             case "(":
-                recIdExp();
-                break;
+                if (atual.getCategoria() != Simbolos.MET) {
+                    erroSemantico("esta variavel não é um método");
+                }
+                return recIdExp();
             case ".":
-                recIdExp();
-                break;
+                if (atual.getCategoria() != Simbolos.OBJECT) {
+                    erroSemantico("esta variavel não é um objeto");
+                }
+                return recIdExp();
             case "[":
-                recIdExp();
-                break;
+                if (atual.getCategoria() != Simbolos.VET) {
+                    erroSemantico("esta variavel não é um vetor");
+                }
+                return recIdExp();
             case "++":
                 terminal("++");
-                break;
+                return -1;
             case "--":
                 terminal("--");
-                break;
+                return -1;
             default:
-                break;
+                return -1;
         }
     }
 
-    private void recComplementoAritmetico() {
+    private int recComplementoAritmetico() {
         switch (proximo.getValor()) {
             case "+":
                 terminal("+");
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             case "-":
                 terminal("-");
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             case "*":
                 terminal("*");
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             case "/":
                 terminal("/");
-                recFatorAritmetico();
-                break;
+                return recFatorAritmetico();
             default:
-                break;
+                return -1;
         }
     }
 
@@ -2390,6 +2381,10 @@ public class AnalisadorSintatico {
 
     private Simbolos getFilho(String valor) {
         return escopo.contains(valor) ? escopo.getFilho(valor) : (classeEscopo.contains(valor) ? classeEscopo.getFilho(valor) : (globalEscopo.getFilho(valor)));
+    }
+
+    private String tipoToString(int tipo) {
+        return Simbolos.BOOL == tipo ? "boolean" : Simbolos.INT == tipo ? "int" : Simbolos.FLOAT == tipo ? "float" : Simbolos.STRING == tipo ? "string" : Simbolos.CHAR == tipo ? "char" : atual.getObjectNome();
     }
 
 }

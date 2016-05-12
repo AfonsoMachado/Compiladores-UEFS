@@ -4,7 +4,7 @@
 11 Identificador já utilizado
 16 uma classe so pode herdar de outra classe
 21 tipos incompatives, o indice nao pode ser do tipo float
-22 tipos incompatives, o indice nao pode ser do tipo float
+22 tipos incompatives, o indice só pode ser do tipo int
 23 variavel do indice não declarada
 25 Identificador já utilizado
 26 Identificador já utilizado
@@ -24,7 +24,10 @@
 59 este identificador nao eh uma variavel
 64 este identificador nao eh uma variavel
 69 Identificador já utilizado
+70 atribuição invalida, tipos incompativeis
+76 atribuição invalida, tipos incompativeis
 81 Identificador já utilizado
+82 atribuição invalida, tipos incompativeis
 85 Identificador já utilizado
 89 Identificador já utilizado
 90 Identificador já utilizado
