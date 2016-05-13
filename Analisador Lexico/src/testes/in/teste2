@@ -67,6 +67,10 @@ a=2;
 
 class folha{
  float isGreen(int a, int bbbb) {
+
+folha dad2, dad3;
+dad2 = dad3;
+dad2=a;
         return bbb2;
     }
     int batata(int maca, int uva){

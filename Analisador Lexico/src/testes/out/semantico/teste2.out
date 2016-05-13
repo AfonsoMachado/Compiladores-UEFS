@@ -24,10 +24,11 @@
 59 este identificador nao eh uma variavel
 64 este identificador nao eh uma variavel
 69 Identificador já utilizado
-70 atribuição invalida, tipos incompativeis
-76 atribuição invalida, tipos incompativeis
-81 Identificador já utilizado
-82 atribuição invalida, tipos incompativeis
+73 atribuição invalida, tipos incompativeis
+74 tipo de retorno incompativel
+80 tipo de retorno incompativel
 85 Identificador já utilizado
+86 tipo de retorno incompativel
 89 Identificador já utilizado
-90 Identificador já utilizado
+93 Identificador já utilizado
+94 Identificador já utilizado

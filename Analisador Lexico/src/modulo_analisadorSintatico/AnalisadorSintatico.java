@@ -32,6 +32,9 @@ public class AnalisadorSintatico {
     private Simbolos atual;             //simbolo atual
     private final Simbolos globalEscopo;             //simbolo global
     private Simbolos classeEscopo;             //simbolo classe
+    
+    private int checaTipo;
+    private int checaTipo2;
 
     /**
      * Construtor do analisador Sintatico.
@@ -1010,6 +1013,7 @@ public class AnalisadorSintatico {
                     Tipo("id");
                     if (proximo.getTipo().equals("id")) {
                         atual.setTipo(Simbolos.OBJECT);
+                        atual.setCategoria(Simbolos.VAR);
                         atual.setObjectNome(aux);
                         if (globalEscopo.contains(aux)) {
                             if (globalEscopo.getFilho(aux).getCategoria() != Simbolos.CLASS) {
@@ -1143,7 +1147,7 @@ public class AnalisadorSintatico {
                 terminal("(");
                 aux2 = recAtribuicao();
                 terminal(")");
-                recOperacao();
+                checaTipo = recOperacao();
                 return aux2;
             case "++":
                 return recIdAcesso();
@@ -1330,7 +1334,7 @@ public class AnalisadorSintatico {
 
     private void recRetorno() {
         if (escopo.getTipo() != recAtribuicao()) {
-            erroSemantico("atribuição invalida, tipos incompativeis");
+            erroSemantico("tipo de retorno incompativel");
         }
         terminal(";");
     }
@@ -2381,10 +2385,6 @@ public class AnalisadorSintatico {
 
     private Simbolos getFilho(String valor) {
         return escopo.contains(valor) ? escopo.getFilho(valor) : (classeEscopo.contains(valor) ? classeEscopo.getFilho(valor) : (globalEscopo.getFilho(valor)));
-    }
-
-    private String tipoToString(int tipo) {
-        return Simbolos.BOOL == tipo ? "boolean" : Simbolos.INT == tipo ? "int" : Simbolos.FLOAT == tipo ? "float" : Simbolos.STRING == tipo ? "string" : Simbolos.CHAR == tipo ? "char" : atual.getObjectNome();
     }
 
 }
