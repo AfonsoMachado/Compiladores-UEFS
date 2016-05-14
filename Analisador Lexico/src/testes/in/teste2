@@ -17,7 +17,7 @@ class abb > a1{
 
 }
 class dad{
-float ddd;
+float ddd, dad;
 int vet2[10.0];
 int vet[ddd];
 int vetor [nao]; 

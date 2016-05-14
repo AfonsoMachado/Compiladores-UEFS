@@ -34,7 +34,7 @@ public class AnalisadorSintatico {
     private Simbolos classeEscopo;             //simbolo classe
     
     private int checaTipo;
-    private int checaTipo2;
+    private boolean eBool = false;
 
     /**
      * Construtor do analisador Sintatico.
@@ -251,7 +251,7 @@ public class AnalisadorSintatico {
         atual.setCategoria(Simbolos.MAIN); //salva a categoria
         atual.setNome("MAIN");
         if (escopo.contains(atual.getNome())) {
-            erroSemantico("Main ja declarada");
+            erroSemantico("main ja declarada");
         } else {
             escopo.addFilho(atual); //adiciona a main na tabela de simbolos
         }
@@ -278,7 +278,7 @@ public class AnalisadorSintatico {
                 terminal("class");
                 atual.setNome(proximo.getValor());
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador ja utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -308,7 +308,7 @@ public class AnalisadorSintatico {
                 if (proximo.getValor().equals(atual.getNome())) {
                     erroSemantico("uma classe nao pode herdar dela mesma");
                 } else if (!escopo.contains(proximo.getValor())) {
-                    erroSemantico("uma classe so pode herdar de outra classe declarada anteriormente");
+                    erroSemantico("uma classe so pode herdar de outra declarada anteriormente");
                 } else if (escopo.contains(proximo.getValor()) && escopo.getFilho(proximo.getValor()) != null && escopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
                     erroSemantico("uma classe so pode herdar de outra classe");
                 } else {
@@ -462,9 +462,9 @@ public class AnalisadorSintatico {
                 int aux = atual.getTipo();
                 String obj = atual.getObjectNome();
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("constante nao pode ser alterada");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -476,10 +476,10 @@ public class AnalisadorSintatico {
                 break;
             case ";":
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
-                } else {
+                    erroSemantico("constante nao pode ser alterada");
+                }else {
                     escopo.addFilho(atual);
                 }
                 terminal(";");
@@ -545,12 +545,12 @@ public class AnalisadorSintatico {
                 terminal(")");
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
-                        erroSemantico("Identificador já utilizado", linha);
+                        erroSemantico("identificador ja declarado", linha);
                     } else {
                         anterior.addFilho(escopo);
                     }
                 } else if (globalEscopo.containsConst(escopo.getNome())) {
-                    erroSemantico("Identificador já utilizado", linha);
+                    erroSemantico("constante nao pode ser alterada", linha);
                 } else {
                     anterior.addFilho(escopo);
                 }
@@ -563,6 +563,11 @@ public class AnalisadorSintatico {
                 terminal("char");
                 atual.setTipo(Simbolos.CHAR);
                 atual.setNome(proximo.getValor());
+                if(escopo.contains(atual.getNome())){
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
+                }
                 Tipo("id");
                 recCompId();
                 break;
@@ -570,6 +575,11 @@ public class AnalisadorSintatico {
                 terminal("int");
                 atual.setTipo(Simbolos.INT);
                 atual.setNome(proximo.getValor());
+                if(escopo.contains(atual.getNome())){
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
+                }
                 Tipo("id");
                 recCompId();
                 break;
@@ -577,6 +587,11 @@ public class AnalisadorSintatico {
                 terminal("bool");
                 atual.setTipo(Simbolos.BOOL);
                 atual.setNome(proximo.getValor());
+                if(escopo.contains(atual.getNome())){
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
+                }
                 Tipo("id");
                 recCompId();
                 break;
@@ -584,6 +599,11 @@ public class AnalisadorSintatico {
                 terminal("string");
                 atual.setTipo(Simbolos.STRING);
                 atual.setNome(proximo.getValor());
+                if(escopo.contains(atual.getNome())){
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
+                }
                 Tipo("id");
                 recCompId();
                 break;
@@ -591,6 +611,11 @@ public class AnalisadorSintatico {
                 terminal("float");
                 atual.setTipo(Simbolos.FLOAT);
                 atual.setNome(proximo.getValor());
+                if(escopo.contains(atual.getNome())){
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
+                }
                 Tipo("id");
                 recCompId();
                 break;
@@ -600,10 +625,10 @@ public class AnalisadorSintatico {
                     atual.setObjectNome(proximo.getValor());
                     if (globalEscopo.contains(proximo.getValor())) {
                         if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
-                            erroSemantico("Classe não declarada");
+                            erroSemantico("classe nao declarada");
                         }
                     } else {
-                        erroSemantico("Classe não declarada");
+                        erroSemantico("classe nao declarada");
                     }
                     Tipo("id");
                     atual.setNome(proximo.getValor());
@@ -636,12 +661,12 @@ public class AnalisadorSintatico {
                 terminal(")");
                 if (anterior.contains(escopo.getNome())) {
                     if (!anterior.isOverload(escopo)) {
-                        erroSemantico("Identificador já utilizado", linha);
+                        erroSemantico("identificador ja declarado", linha);
                     } else {
                         anterior.addFilho(escopo);
                     }
                 } else if (globalEscopo.containsConst(escopo.getNome())) {
-                    erroSemantico("Identificador já utilizado", linha);
+                    erroSemantico("constante nao pode ser alterada", linha);
                 } else {
                     anterior.addFilho(escopo);
                 }
@@ -659,10 +684,10 @@ public class AnalisadorSintatico {
             case ";":
                 atual.setCategoria(Simbolos.VAR);
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
-                } else {
+                    erroSemantico("constante nao pode ser alterada");
+                }else {
                     escopo.addFilho(atual);
                 }
                 terminal(";");
@@ -678,9 +703,9 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("constante nao pode ser alterada");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -697,9 +722,9 @@ public class AnalisadorSintatico {
             case ";":
                 System.out.println(escopo.getCategoria() + "   " + atual.getNome());
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("constante nao pode ser alterada");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -721,10 +746,10 @@ public class AnalisadorSintatico {
                 int aux = atual.getTipo();
                 String obj = atual.getObjectNome();
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
-                } else {
+                    erroSemantico("constante nao pode ser alterada");
+                }else {
                     escopo.addFilho(atual);
                 }
                 atual = new Simbolos();
@@ -740,9 +765,9 @@ public class AnalisadorSintatico {
                 break;
             case ";":
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
-                } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -761,15 +786,15 @@ public class AnalisadorSintatico {
         switch (proximo.getTipo()) {
             case "id":
                 if (!escopo.contains(proximo.getValor()) && !globalEscopo.contains(proximo.getValor()) && (classeEscopo != null && !classeEscopo.contains(proximo.getValor()))) {
-                    erroSemantico("variavel do indice não declarada");
+                    erroSemantico("variavel do indice nao declarada");
                 } else if (escopo.contains(proximo.getValor()) ? escopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT : (globalEscopo.contains(proximo.getValor()) ? globalEscopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT : (classeEscopo.contains(proximo.getValor())) && classeEscopo.getFilho(proximo.getValor()).getTipo() != Simbolos.INT)) {
-                    erroSemantico("tipos incompatives, o indice só pode ser do tipo int");
+                    erroSemantico("indice do vetor deve ser inteiro");
                 }
                 Tipo("id");
                 break;
             case "numero":
                 if (proximo.getValor().contains(".")) {
-                    erroSemantico("tipos incompatives, o indice nao pode ser do tipo float");
+                    erroSemantico("indice do vetor deve ser inteiro");
                 }
                 Tipo("numero");
                 break;
@@ -829,10 +854,10 @@ public class AnalisadorSintatico {
                     atual.setObjectNome(proximo.getValor());
                     if (globalEscopo.contains(proximo.getValor())) {
                         if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
-                            erroSemantico("Classe não declarada");
+                            erroSemantico("classe nao declarada");
                         }
                     } else {
-                        erroSemantico("Classe não declarada");
+                        erroSemantico("classe nao declarada");
                     }
                     Tipo("id");
                     atual.setNome(proximo.getValor());
@@ -850,9 +875,9 @@ public class AnalisadorSintatico {
                 terminal(",");
                 escopo.addParametro(atual.getTipo());
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
-                } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
+                }else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
+                    erroSemantico("constante nao pode ser alterada");
                 } else {
                     escopo.addFilho(atual);
                 }
@@ -866,10 +891,10 @@ public class AnalisadorSintatico {
             default:
                 escopo.addParametro(atual.getTipo());
                 if (escopo.contains(atual.getNome())) {
-                    erroSemantico("Identificador já utilizado");
+                    erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
-                    erroSemantico("Identificador já utilizado");
-                } else {
+                    erroSemantico("constante nao pode ser alterada");
+                }else {
                     escopo.addFilho(atual);
                 }
                 break;
@@ -904,10 +929,10 @@ public class AnalisadorSintatico {
                     atual.setObjectNome(proximo.getValor());
                     if (globalEscopo.contains(proximo.getValor())) {
                         if (globalEscopo.getFilho(proximo.getValor()).getCategoria() != Simbolos.CLASS) {
-                            erroSemantico("Classe não declarada");
+                            erroSemantico("classe nao declarada");
                         }
                     } else {
-                        erroSemantico("Classe não declarada");
+                        erroSemantico("classe nao declarada");
                     }
                     Tipo("id");
                 } else {
@@ -1017,10 +1042,10 @@ public class AnalisadorSintatico {
                         atual.setObjectNome(aux);
                         if (globalEscopo.contains(aux)) {
                             if (globalEscopo.getFilho(aux).getCategoria() != Simbolos.CLASS) {
-                                erroSemantico("Classe não declarada");
+                                erroSemantico("classe nao declarada");
                             }
                         } else {
-                            erroSemantico("Classe não declarada");
+                            erroSemantico("classe nao declarada");
                         }
                         atual.setNome(proximo.getValor());
                         Tipo("id");
@@ -1028,7 +1053,7 @@ public class AnalisadorSintatico {
                     } else {
                         atual = escopo.getFilho(aux);
                         if (atual.getTipo() == Simbolos.ERRO) {
-                            erroSemantico("Identificador não declarado");
+                            erroSemantico("identificador nao declarado");
                         }
                         recIdComando();
                     }
@@ -1066,7 +1091,7 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "(":
                 if (atual.getCategoria() != Simbolos.MET) {
-                    erroSemantico("esta identificador nao eh um metodo");
+                    erroSemantico("esta identificador nao e um metodo");
                 }
                 terminal("(");
                 recParametros();
@@ -1075,12 +1100,12 @@ public class AnalisadorSintatico {
                 break;
             case ".":
                 if (atual.getCategoria() != Simbolos.OBJECT) {
-                    erroSemantico("esta identificador nao eh um objeto");
+                    erroSemantico("esta identificador nao e um objeto");
                 }
                 terminal(".");
                 atual = escopo.getFilho(proximo.getValor());
                 if (atual.getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("o objeto não possue este atributo");
+                    erroSemantico("o objeto nao possue este atributo");
                 }
                 Tipo("id");
                 recAcessoObjeto();
@@ -1091,8 +1116,10 @@ public class AnalisadorSintatico {
                     erroSemantico("este identificador nao eh uma variavel");
                 }
                 terminal("=");
-                if (atual.getTipo() != recAtribuicao()) {
-                    erroSemantico("atribuição invalida, tipos incompativeis");
+                if (eBool && atual.getTipo() != Simbolos.BOOL) {
+                    erroSemantico("atribuicao invalida, tipos incompativeis");
+                }else if(atual.getTipo() != recAtribuicao()){
+                    erroSemantico("atribuicao invalida, tipos incompativeis");
                 }
                 terminal(";");
                 break;
@@ -1105,7 +1132,7 @@ public class AnalisadorSintatico {
                 terminal("]");
                 terminal("=");
                 if (atual.getTipo() != recAtribuicao()) {
-                    erroSemantico("atribuição invalida, tipos incompativeis");
+                    erroSemantico("atribuicao invalida, tipos incompativeis");
                 }
                 terminal(";");
                 break;
@@ -1119,7 +1146,7 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "(":
                 if (atual.getCategoria() != Simbolos.MET) {
-                    erroSemantico("este atributo não é um método");
+                    erroSemantico("este atributo nao e um metodo");
                 }
                 terminal("(");
                 recParametros();
@@ -1127,11 +1154,11 @@ public class AnalisadorSintatico {
                 break;
             case "=":
                 if (atual.getCategoria() != Simbolos.VAR) {
-                    erroSemantico("este atributo não é uma variavel");
+                    erroSemantico("este atributo nao e uma variavel");
                 }
                 terminal("=");
                 if (atual.getTipo() != recAtribuicao()) {
-                    erroSemantico("atribuição invalida, tipos incompativeis");
+                    erroSemantico("atribuicao invalida, tipos incompativeis");
                 }
                 break;
             default:
@@ -1155,14 +1182,14 @@ public class AnalisadorSintatico {
                 return recIdAcesso();
             case "true":
                 if (atual.getTipo() != Simbolos.BOOL) {
-                    erroSemantico("a variavel não é do tipo booleana");
+                    erroSemantico("a variavel nao e do tipo booleana");
                 }
                 terminal("true");
                 recOpLogico();
                 return Simbolos.BOOL;
             case "false":
                 if (atual.getTipo() != Simbolos.BOOL) {
-                    erroSemantico("a variavel não é do tipo booleana");
+                    erroSemantico("a variavel nao e do tipo booleana");
                 }
                 terminal("false");
                 recOpLogico();
@@ -1181,13 +1208,13 @@ public class AnalisadorSintatico {
                         return aux2;
                     case "cadeia_constante":
                         if (atual.getTipo() != Simbolos.STRING) {
-                            erroSemantico("a variavel não é do tipo string");
+                            erroSemantico("a variavel nao e do tipo string");
                         }
                         Tipo("cadeia_constante");
                         return Simbolos.STRING;
                     case "caractere_constante":
                         if (atual.getTipo() != Simbolos.CHAR) {
-                            erroSemantico("a variavel não é do tipo char");
+                            erroSemantico("a variavel nao e do tipo char");
                         }
                         Tipo("caractere_constante");
                         return Simbolos.CHAR;
@@ -1344,18 +1371,18 @@ public class AnalisadorSintatico {
             case "++":
                 terminal("++");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
+                    erroSemantico("somentes numeros podem ser incrementados");
                 }
                 Tipo("id");
                 return recOperacao();
             case "--":
                 terminal("--");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("identificador não é um numero, somentes numeros podem ser incrementados");
+                    erroSemantico("somentes numeros podem ser incrementados");
                 }
                 Tipo("id");
                 return recOperacao();
@@ -1380,7 +1407,7 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "[":
                 if (atual.getCategoria() != Simbolos.VET) {
-                    erroSemantico("este identificador não é um vetor");
+                    erroSemantico("este identificador nao e um vetor");
                 }
                 terminal("[");
                 recIndice();
@@ -1388,7 +1415,7 @@ public class AnalisadorSintatico {
                 break;
             case "(":
                 if (atual.getCategoria() != Simbolos.MET) {
-                    erroSemantico("este identificador não é um metodo");
+                    erroSemantico("este identificador nao e um metodo");
                 }
                 terminal("(");
                 recParametros();
@@ -1396,12 +1423,12 @@ public class AnalisadorSintatico {
                 break;
             case ".":
                 if (atual.getCategoria() != Simbolos.OBJECT) {
-                    erroSemantico("este identificador não é um objeto");
+                    erroSemantico("este identificador nao e um objeto");
                 }
                 terminal(".");
                 atual = getFilho(proximo.getValor());
                 if (atual.getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("a classe não possue este atributo");
+                    erroSemantico("a classe nao possue este atributo");
                 }
                 Tipo("id");
                 recChamadaMetodo();
@@ -1460,7 +1487,7 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "(":
                 if (atual.getCategoria() != Simbolos.MET) {
-                    erroSemantico("este identificador não é um metodo");
+                    erroSemantico("este identificador nao e um metodo");
                 }
                 terminal("(");
                 recParametros();
@@ -1513,13 +1540,13 @@ public class AnalisadorSintatico {
             case "==":
                 terminal("==");
                 if (atual.getTipo() != recAtribuicao()) {
-                    erroSemantico("operação invalida, tipos incompativeis");
+                    erroSemantico("operacao invalida, tipos incompativeis");
                 }
                 return Simbolos.BOOL;
             case "!=":
                 terminal("!=");
                 if (atual.getTipo() != recAtribuicao()) {
-                    erroSemantico("operação invalida, tipos incompativeis");
+                    erroSemantico("operacao invalida, tipos incompativeis");
                 }
                 return Simbolos.BOOL;
             case "&&":
@@ -1601,9 +1628,9 @@ public class AnalisadorSintatico {
     private void recInicializaObjeto() {
         terminal("new");
         if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-            erroSemantico("objeto não declarado");
+            erroSemantico("objeto nao declarado");
         } else if (this.getFilho(proximo.getValor()).getCategoria() != Simbolos.OBJECT) {
-            erroSemantico("este identificador não é um objeto");
+            erroSemantico("este identificador nao e um objeto");
         }
         Tipo("id");
         terminal(";");
@@ -1623,7 +1650,7 @@ public class AnalisadorSintatico {
         terminal("read");
         terminal("(");
         if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-            erroSemantico("identificador não declarado");
+            erroSemantico("identificador nao declarado");
         }
         Tipo("id");
         recListaRead();
@@ -1636,7 +1663,7 @@ public class AnalisadorSintatico {
             case ",":
                 terminal(",");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 }
                 Tipo("id");
                 recListaRead();
@@ -1675,7 +1702,7 @@ public class AnalisadorSintatico {
         switch (proximo.getTipo()) {
             case "id":
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 }
                 Tipo("id");
                 recOpWrite();
@@ -1842,9 +1869,9 @@ public class AnalisadorSintatico {
             case "++":
                 terminal("++");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("operação não permitida, somente numeros podem ser incremetados");
+                    erroSemantico("somente numeros podem ser incremetados");
                 }
                 Tipo("id");
                 recIdExp();
@@ -1853,9 +1880,9 @@ public class AnalisadorSintatico {
             case "--":
                 terminal("--");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 } else if (this.getFilho(proximo.getValor()).getTipo() != Simbolos.INT && this.getFilho(proximo.getValor()).getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("operação não permitida, somente numeros podem ser incremetados");
+                    erroSemantico("somente numeros podem ser incremetados");
                 }
                 Tipo("id");
                 recIdExp();
@@ -1870,7 +1897,7 @@ public class AnalisadorSintatico {
                 switch (proximo.getTipo()) {
                     case "id":
                         if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                            erroSemantico("identificador não declarado");
+                            erroSemantico("identificador nao declarado");
                         }
                         Tipo("id");
                         recIdExpArit();
@@ -1955,7 +1982,7 @@ public class AnalisadorSintatico {
                 switch (proximo.getTipo()) {
                     case "id":
                         if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                            erroSemantico("identificador não declarado");
+                            erroSemantico("identificador nao declarado");
                         }
                         Tipo("id");
                         recIdExpArit();
@@ -2084,7 +2111,7 @@ public class AnalisadorSintatico {
             case ".":
                 terminal(".");
                 if (this.getFilho(proximo.getValor()).getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 }
                 Tipo("id");
                 recChamadaMetodo();
@@ -2292,9 +2319,9 @@ public class AnalisadorSintatico {
                 terminal("++");
                 aux = this.getFilho(proximo.getValor());
                 if (aux.getCategoria() == Simbolos.ERRO) {
-                    erroSemantico("identificador não declarado");
+                    erroSemantico("identificador nao declarado");
                 } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                    erroSemantico("somente numeros podem ser incremetados");
                 }
                 aux2 = this.getFilho(proximo.getValor()).getTipo();
                 Tipo("id");
@@ -2305,7 +2332,7 @@ public class AnalisadorSintatico {
                 if (aux.getCategoria() == Simbolos.ERRO) {
                     erroSemantico("identificador não declarado");
                 } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
-                    erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                    erroSemantico("somente numeros podem ser incremetados");
                 }
                 aux2 = this.getFilho(proximo.getValor()).getTipo();
                 Tipo("id");
@@ -2314,9 +2341,9 @@ public class AnalisadorSintatico {
                 if (proximo.getTipo().equals("id")) {
                     aux = this.getFilho(proximo.getValor());
                     if (aux.getCategoria() == Simbolos.ERRO) {
-                        erroSemantico("identificador não declarado");
+                        erroSemantico("identificador nao declarado");
                     } else if (aux.getTipo() != Simbolos.INT && aux.getTipo() != Simbolos.FLOAT) {
-                        erroSemantico("identificador não é um numero, operação permitida apenas para os tipos int e float");
+                        erroSemantico("somente numeros podem ser incremetados");
                     }
                     Tipo("id");
                     return recIdExpArit();
@@ -2331,17 +2358,17 @@ public class AnalisadorSintatico {
         switch (proximo.getValor()) {
             case "(":
                 if (atual.getCategoria() != Simbolos.MET) {
-                    erroSemantico("esta variavel não é um método");
+                    erroSemantico("esta variavel nao e um metodo");
                 }
                 return recIdExp();
             case ".":
                 if (atual.getCategoria() != Simbolos.OBJECT) {
-                    erroSemantico("esta variavel não é um objeto");
+                    erroSemantico("esta variavel nao e um objeto");
                 }
                 return recIdExp();
             case "[":
                 if (atual.getCategoria() != Simbolos.VET) {
-                    erroSemantico("esta variavel não é um vetor");
+                    erroSemantico("esta variavel nao e um vetor");
                 }
                 return recIdExp();
             case "++":

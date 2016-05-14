@@ -111,6 +111,9 @@ public class Simbolos {
         if (pai != null) {                    //Verifica se a classe tem herança.
             return pai.contains(simbolo); //Verifica se o identificador já foi decarado no pai. 
         }
+        if(this.nome.equals(simbolo)){
+            return true;
+        }
         for (Simbolos next : filhos) {
             if (next.getNome().equals(simbolo)) {
                 var = true;

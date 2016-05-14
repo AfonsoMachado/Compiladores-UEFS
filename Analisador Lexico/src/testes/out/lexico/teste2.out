@@ -55,7 +55,9 @@ dad id 19:7
 { delimitador 19:10
 float palavra_reservada 20:1
 ddd id 20:7
-; delimitador 20:10
+, delimitador 20:10
+dad id 20:12
+; delimitador 20:15
 int palavra_reservada 21:1
 vet2 id 21:5
 [ delimitador 21:9

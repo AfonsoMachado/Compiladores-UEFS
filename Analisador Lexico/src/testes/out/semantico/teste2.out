@@ -1,34 +1,41 @@
 4 tipos incompatives
-4 Identificador já utilizado
-8 Identificador já utilizado
-11 Identificador já utilizado
+4 identificador ja declarado
+8 identificador ja declarado
+11 identificador ja declarado
 16 uma classe so pode herdar de outra classe
-21 tipos incompatives, o indice nao pode ser do tipo float
-22 tipos incompatives, o indice só pode ser do tipo int
-23 variavel do indice não declarada
-25 Identificador já utilizado
-26 Identificador já utilizado
+20 identificador ja declarado
+21 indice do vetor deve ser inteiro
+22 indice do vetor deve ser inteiro
+23 variavel do indice nao declarada
+25 constante nao pode ser alterada
+26 constante nao pode ser alterada
 27 tipos incompatives
-27 Identificador já utilizado
-29 Identificador já utilizado
+27 constante nao pode ser alterada
+29 constante nao pode ser alterada
+29 constante nao pode ser alterada
 35 uma classe nao pode herdar dela mesma
-38 uma classe so pode herdar de outra classe declarada anteriormente
-41 Identificador ja utilizado
-44 Identificador ja utilizado
+38 uma classe so pode herdar de outra declarada anteriormente
+41 identificador ja declarado
+44 identificador ja declarado
 46 tipos incompatives, nao pode converter int para float
-46 Identificador já utilizado
-48 Identificador já utilizado
-49 Identificador já utilizado
-56 Identificador já utilizado
-57 Identificador já utilizado
+46 constante nao pode ser alterada
+48 constante nao pode ser alterada
+48 constante nao pode ser alterada
+49 constante nao pode ser alterada
+49 constante nao pode ser alterada
+56 constante nao pode ser alterada
+57 constante nao pode ser alterada
 59 este identificador nao eh uma variavel
 64 este identificador nao eh uma variavel
-69 Identificador já utilizado
-73 atribuição invalida, tipos incompativeis
+69 constante nao pode ser alterada
+73 atribuicao invalida, tipos incompativeis
 74 tipo de retorno incompativel
 80 tipo de retorno incompativel
-85 Identificador já utilizado
+84 identificador ja declarado
+85 constante nao pode ser alterada
 86 tipo de retorno incompativel
-89 Identificador já utilizado
-93 Identificador já utilizado
-94 Identificador já utilizado
+89 identificador ja declarado
+89 identificador ja declarado
+93 identificador ja declarado
+93 identificador ja declarado
+94 identificador ja declarado
