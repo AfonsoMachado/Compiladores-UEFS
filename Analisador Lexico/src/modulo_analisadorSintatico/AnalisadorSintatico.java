@@ -32,13 +32,10 @@ public class AnalisadorSintatico {
     private Simbolos atual;             //simbolo atual
     private final Simbolos globalEscopo;             //simbolo global
     private Simbolos classeEscopo;             //simbolo classe
-    
-    private int checaTipo;
     private boolean eBool = false;
 
     /**
      * Construtor do analisador Sintatico.
-     *
      * @param escopo recebe a tabela de simbolos do compilador
      */
     public AnalisadorSintatico(Simbolos escopo) {
@@ -48,7 +45,6 @@ public class AnalisadorSintatico {
 
     /**
      * Metodo responsavel pela analise sintatica dos codigos fontes.
-     *
      * @param tokens lista com os tokens vindos do lexico.
      */
     public void analise(ArrayList<Token> tokens) {
@@ -720,7 +716,6 @@ public class AnalisadorSintatico {
                 recListaVariavel();
                 break;
             case ";":
-                System.out.println(escopo.getCategoria() + "   " + atual.getNome());
                 if (escopo.contains(atual.getNome())) {
                     erroSemantico("identificador ja declarado");
                 } else if (globalEscopo.containsConst(atual.getNome()) || (classeEscopo != null && classeEscopo.containsConst(atual.getNome()))) {
@@ -1121,6 +1116,7 @@ public class AnalisadorSintatico {
                 }else if(atual.getTipo() != recAtribuicao()){
                     erroSemantico("atribuicao invalida, tipos incompativeis");
                 }
+                eBool=false;
                 terminal(";");
                 break;
             case "[":
@@ -1174,7 +1170,7 @@ public class AnalisadorSintatico {
                 terminal("(");
                 aux2 = recAtribuicao();
                 terminal(")");
-                checaTipo = recOperacao();
+                recOperacao();
                 return aux2;
             case "++":
                 return recIdAcesso();
@@ -2281,7 +2277,6 @@ public class AnalisadorSintatico {
     }
 
     private int recFatorAritmetico() {
-        int aux2;
         switch (proximo.getValor()) {
             case "++":
                 recIdAritmetico();

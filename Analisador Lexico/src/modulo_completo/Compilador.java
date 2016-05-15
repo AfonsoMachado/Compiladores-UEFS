@@ -71,7 +71,6 @@ public class Compilador {
             analisadorSintatico.analise(listaTokens);
             arquivo.escreverSaidaSintatico(analisadorSintatico.getErros()); 
             arquivo.escreverSaidaSemantico(analisadorSintatico.getErrosSemanticos());
-            System.out.println(tabelaSimbolos);
         }
     }
 
