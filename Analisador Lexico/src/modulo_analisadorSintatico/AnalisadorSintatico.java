@@ -697,6 +697,7 @@ public class AnalisadorSintatico {
     private void recListaVariavel() {
         switch (proximo.getValor()) {
             case ",":
+                atual.setCategoria(Simbolos.VAR);
                 terminal(",");
                 if (escopo.contains(atual.getNome())) {
                     erroSemantico("identificador ja declarado");
@@ -723,6 +724,7 @@ public class AnalisadorSintatico {
                 } else {
                     escopo.addFilho(atual);
                 }
+                atual.setCategoria(Simbolos.VAR);
                 terminal(";");
                 break;
             default:
@@ -1046,7 +1048,7 @@ public class AnalisadorSintatico {
                         Tipo("id");
                         recIdDecl();
                     } else {
-                        atual = escopo.getFilho(aux);
+                        atual = this.getFilho(aux);
                         if (atual.getTipo() == Simbolos.ERRO) {
                             erroSemantico("identificador nao declarado");
                         }
@@ -1067,6 +1069,8 @@ public class AnalisadorSintatico {
                 recListaVariavel();
                 break;
             case ";":
+                atual.setCategoria(Simbolos.VAR);
+                
                 recListaVariavel();
                 break;
             case "[":
@@ -1107,7 +1111,7 @@ public class AnalisadorSintatico {
                 terminal(";");
                 break;
             case "=":
-                if (atual.getCategoria() != Simbolos.VAR) {
+                if (atual.getCategoria() != Simbolos.VAR && atual.getCategoria() != Simbolos.CONST){
                     erroSemantico("este identificador nao eh uma variavel");
                 }
                 terminal("=");
@@ -1395,7 +1399,6 @@ public class AnalisadorSintatico {
                         erroSintatico("falta: ++, --, identificador");
                         return -1;
                 }
-
         }
     }
 
@@ -1436,6 +1439,9 @@ public class AnalisadorSintatico {
                 terminal("--");
                 break;
             default:
+                if (atual.getCategoria() != Simbolos.VAR && atual.getCategoria() != Simbolos.CONST) {
+                    erroSemantico("este identificador nao e um variavel");
+                }
                 break;
         }
     }
@@ -1804,7 +1810,6 @@ public class AnalisadorSintatico {
                 recWrite();
                 break;
             case "new":
-                recInicializaObjeto();
                 recInicializaObjeto();
                 break;
             case "if":
